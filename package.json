@@ -1,0 +1,47 @@
+{
+  "name": "voie-example",
+  "version": "0.0.0",
+  "description": "Voie.js example",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/inca/voie-example"
+  },
+  "scripts": {
+    "build": "browserify spa/index.js -o static/spa.js",
+    "dev": "watchify spa/index.js -o static/spa.js",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "voie",
+    "vue",
+    "router",
+    "layout-manager",
+    "example"
+  ],
+  "author": "Boris Okunskiy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/inca/voie-example/issues"
+  },
+  "homepage": "https://github.com/inca/voie-example",
+  "private": true,
+  "dependencies": {
+    "express": "^4.13.3",
+    "voie": "^0.2.0",
+    "vue": "^1.0.12"
+  },
+  "devDependencies": {
+    "babel-core": "^6.3.21",
+    "babel-plugin-transform-runtime": "^6.3.13",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-runtime": "^5.8.34",
+    "babelify": "^7.2.0",
+    "browserify": "^12.0.1",
+    "stylus": "^0.53.0",
+    "vue-hot-reload-api": "^1.2.2",
+    "vueify": "^8.0.0",
+    "vueify-insert-css": "^1.0.0",
+    "watchify": "^3.6.1"
+  }
+}

@@ -1,0 +1,46 @@
+<!doctype html>
+<!-- Entry point of application -->
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="icon"
+          href="/favicon.ico"/>
+    <!-- Some styles to start app with -->
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600|Roboto Mono' rel='stylesheet' type='text/css'>
+    <style>
+      html, body {
+        padding: 0;
+        margin: 0;
+        font: 400 16px/1.5 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+        color: hsl(192, 25%, 25%);
+      }
+
+      #app {
+        display: flex;
+        flex-flow: column nowrap;
+        min-height: 100vh;
+      }
+
+      .loading {
+        flex: 1;
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+    <!-- Use base to specify different prefix for all app URLs -->
+    <base href="/"/>
+  </head>
+  <body>
+    <!-- Once scripts are loaded, Voie will replace this element with rendered view -->
+    <div id="app">
+      <div class="loading">
+        Please wait...
+      </div>
+    </div>
+    <!-- Our application -->
+    <script src="/spa.js">
+    </script>
+  </body>
+</html>

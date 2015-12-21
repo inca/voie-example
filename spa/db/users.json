@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "name": "Alex Jacobson",
+    "courses": [
+      "CS001", "CS002", "CS003", "CS004", "PR001", "PR002", "FL002"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Jayme Reyes",
+    "courses": [
+      "CS001", "CS002", "PR001", "FL001"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Sam Carter",
+    "courses": [
+      "CS001", "FL001", "FL002"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Gunther Hermann",
+    "courses": [
+      "FL002"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Anna Navarre",
+    "courses": [
+      "PR001", "PR002", "FL001"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Tracer Tong",
+    "courses": [
+      "CS001", "CS002", "PR001", "PR002", "FL001", "FL003"
+    ]
+  }
+]

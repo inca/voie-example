@@ -1,0 +1,38 @@
+[
+  {
+    "id": "CS001",
+    "title": "Computer Science"
+  },
+  {
+    "id": "CS002",
+    "title": "Imperative Programming"
+  },
+  {
+    "id": "CS003",
+    "title": "Functional Programming"
+  },
+  {
+    "id": "CS004",
+    "title": "Object-Oriented Programming"
+  },
+  {
+    "id": "PR001",
+    "title": "Programming in JavaScript"
+  },
+  {
+    "id": "PR002",
+    "title": "Programming in ECMAScript 6"
+  },
+  {
+    "id": "FL001",
+    "title": "Le français"
+  },
+  {
+    "id": "FL002",
+    "title": "Русский язык"
+  },
+  {
+    "id": "FL003",
+    "title": "中文"
+  }
+]

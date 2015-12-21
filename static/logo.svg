@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1"
+     width="480"
+     height="480">
+  <path
+    d="M 0,32 96,32 240,280 384,32 480,32 240,448 z"
+    id="path3060"
+    style="fill:#ffdd55;stroke:none" />
+  <path
+    d="m 96,32 88,0 56,96 56,-96 88,0 -144,250 z"
+    id="path3062"
+    style="fill:#53676c;stroke:none" />
+</svg>

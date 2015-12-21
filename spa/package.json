@@ -1,0 +1,15 @@
+{
+  "browserify": {
+    "transform": [
+      "vueify",
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015"
+          ]
+        }
+      ]
+    ]
+  }
+}
