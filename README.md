@@ -12,6 +12,11 @@ npm i
 npm start
 ```
 
+## Playground
+
+You can fork this repo to play with it: add some states, components, see how everything
+works together. To recompile your changes simply run `npm run dev` in separate terminal tab.
+
 ## License (ISC)
 
 Copyright (c) 2015-2016, Boris Okunskiy <boris@okunskiy.name>

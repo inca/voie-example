@@ -1,6 +1,6 @@
 <template>
   <div class="users-layout">
-    <ul class="users-list">
+    <ul class="users-list side-list">
       <li v-for="user in users">
         <a v-link="{ name: 'user', params: { userId: user.id }}">
           {{ user.name }}
@@ -19,29 +19,6 @@
   .users-layout {
     display: flex;
     flex-flow: row nowrap;
-  }
-
-  .users-list {
-    display: block;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    background: hsl(192, 25%, 95%);
-
-    li {
-      margin: 0;
-    }
-
-    a {
-      display: block;
-      padding: .5em 1em;
-      color: hsl(192, 50%, 25%);
-      text-decoration: none;
-
-      &.active {
-        background: hsl(192, 25%, 85%);
-      }
-    }
   }
 
   .users-view {

@@ -9799,7 +9799,43 @@ exports.default = new _voie.StateManager({
   el: '#app'
 });
 
-},{"voie":55}],6:[function(require,module,exports){
+},{"voie":69}],6:[function(require,module,exports){
+module.exports=[
+  {
+    "id": "CS001",
+    "title": "Computer Science"
+  },
+  {
+    "id": "CS002",
+    "title": "Imperative Programming"
+  },
+  {
+    "id": "CS003",
+    "title": "Functional Programming"
+  },
+  {
+    "id": "CS004",
+    "title": "Object-Oriented Programming"
+  },
+  {
+    "id": "PR001",
+    "title": "Programming in JavaScript"
+  },
+  {
+    "id": "PR002",
+    "title": "Programming in ECMAScript 6"
+  },
+  {
+    "id": "FL001",
+    "title": "Le français"
+  },
+  {
+    "id": "FL002",
+    "title": "中文"
+  }
+]
+
+},{}],7:[function(require,module,exports){
 module.exports=[
   {
     "id": 1,
@@ -9840,12 +9876,12 @@ module.exports=[
     "id": 6,
     "name": "Tracer Tong",
     "courses": [
-      "CS001", "CS002", "PR001", "PR002", "FL001", "FL003"
+      "CS001", "CS002", "PR001", "PR002", "FL001", "FL002"
     ]
   }
 ]
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var _app = require('./app');
@@ -9858,7 +9894,63 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _app2.default.start();
 
-},{"./app":5,"./states":9}],8:[function(require,module,exports){
+// Export app to window for console usage
+window.app = _app2.default;
+console.log('%c Welcome to Voie :)', 'font-size: 2em; color: #53676c');
+console.log('Glad you\'re here! We\'ve exposed %c app %c ' + ' so that you could play with it here. For example, try %c app.go(\'users\') %c.', 'background: #eee', '', 'background: #eee', '');
+console.log('To see Voie debug logs type %c localStorage.debug = \'voie*\' %c,' + ' hit Enter and reload the page.', 'background: #eee', '');
+console.log('Have fun!');
+
+},{"./app":5,"./states":20}],9:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _courses = require('spa/db/courses.json');
+
+var _courses2 = _interopRequireDefault(_courses);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+
+  findAll: function findAll() {
+    return new Promise(function (resolve) {
+      setTimeout(function () {
+        return resolve(_courses2.default);
+      }, 1000);
+    });
+  },
+
+  findById: function findById(courseId) {
+    return new Promise(function (resolve, reject) {
+      var course = _courses2.default.find(function (c) {
+        return c.id == courseId;
+      });
+      setTimeout(function () {
+        if (course) resolve(course);else reject(new Error('Course not found.'));
+      }, 500);
+    });
+  },
+
+  findByUser: function findByUser(user) {
+    return new Promise(function (resolve) {
+      var courses = user.courses.map(function (id) {
+        return _courses2.default.find(function (c) {
+          return c.id == id;
+        });
+      }).filter(Boolean);
+      setTimeout(function () {
+        return resolve(courses);
+      }, 1000);
+    });
+  }
+
+};
+
+},{"spa/db/courses.json":6}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -9882,101 +9974,30 @@ exports.default = {
   },
 
   findById: function findById(userId) {
-    return new Promise(function (resolve) {
+    return new Promise(function (resolve, reject) {
+      var user = _users2.default.find(function (u) {
+        return u.id == userId;
+      });
       setTimeout(function () {
-        return resolve(_users2.default.find(function (u) {
-          return u.id == userId;
-        }));
-      }, 1000);
+        if (user) resolve(user);else reject(new Error('User not found.'));
+      }, 500);
+    });
+  },
+
+  findByCourse: function findByCourse(course) {
+    return new Promise(function (resolve) {
+      var users = _users2.default.filter(function (u) {
+        return u.courses.indexOf(course.id) > -1;
+      });
+      setTimeout(function () {
+        return resolve(users);
+      }, 500);
     });
   }
 
 };
 
-},{"spa/db/users.json":6}],9:[function(require,module,exports){
-'use strict';
-
-require('./root');
-
-require('./users');
-
-require('./user');
-
-},{"./root":10,"./user":13,"./users":15}],10:[function(require,module,exports){
-'use strict';
-
-var _app = require('spa/app');
-
-var _app2 = _interopRequireDefault(_app);
-
-var _root = require('./root.vue');
-
-var _root2 = _interopRequireDefault(_root);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-_app2.default.add('root', {
-  component: _root2.default,
-  redirect: 'home'
-});
-
-},{"./root.vue":11,"spa/app":5}],11:[function(require,module,exports){
-var __vueify_style__ = require("vueify-insert-css").insert("\n  .root {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-flex-flow: column nowrap;\n        -ms-flex-flow: column nowrap;\n            flex-flow: column nowrap;\n  }\n\n  .root-body {\n    -webkit-box-flex: 1;\n    -webkit-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n  }\n")
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _topnav = require('./topnav.vue');
-
-var _topnav2 = _interopRequireDefault(_topnav);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-
-  components: {
-    topnav: _topnav2.default
-  }
-
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"root\">\n    <topnav>\n    </topnav>\n    <v-view class=\"root-body\">\n      <div class=\"loading\">Please wait...</div>\n    </v-view>\n  </div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  var id = "/Users/inca/projects/voie-example/spa/states/root.vue"
-  module.hot.dispose(function () {
-    require("vueify-insert-css").cache["\n  .root {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-flex-flow: column nowrap;\n        -ms-flex-flow: column nowrap;\n            flex-flow: column nowrap;\n  }\n\n  .root-body {\n    -webkit-box-flex: 1;\n    -webkit-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n  }\n"] = false
-    document.head.removeChild(__vueify_style__)
-  })
-  if (!module.hot.data) {
-    hotAPI.createRecord(id, module.exports)
-  } else {
-    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"./topnav.vue":12,"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],12:[function(require,module,exports){
-var __vueify_style__ = require("vueify-insert-css").insert(".topnav {\n  background: #29393d;\n}\n.topnav-link {\n  display: inline-block;\n  padding: 0.25em 0.5em;\n  color: #2bb2d4;\n  text-decoration: none;\n}\n.topnav-link.active {\n  color: #c2e7f0;\n  text-shadow: 0 0 16px rgba(255,255,255,0.5);\n}\n.topnav-link.logo {\n  color: #ffdd57;\n}\n.topnav-link img {\n  vertical-align: middle;\n  margin: 0 0.25em;\n}\n")
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"topnav\">\n    <a class=\"topnav-link logo\" href=\"https://github.com/inca/voie\" target=\"_blank\">\n      <img src=\"/logo.svg\" width=\"24\" height=\"24\">\n      <span>Voie.js</span>\n    </a>\n    <a class=\"topnav-link\" v-link=\"{ name: 'users' }\">\n      Users\n    </a>\n    <a class=\"topnav-link\" v-link=\"{ name: 'courses' }\">\n      Courses\n    </a>\n  </div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  var id = "/Users/inca/projects/voie-example/spa/states/topnav.vue"
-  module.hot.dispose(function () {
-    require("vueify-insert-css").cache[".topnav {\n  background: #29393d;\n}\n.topnav-link {\n  display: inline-block;\n  padding: 0.25em 0.5em;\n  color: #2bb2d4;\n  text-decoration: none;\n}\n.topnav-link.active {\n  color: #c2e7f0;\n  text-shadow: 0 0 16px rgba(255,255,255,0.5);\n}\n.topnav-link.logo {\n  color: #ffdd57;\n}\n.topnav-link img {\n  vertical-align: middle;\n  margin: 0 0.25em;\n}\n"] = false
-    document.head.removeChild(__vueify_style__)
-  })
-  if (!module.hot.data) {
-    hotAPI.createRecord(id, module.exports)
-  } else {
-    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],13:[function(require,module,exports){
+},{"spa/db/users.json":7}],11:[function(require,module,exports){
 'use strict';
 
 var _app = require('spa/app');
@@ -9987,15 +10008,397 @@ var _users = require('spa/services/users');
 
 var _users2 = _interopRequireDefault(_users);
 
+var _courses = require('spa/services/courses');
+
+var _courses2 = _interopRequireDefault(_courses);
+
 var _layout = require('./layout.vue');
 
 var _layout2 = _interopRequireDefault(_layout);
+
+var _info = require('./info.vue');
+
+var _info2 = _interopRequireDefault(_info);
+
+var _members = require('./members.vue');
+
+var _members2 = _interopRequireDefault(_members);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_app2.default.add('course', {
+  parent: 'courses',
+  url: '/course/:courseId',
+  redirect: 'course.info',
+  enter: function enter(ctx) {
+    return _courses2.default.findById(ctx.params.courseId).then(function (course) {
+      return ctx.data.course = course;
+    });
+  },
+  component: _layout2.default
+});
+
+_app2.default.add('course.info', {
+  component: _info2.default
+});
+
+_app2.default.add('course.members', {
+  url: 'members',
+  enter: function enter(ctx) {
+    return _users2.default.findByCourse(ctx.data.course).then(function (users) {
+      return ctx.data.members = users;
+    });
+  },
+  component: _members2.default
+});
+
+},{"./info.vue":12,"./layout.vue":13,"./members.vue":14,"spa/app":5,"spa/services/courses":9,"spa/services/users":10}],12:[function(require,module,exports){
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"course-info\">\n    <p>\n      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto asperiores cupiditate et explicabo id laborum mollitia recusandae rerum tempore vitae?\n    </p>\n  </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/inca/projects/voie-example/spa/states/course/info.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":3,"vue-hot-reload-api":2}],13:[function(require,module,exports){
+var __vueify_style__ = require("vueify-insert-css").insert("\n  .course-layout {\n    -webkit-flex-flow: column nowrap;\n        -ms-flex-flow: column nowrap;\n            flex-flow: column nowrap;\n    padding: 2em;\n  }\n")
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"course-layout\">\n    <h1>{{ course.title }}</h1>\n    <div class=\"course-nav\">\n      <a class=\"nav-link\" v-link=\"{ name: 'course.info' }\">\n        Information\n      </a>\n      <a class=\"nav-link\" v-link=\"{ name: 'course.members' }\">\n        Members\n      </a>\n    </div>\n    <v-view>\n      <div class=\"loading\">\n        Please wait...\n      </div>\n    </v-view>\n  </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/inca/projects/voie-example/spa/states/course/layout.vue"
+  module.hot.dispose(function () {
+    require("vueify-insert-css").cache["\n  .course-layout {\n    -webkit-flex-flow: column nowrap;\n        -ms-flex-flow: column nowrap;\n            flex-flow: column nowrap;\n    padding: 2em;\n  }\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],14:[function(require,module,exports){
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"course-members\">\n    <ul v-if=\"members.length\">\n      <li v-for=\"user in members\">\n        <a v-link=\"{ name: 'user', params: { userId: user.id }}\">\n          {{ user.name }}\n        </a>\n      </li>\n    </ul>\n    <p v-else=\"\">No members yet.</p>\n  </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/inca/projects/voie-example/spa/states/course/members.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":3,"vue-hot-reload-api":2}],15:[function(require,module,exports){
+'use strict';
+
+var _app = require('spa/app');
+
+var _app2 = _interopRequireDefault(_app);
+
+var _courses = require('spa/services/courses');
+
+var _courses2 = _interopRequireDefault(_courses);
+
+var _layout = require('./layout.vue');
+
+var _layout2 = _interopRequireDefault(_layout);
+
+var _select = require('./select.vue');
+
+var _select2 = _interopRequireDefault(_select);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_app2.default.add('courses', {
+  parent: 'root',
+  url: '/courses',
+  redirect: 'courses.select',
+  enter: function enter(ctx) {
+    return _courses2.default.findAll().then(function (courses) {
+      ctx.data.courses = courses;
+    });
+  },
+  component: _layout2.default
+});
+
+_app2.default.add('courses.select', {
+  component: _select2.default
+});
+
+},{"./layout.vue":16,"./select.vue":17,"spa/app":5,"spa/services/courses":9}],16:[function(require,module,exports){
+var __vueify_style__ = require("vueify-insert-css").insert(".courses-layout {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: row nowrap;\n      -ms-flex-flow: row nowrap;\n          flex-flow: row nowrap;\n}\n.courses-view {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n}\n")
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"courses-layout\">\n    <ul class=\"courses-list side-list\">\n      <li v-for=\"course in courses\">\n        <a v-link=\"{ name: 'course', params: { courseId: course.id }}\">\n          {{ course.title }}\n        </a>\n      </li>\n    </ul>\n    <v-view class=\"courses-view\">\n      <div class=\"loading\">\n        Please wait...\n      </div>\n    </v-view>\n  </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/inca/projects/voie-example/spa/states/courses/layout.vue"
+  module.hot.dispose(function () {
+    require("vueify-insert-css").cache[".courses-layout {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: row nowrap;\n      -ms-flex-flow: row nowrap;\n          flex-flow: row nowrap;\n}\n.courses-view {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],17:[function(require,module,exports){
+var __vueify_style__ = require("vueify-insert-css").insert("\n  .courses-select {\n    -webkit-flex-flow: column nowrap;\n        -ms-flex-flow: column nowrap;\n            flex-flow: column nowrap;\n    -webkit-box-pack: center;\n    -webkit-justify-content: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n  }\n")
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"courses-select\">\n    <h1>Welcome to courses!</h1>\n    ← Select a course on sidebar\n  </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/inca/projects/voie-example/spa/states/courses/select.vue"
+  module.hot.dispose(function () {
+    require("vueify-insert-css").cache["\n  .courses-select {\n    -webkit-flex-flow: column nowrap;\n        -ms-flex-flow: column nowrap;\n            flex-flow: column nowrap;\n    -webkit-box-pack: center;\n    -webkit-justify-content: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n  }\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],18:[function(require,module,exports){
+var __vueify_style__ = require("vueify-insert-css").insert(".debug {\n  position: relative;\n}\n.debug-body,\n.debug-handle {\n  background: #29393d;\n  color: #fff;\n}\n.debug-handle {\n  position: absolute;\n  bottom: 100%;\n  left: 1em;\n  padding: 0.25em 1em;\n  cursor: pointer;\n  text-align: center;\n  border-radius: 8px 8px 0 0;\n}\n.debug-body {\n  padding: 0.5em 1em;\n}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _app = require('spa/app');
+
+var _app2 = _interopRequireDefault(_app);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+
+  data: function data() {
+    return {
+      app: _app2.default,
+      shown: !!localStorage.debugShown
+    };
+  },
+
+  methods: {
+    toggleDebug: function toggleDebug() {
+      this.shown = !this.shown;
+      localStorage.debugShown = this.shown ? true : '';
+    }
+  }
+
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"debug\" :class=\"{ shown: shown }\">\n    <div class=\"debug-handle\" @click=\"toggleDebug\">\n      <span v-if=\"!shown\">Show debug</span>\n      <span v-if=\"shown\">Hide debug</span>\n    </div>\n    <div class=\"debug-body\" v-if=\"shown\">\n      <pre>ctx.state.name = {{ app.context.state.name }}</pre>\n      <pre>ctx.params = {{ app.context.params | json 2 }}</pre>\n    </div>\n  </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/inca/projects/voie-example/spa/states/debug.vue"
+  module.hot.dispose(function () {
+    require("vueify-insert-css").cache[".debug {\n  position: relative;\n}\n.debug-body,\n.debug-handle {\n  background: #29393d;\n  color: #fff;\n}\n.debug-handle {\n  position: absolute;\n  bottom: 100%;\n  left: 1em;\n  padding: 0.25em 1em;\n  cursor: pointer;\n  text-align: center;\n  border-radius: 8px 8px 0 0;\n}\n.debug-body {\n  padding: 0.5em 1em;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"spa/app":5,"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],19:[function(require,module,exports){
+var __vueify_style__ = require("vueify-insert-css").insert(".home {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: column nowrap;\n      -ms-flex-flow: column nowrap;\n          flex-flow: column nowrap;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n.home-wrap {\n  max-width: 480px;\n}\n.author {\n  padding: 4em 0;\n  color: #aaa;\n}\n.author a {\n  text-decoration: none;\n}\n")
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"home\">\n    <div class=\"home-wrap\">\n      <h1>Welcome to Voie.js example!</h1>\n      <p>\n        This is a single-page application written\n        using awesome <a href=\"http://vuejs.org\" target=\"_blank\">Vue.js</a>\n        and <a href=\"https://inca.github.io/voie\" target=\"_blank\">Voie.js</a>.\n      </p>\n      <p>\n        To start just click on some navigation links above and continue exploring.\n      </p>\n      <p>\n        Note how some screens show you \"Please wait...\" —\n        this is done intentionally to demonstrate the ability to render\n        fallback content while state data is not ready.\n      </p>\n      <h2>Enjoying Vue + Voie?</h2>\n      <p>\n        Then you can continue browsing\n        <a href=\"https://github.com/inca/voie-example\">source code at GitHub</a>.\n        Be sure to give me some stars while you're at it :D\n      </p>\n    </div>\n    <div class=\"author\">\n      Made with &lt;3 by <a href=\"https://github.com/inca\">Boris Okunskiy</a>\n    </div>\n  </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/inca/projects/voie-example/spa/states/home.vue"
+  module.hot.dispose(function () {
+    require("vueify-insert-css").cache[".home {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: column nowrap;\n      -ms-flex-flow: column nowrap;\n          flex-flow: column nowrap;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n.home-wrap {\n  max-width: 480px;\n}\n.author {\n  padding: 4em 0;\n  color: #aaa;\n}\n.author a {\n  text-decoration: none;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],20:[function(require,module,exports){
+'use strict';
+
+require('./root');
+
+require('./users');
+
+require('./user');
+
+require('./courses');
+
+require('./course');
+
+},{"./course":11,"./courses":15,"./root":21,"./user":26,"./users":29}],21:[function(require,module,exports){
+'use strict';
+
+var _app = require('spa/app');
+
+var _app2 = _interopRequireDefault(_app);
+
+var _root = require('./root.vue');
+
+var _root2 = _interopRequireDefault(_root);
+
+var _home = require('./home.vue');
+
+var _home2 = _interopRequireDefault(_home);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_app2.default.add('root', {
+  component: _root2.default,
+  redirect: 'home'
+});
+
+_app2.default.add('home', {
+  parent: 'root',
+  component: _home2.default
+});
+
+},{"./home.vue":19,"./root.vue":22,"spa/app":5}],22:[function(require,module,exports){
+var __vueify_style__ = require("vueify-insert-css").insert(".nav-link {\n  display: inline-block;\n  padding: 0 1em;\n  border-radius: 16px;\n  text-decoration: none;\n}\n.nav-link.active {\n  background: #40a6bf;\n  color: #fff;\n}\n.side-list {\n  display: block;\n  list-style: none;\n  padding: 0.5em 0;\n  margin: 0;\n  background: #f7f7f7;\n}\n.side-list li {\n  margin: 0;\n}\n.side-list a {\n  display: block;\n  padding: 0.5em 1em;\n  color: #40a6bf;\n  text-decoration: none;\n}\n.side-list a.active {\n  background: #40a6bf;\n  color: #f7f7f7;\n}\n.root {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: column nowrap;\n      -ms-flex-flow: column nowrap;\n          flex-flow: column nowrap;\n}\n.root-body {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _topnav = require('./topnav.vue');
+
+var _topnav2 = _interopRequireDefault(_topnav);
+
+var _debug = require('./debug.vue');
+
+var _debug2 = _interopRequireDefault(_debug);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+
+  components: {
+    topnav: _topnav2.default,
+    debug: _debug2.default
+  }
+
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"root\">\n    <topnav>\n    </topnav>\n    <v-view class=\"root-body\">\n      <div class=\"loading\">Please wait...</div>\n    </v-view>\n    <debug>\n    </debug>\n  </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/inca/projects/voie-example/spa/states/root.vue"
+  module.hot.dispose(function () {
+    require("vueify-insert-css").cache[".nav-link {\n  display: inline-block;\n  padding: 0 1em;\n  border-radius: 16px;\n  text-decoration: none;\n}\n.nav-link.active {\n  background: #40a6bf;\n  color: #fff;\n}\n.side-list {\n  display: block;\n  list-style: none;\n  padding: 0.5em 0;\n  margin: 0;\n  background: #f7f7f7;\n}\n.side-list li {\n  margin: 0;\n}\n.side-list a {\n  display: block;\n  padding: 0.5em 1em;\n  color: #40a6bf;\n  text-decoration: none;\n}\n.side-list a.active {\n  background: #40a6bf;\n  color: #f7f7f7;\n}\n.root {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: column nowrap;\n      -ms-flex-flow: column nowrap;\n          flex-flow: column nowrap;\n}\n.root-body {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"./debug.vue":18,"./topnav.vue":23,"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],23:[function(require,module,exports){
+var __vueify_style__ = require("vueify-insert-css").insert(".topnav {\n  background: #29393d;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: row nowrap;\n      -ms-flex-flow: row nowrap;\n          flex-flow: row nowrap;\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n}\n.topnav-link {\n  display: inline-block;\n  line-height: 2.5em;\n  padding: 0 0.5em;\n  color: #40a6bf;\n  text-decoration: none;\n}\n.topnav-link.logo {\n  color: #ffdd57;\n}\n.topnav-link.active {\n  color: #c6e4ec;\n  text-shadow: 0 0 16px rgba(255,255,255,0.5);\n}\n.topnav-link img {\n  position: relative;\n  top: -2px;\n  vertical-align: middle;\n  margin: 0 0.25em;\n}\n")
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"topnav\">\n    <div class=\"topnav-group\">\n      <a class=\"topnav-link logo\" v-link=\"{ name: 'home' }\">\n        <img src=\"/logo.svg\" width=\"24\" height=\"24\">\n        <span>Voie.js</span>\n      </a>\n      <a class=\"topnav-link\" v-link=\"{ name: 'users' }\">\n        Users\n      </a>\n      <a class=\"topnav-link\" v-link=\"{ name: 'courses' }\">\n        Courses\n      </a>\n    </div>\n    <div class=\"topnav-group\">\n      <a class=\"topnav-link\" href=\"https://github.com/inca/voie-example\" target=\"_blank\">\n        Source on GitHub\n      </a>\n    </div>\n  </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/inca/projects/voie-example/spa/states/topnav.vue"
+  module.hot.dispose(function () {
+    require("vueify-insert-css").cache[".topnav {\n  background: #29393d;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: row nowrap;\n      -ms-flex-flow: row nowrap;\n          flex-flow: row nowrap;\n  -webkit-box-pack: justify;\n  -webkit-justify-content: space-between;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n}\n.topnav-link {\n  display: inline-block;\n  line-height: 2.5em;\n  padding: 0 0.5em;\n  color: #40a6bf;\n  text-decoration: none;\n}\n.topnav-link.logo {\n  color: #ffdd57;\n}\n.topnav-link.active {\n  color: #c6e4ec;\n  text-shadow: 0 0 16px rgba(255,255,255,0.5);\n}\n.topnav-link img {\n  position: relative;\n  top: -2px;\n  vertical-align: middle;\n  margin: 0 0.25em;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],24:[function(require,module,exports){
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"user-courses\">\n    <ul v-if=\"courses.length\">\n      <li v-for=\"course in courses\">\n        <a v-link=\"{ name: 'user.enrollment', params: { courseId: course.id }}\">\n          {{ course.title }}\n        </a>\n      </li>\n    </ul>\n    <p v-else=\"\">Not enrolled on any courses.</p>\n  </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/inca/projects/voie-example/spa/states/user/courses.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":3,"vue-hot-reload-api":2}],25:[function(require,module,exports){
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"user-enrollment\">\n    <p>\n      <strong>{{ user.name }}</strong>\n      is\n      <strong v-if=\"!isMember\">not</strong>\n      enrolled on course\n      <strong>{{ course.title }}</strong>.\n    </p>\n  </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/inca/projects/voie-example/spa/states/user/enrollment.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":3,"vue-hot-reload-api":2}],26:[function(require,module,exports){
+'use strict';
+
+var _app = require('spa/app');
+
+var _app2 = _interopRequireDefault(_app);
+
+var _users = require('spa/services/users');
+
+var _users2 = _interopRequireDefault(_users);
+
+var _courses = require('spa/services/courses');
+
+var _courses2 = _interopRequireDefault(_courses);
+
+var _layout = require('./layout.vue');
+
+var _layout2 = _interopRequireDefault(_layout);
+
+var _info = require('./info.vue');
+
+var _info2 = _interopRequireDefault(_info);
+
+var _courses3 = require('./courses.vue');
+
+var _courses4 = _interopRequireDefault(_courses3);
+
+var _enrollment = require('./enrollment.vue');
+
+var _enrollment2 = _interopRequireDefault(_enrollment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _app2.default.add('user', {
   parent: 'users',
   url: '/user/:userId',
+  redirect: 'user.info',
   enter: function enter(ctx) {
     return _users2.default.findById(ctx.params.userId).then(function (user) {
       return ctx.data.user = user;
@@ -10004,9 +10407,48 @@ _app2.default.add('user', {
   component: _layout2.default
 });
 
-},{"./layout.vue":14,"spa/app":5,"spa/services/users":8}],14:[function(require,module,exports){
+_app2.default.add('user.info', {
+  component: _info2.default
+});
+
+_app2.default.add('user.courses', {
+  url: 'members',
+  enter: function enter(ctx) {
+    return _courses2.default.findByUser(ctx.data.user).then(function (courses) {
+      return ctx.data.courses = courses;
+    });
+  },
+  component: _courses4.default
+});
+
+_app2.default.add('user.enrollment', {
+  url: 'course/:courseId',
+  enter: function enter(ctx) {
+    return _courses2.default.findById(ctx.params.courseId).then(function (course) {
+      var user = ctx.data.user;
+      ctx.data.course = course;
+      ctx.data.isMember = user.courses.indexOf(course.id) > -1;
+    });
+  },
+  component: _enrollment2.default
+});
+
+},{"./courses.vue":24,"./enrollment.vue":25,"./info.vue":27,"./layout.vue":28,"spa/app":5,"spa/services/courses":9,"spa/services/users":10}],27:[function(require,module,exports){
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"user-info\">\n    <p>\n      Welcome to {{ user.name }}!\n    </p>\n  </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/inca/projects/voie-example/spa/states/user/info.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":3,"vue-hot-reload-api":2}],28:[function(require,module,exports){
 var __vueify_style__ = require("vueify-insert-css").insert("\n  .user-layout {\n    -webkit-flex-flow: column nowrap;\n        -ms-flex-flow: column nowrap;\n            flex-flow: column nowrap;\n    -webkit-box-pack: start;\n    -webkit-justify-content: flex-start;\n        -ms-flex-pack: start;\n            justify-content: flex-start;\n    padding: 2em;\n  }\n")
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"user-layout\">\n    <h1>{{ user.name }}</h1>\n  </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"user-layout\">\n    <h1>{{ user.name }}</h1>\n    <div class=\"user-nav\">\n      <a class=\"nav-link\" v-link=\"{ name: 'user.info' }\">\n        Information\n      </a>\n      <a class=\"nav-link\" v-link=\"{ name: 'user.courses' }\">\n        Courses\n      </a>\n    </div>\n    <v-view>\n    </v-view>\n  </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -10022,7 +10464,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],15:[function(require,module,exports){
+},{"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],29:[function(require,module,exports){
 'use strict';
 
 var _app = require('spa/app');
@@ -10059,16 +10501,16 @@ _app2.default.add('users.select', {
   component: _select2.default
 });
 
-},{"./layout.vue":16,"./select.vue":17,"spa/app":5,"spa/services/users":8}],16:[function(require,module,exports){
-var __vueify_style__ = require("vueify-insert-css").insert(".users-layout {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: row nowrap;\n      -ms-flex-flow: row nowrap;\n          flex-flow: row nowrap;\n}\n.users-list {\n  display: block;\n  list-style: none;\n  padding: 0;\n  margin: 0;\n  background: #eff4f5;\n}\n.users-list li {\n  margin: 0;\n}\n.users-list a {\n  display: block;\n  padding: 0.5em 1em;\n  color: #205360;\n  text-decoration: none;\n}\n.users-list a.active {\n  background: #cfdee2;\n}\n.users-view {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n}\n")
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"users-layout\">\n    <ul class=\"users-list\">\n      <li v-for=\"user in users\">\n        <a v-link=\"{ name: 'user', params: { userId: user.id }}\">\n          {{ user.name }}\n        </a>\n      </li>\n    </ul>\n    <v-view class=\"users-view\">\n      <div class=\"loading\">\n        Please wait...\n      </div>\n    </v-view>\n  </div>\n"
+},{"./layout.vue":30,"./select.vue":31,"spa/app":5,"spa/services/users":10}],30:[function(require,module,exports){
+var __vueify_style__ = require("vueify-insert-css").insert(".users-layout {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: row nowrap;\n      -ms-flex-flow: row nowrap;\n          flex-flow: row nowrap;\n}\n.users-view {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n}\n")
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"users-layout\">\n    <ul class=\"users-list side-list\">\n      <li v-for=\"user in users\">\n        <a v-link=\"{ name: 'user', params: { userId: user.id }}\">\n          {{ user.name }}\n        </a>\n      </li>\n    </ul>\n    <v-view class=\"users-view\">\n      <div class=\"loading\">\n        Please wait...\n      </div>\n    </v-view>\n  </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   var id = "/Users/inca/projects/voie-example/spa/states/users/layout.vue"
   module.hot.dispose(function () {
-    require("vueify-insert-css").cache[".users-layout {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: row nowrap;\n      -ms-flex-flow: row nowrap;\n          flex-flow: row nowrap;\n}\n.users-list {\n  display: block;\n  list-style: none;\n  padding: 0;\n  margin: 0;\n  background: #eff4f5;\n}\n.users-list li {\n  margin: 0;\n}\n.users-list a {\n  display: block;\n  padding: 0.5em 1em;\n  color: #205360;\n  text-decoration: none;\n}\n.users-list a.active {\n  background: #cfdee2;\n}\n.users-view {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n}\n"] = false
+    require("vueify-insert-css").cache[".users-layout {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: row nowrap;\n      -ms-flex-flow: row nowrap;\n          flex-flow: row nowrap;\n}\n.users-view {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
@@ -10077,16 +10519,16 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],17:[function(require,module,exports){
-var __vueify_style__ = require("vueify-insert-css").insert("\n  .users-select {\n    -webkit-box-pack: center;\n    -webkit-justify-content: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n  }\n")
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"users-select\">\n    ← Select a user\n  </div>\n"
+},{"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],31:[function(require,module,exports){
+var __vueify_style__ = require("vueify-insert-css").insert("\n  .users-select {\n    -webkit-flex-flow: column nowrap;\n        -ms-flex-flow: column nowrap;\n            flex-flow: column nowrap;\n    -webkit-box-pack: center;\n    -webkit-justify-content: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n  }\n")
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"users-select\">\n    <h1>Welcome to users!</h1>\n    ← Select a user on sidebar\n  </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   var id = "/Users/inca/projects/voie-example/spa/states/users/select.vue"
   module.hot.dispose(function () {
-    require("vueify-insert-css").cache["\n  .users-select {\n    -webkit-box-pack: center;\n    -webkit-justify-content: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n  }\n"] = false
+    require("vueify-insert-css").cache["\n  .users-select {\n    -webkit-flex-flow: column nowrap;\n        -ms-flex-flow: column nowrap;\n            flex-flow: column nowrap;\n    -webkit-box-pack: center;\n    -webkit-justify-content: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n  }\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
@@ -10095,7 +10537,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],18:[function(require,module,exports){
+},{"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],32:[function(require,module,exports){
 
 /**
  * This is the web browser implementation of `debug()`.
@@ -10265,7 +10707,7 @@ function localstorage(){
   } catch (e) {}
 }
 
-},{"./debug":19}],19:[function(require,module,exports){
+},{"./debug":33}],33:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -10464,7 +10906,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":20}],20:[function(require,module,exports){
+},{"ms":34}],34:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -10591,7 +11033,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],21:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 'use strict';
 
 //
@@ -10855,7 +11297,7 @@ if ('undefined' !== typeof module) {
   module.exports = EventEmitter;
 }
 
-},{}],22:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 /**
  * Indicates that navigation was caused by a call to history.push.
  */
@@ -10887,7 +11329,7 @@ exports['default'] = {
   REPLACE: REPLACE,
   POP: POP
 };
-},{}],23:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -10914,7 +11356,7 @@ function loopAsync(turns, work, callback) {
 
   next();
 }
-},{}],24:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 (function (process){
 /*eslint-disable no-empty */
 'use strict';
@@ -10985,7 +11427,7 @@ function readState(key) {
   return null;
 }
 }).call(this,require('_process'))
-},{"_process":1,"warning":49}],25:[function(require,module,exports){
+},{"_process":1,"warning":63}],39:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -11066,13 +11508,13 @@ function supportsGoWithoutReloadUsingHash() {
   var ua = navigator.userAgent;
   return ua.indexOf('Firefox') === -1;
 }
-},{}],26:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
 var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 exports.canUseDOM = canUseDOM;
-},{}],27:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -11253,7 +11695,7 @@ function createBrowserHistory() {
 exports['default'] = createBrowserHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./Actions":22,"./DOMStateStorage":24,"./DOMUtils":25,"./ExecutionEnvironment":26,"./createDOMHistory":28,"./parsePath":38,"_process":1,"invariant":46}],28:[function(require,module,exports){
+},{"./Actions":36,"./DOMStateStorage":38,"./DOMUtils":39,"./ExecutionEnvironment":40,"./createDOMHistory":42,"./parsePath":52,"_process":1,"invariant":60}],42:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -11296,7 +11738,7 @@ function createDOMHistory(options) {
 exports['default'] = createDOMHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./DOMUtils":25,"./ExecutionEnvironment":26,"./createHistory":30,"_process":1,"invariant":46}],29:[function(require,module,exports){
+},{"./DOMUtils":39,"./ExecutionEnvironment":40,"./createHistory":44,"_process":1,"invariant":60}],43:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -11547,7 +11989,7 @@ function createHashHistory() {
 exports['default'] = createHashHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./Actions":22,"./DOMStateStorage":24,"./DOMUtils":25,"./ExecutionEnvironment":26,"./createDOMHistory":28,"./parsePath":38,"_process":1,"invariant":46,"warning":49}],30:[function(require,module,exports){
+},{"./Actions":36,"./DOMStateStorage":38,"./DOMUtils":39,"./ExecutionEnvironment":40,"./createDOMHistory":42,"./parsePath":52,"_process":1,"invariant":60,"warning":63}],44:[function(require,module,exports){
 //import warning from 'warning'
 'use strict';
 
@@ -11839,7 +12281,7 @@ function createHistory() {
 
 exports['default'] = createHistory;
 module.exports = exports['default'];
-},{"./Actions":22,"./AsyncUtils":23,"./createLocation":31,"./deprecate":33,"./parsePath":38,"./runTransitionHook":39,"deep-equal":43}],31:[function(require,module,exports){
+},{"./Actions":36,"./AsyncUtils":37,"./createLocation":45,"./deprecate":47,"./parsePath":52,"./runTransitionHook":53,"deep-equal":57}],45:[function(require,module,exports){
 //import warning from 'warning'
 'use strict';
 
@@ -11894,7 +12336,7 @@ function createLocation() {
 
 exports['default'] = createLocation;
 module.exports = exports['default'];
-},{"./Actions":22,"./parsePath":38}],32:[function(require,module,exports){
+},{"./Actions":36,"./parsePath":52}],46:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -12045,7 +12487,7 @@ function createMemoryHistory() {
 exports['default'] = createMemoryHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./Actions":22,"./createHistory":30,"./parsePath":38,"_process":1,"invariant":46}],33:[function(require,module,exports){
+},{"./Actions":36,"./createHistory":44,"./parsePath":52,"_process":1,"invariant":60}],47:[function(require,module,exports){
 //import warning from 'warning'
 
 "use strict";
@@ -12061,7 +12503,7 @@ function deprecate(fn) {
 
 exports["default"] = deprecate;
 module.exports = exports["default"];
-},{}],34:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -12078,7 +12520,7 @@ var _useBeforeUnload2 = _interopRequireDefault(_useBeforeUnload);
 
 exports['default'] = _deprecate2['default'](_useBeforeUnload2['default'], 'enableBeforeUnload is deprecated, use useBeforeUnload instead');
 module.exports = exports['default'];
-},{"./deprecate":33,"./useBeforeUnload":41}],35:[function(require,module,exports){
+},{"./deprecate":47,"./useBeforeUnload":55}],49:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -12095,7 +12537,7 @@ var _useQueries2 = _interopRequireDefault(_useQueries);
 
 exports['default'] = _deprecate2['default'](_useQueries2['default'], 'enableQueries is deprecated, use useQueries instead');
 module.exports = exports['default'];
-},{"./deprecate":33,"./useQueries":42}],36:[function(require,module,exports){
+},{"./deprecate":47,"./useQueries":56}],50:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -12109,7 +12551,7 @@ function extractPath(string) {
 
 exports["default"] = extractPath;
 module.exports = exports["default"];
-},{}],37:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -12181,7 +12623,7 @@ var _enableQueries3 = _interopRequireDefault(_enableQueries2);
 exports.enableQueries = _enableQueries3['default'];
 var createLocation = _deprecate2['default'](_createLocation3['default'], 'Using createLocation without a history instance is deprecated; please use history.createLocation instead');
 exports.createLocation = createLocation;
-},{"./Actions":22,"./createBrowserHistory":27,"./createHashHistory":29,"./createLocation":31,"./createMemoryHistory":32,"./deprecate":33,"./enableBeforeUnload":34,"./enableQueries":35,"./useBasename":40,"./useBeforeUnload":41,"./useQueries":42}],38:[function(require,module,exports){
+},{"./Actions":36,"./createBrowserHistory":41,"./createHashHistory":43,"./createLocation":45,"./createMemoryHistory":46,"./deprecate":47,"./enableBeforeUnload":48,"./enableQueries":49,"./useBasename":54,"./useBeforeUnload":55,"./useQueries":56}],52:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -12228,7 +12670,7 @@ function parsePath(path) {
 exports['default'] = parsePath;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./extractPath":36,"_process":1,"warning":49}],39:[function(require,module,exports){
+},{"./extractPath":50,"_process":1,"warning":63}],53:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -12255,7 +12697,7 @@ function runTransitionHook(hook, location, callback) {
 exports['default'] = runTransitionHook;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"_process":1,"warning":49}],40:[function(require,module,exports){
+},{"_process":1,"warning":63}],54:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -12396,7 +12838,7 @@ function useBasename(createHistory) {
 
 exports['default'] = useBasename;
 module.exports = exports['default'];
-},{"./ExecutionEnvironment":26,"./deprecate":33,"./extractPath":36,"./parsePath":38,"./runTransitionHook":39}],41:[function(require,module,exports){
+},{"./ExecutionEnvironment":40,"./deprecate":47,"./extractPath":50,"./parsePath":52,"./runTransitionHook":53}],55:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -12510,7 +12952,7 @@ function useBeforeUnload(createHistory) {
 exports['default'] = useBeforeUnload;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./DOMUtils":25,"./ExecutionEnvironment":26,"./deprecate":33,"_process":1,"warning":49}],42:[function(require,module,exports){
+},{"./DOMUtils":39,"./ExecutionEnvironment":40,"./deprecate":47,"_process":1,"warning":63}],56:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -12679,7 +13121,7 @@ function useQueries(createHistory) {
 exports['default'] = useQueries;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./deprecate":33,"./parsePath":38,"./runTransitionHook":39,"_process":1,"query-string":47,"warning":49}],43:[function(require,module,exports){
+},{"./deprecate":47,"./parsePath":52,"./runTransitionHook":53,"_process":1,"query-string":61,"warning":63}],57:[function(require,module,exports){
 var pSlice = Array.prototype.slice;
 var objectKeys = require('./lib/keys.js');
 var isArguments = require('./lib/is_arguments.js');
@@ -12775,7 +13217,7 @@ function objEquiv(a, b, opts) {
   return typeof a === typeof b;
 }
 
-},{"./lib/is_arguments.js":44,"./lib/keys.js":45}],44:[function(require,module,exports){
+},{"./lib/is_arguments.js":58,"./lib/keys.js":59}],58:[function(require,module,exports){
 var supportsArgumentsClass = (function(){
   return Object.prototype.toString.call(arguments)
 })() == '[object Arguments]';
@@ -12797,7 +13239,7 @@ function unsupported(object){
     false;
 };
 
-},{}],45:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 exports = module.exports = typeof Object.keys === 'function'
   ? Object.keys : shim;
 
@@ -12808,7 +13250,7 @@ function shim (obj) {
   return keys;
 }
 
-},{}],46:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -12863,7 +13305,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":1}],47:[function(require,module,exports){
+},{"_process":1}],61:[function(require,module,exports){
 'use strict';
 var strictUriEncode = require('strict-uri-encode');
 
@@ -12931,7 +13373,7 @@ exports.stringify = function (obj) {
 	}).join('&') : '';
 };
 
-},{"strict-uri-encode":48}],48:[function(require,module,exports){
+},{"strict-uri-encode":62}],62:[function(require,module,exports){
 'use strict';
 module.exports = function (str) {
 	return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
@@ -12939,7 +13381,7 @@ module.exports = function (str) {
 	});
 };
 
-},{}],49:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -13003,7 +13445,7 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"_process":1}],50:[function(require,module,exports){
+},{"_process":1}],64:[function(require,module,exports){
 var isarray = require('isarray')
 
 /**
@@ -13395,12 +13837,12 @@ function pathToRegexp (path, keys, options) {
   return stringToRegexp(path, keys, options)
 }
 
-},{"isarray":51}],51:[function(require,module,exports){
+},{"isarray":65}],65:[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
-},{}],52:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 (function (process){
 /*!
  * Vue.js v1.0.10
@@ -22705,7 +23147,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = Vue;
 }).call(this,require('_process'))
-},{"_process":1}],53:[function(require,module,exports){
+},{"_process":1}],67:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -22816,7 +23258,7 @@ function resolveManager(vm) {
   return null;
 }
 
-},{"debug":18,"vue":52}],54:[function(require,module,exports){
+},{"debug":32,"vue":66}],68:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22859,7 +23301,7 @@ var RedirectLoopError = exports.RedirectLoopError = (function (_Error2) {
   return RedirectLoopError;
 })(Error);
 
-},{}],55:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22885,7 +23327,7 @@ exports.StateManager = _stateManager2.default;
 exports.State = _state2.default;
 exports.Transition = _transition2.default;
 
-},{"./state":57,"./state-manager":56,"./transition":58}],56:[function(require,module,exports){
+},{"./state":71,"./state-manager":70,"./transition":72}],70:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -23138,7 +23580,7 @@ var StateManager = (function (_EventEmitter) {
 exports.default = StateManager;
 ;
 
-},{"./directives":53,"./state":57,"./transition":58,"debug":18,"eventemitter3":21,"history":37,"vue":52}],57:[function(require,module,exports){
+},{"./directives":67,"./state":71,"./transition":72,"debug":32,"eventemitter3":35,"history":51,"vue":66}],71:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -23321,7 +23763,7 @@ var State = (function () {
 exports.default = State;
 ;
 
-},{"./utils":59,"path-to-regexp":50}],58:[function(require,module,exports){
+},{"./utils":73,"path-to-regexp":64}],72:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -23505,7 +23947,7 @@ var Transition = (function () {
 
 exports.default = Transition;
 
-},{"./error":54,"./utils":59,"debug":18}],59:[function(require,module,exports){
+},{"./error":68,"./utils":73,"debug":32}],73:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23526,4 +23968,4 @@ function toVueComponent(obj) {
   return _vue2.default.extend(obj);
 }
 
-},{"vue":52}]},{},[7]);
+},{"vue":66}]},{},[8]);

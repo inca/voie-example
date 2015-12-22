@@ -1,45 +1,61 @@
 <template>
   <div class="topnav">
-    <a class="topnav-link logo"
-       href="https://github.com/inca/voie"
-       target="_blank">
-      <img src="/logo.svg"
-           width="24"
-           height="24"/>
-      <span>Voie.js</span>
-    </a>
-    <a class="topnav-link"
-       v-link="{ name: 'users' }">
-      Users
-    </a>
-    <a class="topnav-link"
-       v-link="{ name: 'courses' }">
-      Courses
-    </a>
+    <div class="topnav-group">
+      <a class="topnav-link logo"
+         v-link="{ name: 'home' }">
+        <img src="/logo.svg"
+             width="24"
+             height="24"/>
+        <span>Voie.js</span>
+      </a>
+      <a class="topnav-link"
+         v-link="{ name: 'users' }">
+        Users
+      </a>
+      <a class="topnav-link"
+         v-link="{ name: 'courses' }">
+        Courses
+      </a>
+    </div>
+    <div class="topnav-group">
+      <a class="topnav-link"
+         href="https://github.com/inca/voie-example"
+         target="_blank">
+        Source on GitHub
+      </a>
+    </div>
   </div>
 </template>
 
 <style lang="stylus">
+  @import 'spa/stylesheets/variables.styl';
+
   .topnav {
-    background: hsl(192, 20%, 20%);
+    background: color-dark;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
   }
 
   .topnav-link {
     display: inline-block;
-    padding: .25em .5em;
-    color: hsl(192, 66%, 50%);
+    line-height: 2.5em;
+    padding: 0 .5em;
+    color: color-link;
     text-decoration: none;
 
+    &.logo {
+      color: color-logo;
+    }
+
     &.active {
-      color: hsl(192, 60%, 85%);
+      color: color-link-active;
       text-shadow: 0 0 16px rgba(255,255,255,.5);
     }
 
-    &.logo {
-      color: hsl(48, 100%, 67%);
-    }
-
     img {
+      position: relative;
+      top: -2px;
       vertical-align: middle;
       margin: 0 .25em;
     }

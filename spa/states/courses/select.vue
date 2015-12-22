@@ -1,12 +1,12 @@
 <template>
-  <div class="users-select">
-    <h1>Welcome to users!</h1>
-    &larr; Select a user on sidebar
+  <div class="courses-select">
+    <h1>Welcome to courses!</h1>
+    &larr; Select a course on sidebar
   </div>
 </template>
 
 <style>
-  .users-select {
+  .courses-select {
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
