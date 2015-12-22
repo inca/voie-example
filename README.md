@@ -3,6 +3,8 @@
 This example app demonstrates basic usage of [Voie.js](https://github.com/inca/voie) —
 a simple router / layout manager for [Vue.js](https://vuejs.org).
 
+[View this example online](http://voie-example.netlify.com/)
+
 ## Usage
 
 ```bash
