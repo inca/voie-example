@@ -10,11 +10,6 @@
       <p>
         To start just click on some navigation links above and continue exploring.
       </p>
-      <p>
-        Note how some screens show you "Please wait..." —
-        this is done intentionally to demonstrate the ability to render
-        fallback content while state data is not ready.
-      </p>
       <h2>Enjoying Vue + Voie?</h2>
       <p>
         Then you can continue browsing
@@ -39,10 +34,10 @@
 
   .home-wrap {
     max-width: 480px;
+    padding: 2em;
   }
 
   .author {
-    padding: 4em 0;
     color: #aaa;
 
     a {

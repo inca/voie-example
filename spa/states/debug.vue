@@ -8,8 +8,41 @@
     </div>
     <div class="debug-body"
          v-if="shown">
-      <pre>ctx.state.name = {{ app.context.state.name }}</pre>
-      <pre>ctx.params = {{ app.context.params | json 2 }}</pre>
+      <div class="debug-column">
+        <pre>ctx.state.name = {{ app.context.state.name }}</pre>
+        <pre>ctx.params = {{ app.context.params | json 2 }}</pre>
+      </div>
+      <div class="debug-column">
+        <p>
+          Data fetching delay:
+          <label>
+            <input type="radio"
+                   number
+                   :value="0"
+                   v-model="app.fakeDataDelay"/>
+            no delay
+          </label>
+          <label>
+            <input type="radio"
+                   number
+                   :value="1000"
+                   v-model="app.fakeDataDelay"/>
+            1 second
+          </label>
+          <label>
+            <input type="radio"
+                   number
+                   :value="3000"
+                   v-model="app.fakeDataDelay"/>
+            3 seconds
+          </label>
+        </p>
+        <small>
+          This delay is hooked to our mock data services.<br/>
+          Use positive delays to watch state transitions and
+          loading placeholders.
+        </small>
+      </div>
     </div>
   </div>
 </template>
@@ -62,5 +95,16 @@ export default {
 
   .debug-body {
     padding: .5em 1em;
+  }
+
+  @media (min-width: 640px) {
+    .debug-body {
+      display: flex;
+      flex-flow: row nowrap;
+    }
+
+    .debug-column {
+      flex: 1;
+    }
   }
 </style>

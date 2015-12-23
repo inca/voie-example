@@ -9795,9 +9795,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _voie = require('voie');
 
-exports.default = new _voie.StateManager({
+var app = new _voie.StateManager({
   el: '#app'
 });
+
+app.fakeDataDelay = 0;
+
+exports.default = app;
 
 },{"voie":69}],6:[function(require,module,exports){
 module.exports=[
@@ -9912,6 +9916,10 @@ var _courses = require('spa/db/courses.json');
 
 var _courses2 = _interopRequireDefault(_courses);
 
+var _app = require('spa/app');
+
+var _app2 = _interopRequireDefault(_app);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -9920,7 +9928,7 @@ exports.default = {
     return new Promise(function (resolve) {
       setTimeout(function () {
         return resolve(_courses2.default);
-      }, 1000);
+      }, _app2.default.fakeDataDelay);
     });
   },
 
@@ -9931,7 +9939,7 @@ exports.default = {
       });
       setTimeout(function () {
         if (course) resolve(course);else reject(new Error('Course not found.'));
-      }, 500);
+      }, _app2.default.fakeDataDelay);
     });
   },
 
@@ -9944,13 +9952,13 @@ exports.default = {
       }).filter(Boolean);
       setTimeout(function () {
         return resolve(courses);
-      }, 1000);
+      }, _app2.default.fakeDataDelay);
     });
   }
 
 };
 
-},{"spa/db/courses.json":6}],10:[function(require,module,exports){
+},{"spa/app":5,"spa/db/courses.json":6}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -9961,6 +9969,10 @@ var _users = require('spa/db/users.json');
 
 var _users2 = _interopRequireDefault(_users);
 
+var _app = require('spa/app');
+
+var _app2 = _interopRequireDefault(_app);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -9969,7 +9981,7 @@ exports.default = {
     return new Promise(function (resolve) {
       setTimeout(function () {
         return resolve(_users2.default);
-      }, 1000);
+      }, _app2.default.fakeDataDelay);
     });
   },
 
@@ -9980,7 +9992,7 @@ exports.default = {
       });
       setTimeout(function () {
         if (user) resolve(user);else reject(new Error('User not found.'));
-      }, 500);
+      }, _app2.default.fakeDataDelay);
     });
   },
 
@@ -9991,13 +10003,13 @@ exports.default = {
       });
       setTimeout(function () {
         return resolve(users);
-      }, 500);
+      }, _app2.default.fakeDataDelay);
     });
   }
 
 };
 
-},{"spa/db/users.json":7}],11:[function(require,module,exports){
+},{"spa/app":5,"spa/db/users.json":7}],11:[function(require,module,exports){
 'use strict';
 
 var _app = require('spa/app');
@@ -10170,7 +10182,7 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],18:[function(require,module,exports){
-var __vueify_style__ = require("vueify-insert-css").insert(".debug {\n  position: relative;\n}\n.debug-body,\n.debug-handle {\n  background: #29393d;\n  color: #fff;\n}\n.debug-handle {\n  position: absolute;\n  bottom: 100%;\n  left: 1em;\n  padding: 0.25em 1em;\n  cursor: pointer;\n  text-align: center;\n  border-radius: 8px 8px 0 0;\n}\n.debug-body {\n  padding: 0.5em 1em;\n}\n")
+var __vueify_style__ = require("vueify-insert-css").insert(".debug {\n  position: relative;\n}\n.debug-body,\n.debug-handle {\n  background: #29393d;\n  color: #fff;\n}\n.debug-handle {\n  position: absolute;\n  bottom: 100%;\n  left: 1em;\n  padding: 0.25em 1em;\n  cursor: pointer;\n  text-align: center;\n  border-radius: 8px 8px 0 0;\n}\n.debug-body {\n  padding: 0.5em 1em;\n}\n@media (min-width: 640px) {\n  .debug-body {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-flex-flow: row nowrap;\n        -ms-flex-flow: row nowrap;\n            flex-flow: row nowrap;\n  }\n  .debug-column {\n    -webkit-box-flex: 1;\n    -webkit-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n  }\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10201,14 +10213,14 @@ exports.default = {
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"debug\" :class=\"{ shown: shown }\">\n    <div class=\"debug-handle\" @click=\"toggleDebug\">\n      <span v-if=\"!shown\">Show debug</span>\n      <span v-if=\"shown\">Hide debug</span>\n    </div>\n    <div class=\"debug-body\" v-if=\"shown\">\n      <pre>ctx.state.name = {{ app.context.state.name }}</pre>\n      <pre>ctx.params = {{ app.context.params | json 2 }}</pre>\n    </div>\n  </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"debug\" :class=\"{ shown: shown }\">\n    <div class=\"debug-handle\" @click=\"toggleDebug\">\n      <span v-if=\"!shown\">Show debug</span>\n      <span v-if=\"shown\">Hide debug</span>\n    </div>\n    <div class=\"debug-body\" v-if=\"shown\">\n      <div class=\"debug-column\">\n        <pre>ctx.state.name = {{ app.context.state.name }}</pre>\n        <pre>ctx.params = {{ app.context.params | json 2 }}</pre>\n      </div>\n      <div class=\"debug-column\">\n        <p>\n          Data fetching delay:\n          <label>\n            <input type=\"radio\" number=\"\" :value=\"0\" v-model=\"app.fakeDataDelay\">\n            no delay\n          </label>\n          <label>\n            <input type=\"radio\" number=\"\" :value=\"1000\" v-model=\"app.fakeDataDelay\">\n            1 second\n          </label>\n          <label>\n            <input type=\"radio\" number=\"\" :value=\"3000\" v-model=\"app.fakeDataDelay\">\n            3 seconds\n          </label>\n        </p>\n        <small>\n          This delay is hooked to our mock data services.<br>\n          Use positive delays to watch state transitions and\n          loading placeholders.\n        </small>\n      </div>\n    </div>\n  </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   var id = "/Users/inca/projects/voie-example/spa/states/debug.vue"
   module.hot.dispose(function () {
-    require("vueify-insert-css").cache[".debug {\n  position: relative;\n}\n.debug-body,\n.debug-handle {\n  background: #29393d;\n  color: #fff;\n}\n.debug-handle {\n  position: absolute;\n  bottom: 100%;\n  left: 1em;\n  padding: 0.25em 1em;\n  cursor: pointer;\n  text-align: center;\n  border-radius: 8px 8px 0 0;\n}\n.debug-body {\n  padding: 0.5em 1em;\n}\n"] = false
+    require("vueify-insert-css").cache[".debug {\n  position: relative;\n}\n.debug-body,\n.debug-handle {\n  background: #29393d;\n  color: #fff;\n}\n.debug-handle {\n  position: absolute;\n  bottom: 100%;\n  left: 1em;\n  padding: 0.25em 1em;\n  cursor: pointer;\n  text-align: center;\n  border-radius: 8px 8px 0 0;\n}\n.debug-body {\n  padding: 0.5em 1em;\n}\n@media (min-width: 640px) {\n  .debug-body {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-flex-flow: row nowrap;\n        -ms-flex-flow: row nowrap;\n            flex-flow: row nowrap;\n  }\n  .debug-column {\n    -webkit-box-flex: 1;\n    -webkit-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n  }\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
@@ -10218,15 +10230,15 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"spa/app":5,"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],19:[function(require,module,exports){
-var __vueify_style__ = require("vueify-insert-css").insert(".home {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: column nowrap;\n      -ms-flex-flow: column nowrap;\n          flex-flow: column nowrap;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n.home-wrap {\n  max-width: 480px;\n}\n.author {\n  padding: 4em 0;\n  color: #aaa;\n}\n.author a {\n  text-decoration: none;\n}\n")
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"home\">\n    <div class=\"home-wrap\">\n      <h1>Welcome to Voie.js example!</h1>\n      <p>\n        This is a single-page application written\n        using awesome <a href=\"http://vuejs.org\" target=\"_blank\">Vue.js</a>\n        and <a href=\"https://inca.github.io/voie\" target=\"_blank\">Voie.js</a>.\n      </p>\n      <p>\n        To start just click on some navigation links above and continue exploring.\n      </p>\n      <p>\n        Note how some screens show you \"Please wait...\" —\n        this is done intentionally to demonstrate the ability to render\n        fallback content while state data is not ready.\n      </p>\n      <h2>Enjoying Vue + Voie?</h2>\n      <p>\n        Then you can continue browsing\n        <a href=\"https://github.com/inca/voie-example\">source code at GitHub</a>.\n        Be sure to give me some stars while you're at it :D\n      </p>\n    </div>\n    <div class=\"author\">\n      Made with &lt;3 by <a href=\"https://github.com/inca\">Boris Okunskiy</a>\n    </div>\n  </div>\n"
+var __vueify_style__ = require("vueify-insert-css").insert(".home {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: column nowrap;\n      -ms-flex-flow: column nowrap;\n          flex-flow: column nowrap;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n.home-wrap {\n  max-width: 480px;\n  padding: 2em;\n}\n.author {\n  color: #aaa;\n}\n.author a {\n  text-decoration: none;\n}\n")
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"home\">\n    <div class=\"home-wrap\">\n      <h1>Welcome to Voie.js example!</h1>\n      <p>\n        This is a single-page application written\n        using awesome <a href=\"http://vuejs.org\" target=\"_blank\">Vue.js</a>\n        and <a href=\"https://inca.github.io/voie\" target=\"_blank\">Voie.js</a>.\n      </p>\n      <p>\n        To start just click on some navigation links above and continue exploring.\n      </p>\n      <h2>Enjoying Vue + Voie?</h2>\n      <p>\n        Then you can continue browsing\n        <a href=\"https://github.com/inca/voie-example\">source code at GitHub</a>.\n        Be sure to give me some stars while you're at it :D\n      </p>\n    </div>\n    <div class=\"author\">\n      Made with &lt;3 by <a href=\"https://github.com/inca\">Boris Okunskiy</a>\n    </div>\n  </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   var id = "/Users/inca/projects/voie-example/spa/states/home.vue"
   module.hot.dispose(function () {
-    require("vueify-insert-css").cache[".home {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: column nowrap;\n      -ms-flex-flow: column nowrap;\n          flex-flow: column nowrap;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n.home-wrap {\n  max-width: 480px;\n}\n.author {\n  padding: 4em 0;\n  color: #aaa;\n}\n.author a {\n  text-decoration: none;\n}\n"] = false
+    require("vueify-insert-css").cache[".home {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: column nowrap;\n      -ms-flex-flow: column nowrap;\n          flex-flow: column nowrap;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n.home-wrap {\n  max-width: 480px;\n  padding: 2em;\n}\n.author {\n  color: #aaa;\n}\n.author a {\n  text-decoration: none;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {

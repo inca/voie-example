@@ -1,5 +1,11 @@
 import { StateManager } from 'voie';
 
-export default new StateManager({
+let app = new StateManager({
   el: '#app'
 });
+
+app.fakeDataDelay = 0;
+
+export default app;
+
+

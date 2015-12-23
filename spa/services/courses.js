@@ -1,9 +1,10 @@
 import COURSES from 'spa/db/courses.json';
+import app from 'spa/app';
 
 export default {
 
   findAll: () => new Promise(resolve => {
-    setTimeout(() => resolve(COURSES), 1000);
+    setTimeout(() => resolve(COURSES), app.fakeDataDelay);
   }),
 
   findById: courseId => new Promise((resolve, reject) => {
@@ -11,14 +12,14 @@ export default {
     setTimeout(() => {
       if (course) resolve(course);
       else reject(new Error('Course not found.'));
-    }, 500);
+    }, app.fakeDataDelay);
   }),
 
   findByUser: user => new Promise(resolve => {
     let courses = user.courses
       .map(id => COURSES.find(c => c.id == id))
       .filter(Boolean);
-    setTimeout(() => resolve(courses), 1000);
+    setTimeout(() => resolve(courses), app.fakeDataDelay);
   })
 
 }
