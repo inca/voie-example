@@ -23762,6 +23762,23 @@ var State = (function () {
         return result;
       }, {});
     }
+
+    /**
+     * Constructs query object consisting of params mentioned if `paramsSpec`
+     * but missing in `urlParams`.
+     *
+     * @param {object} params
+     */
+
+  }, {
+    key: 'makeQuery',
+    value: function makeQuery(params) {
+      var result = this.makeParams(params);
+      this.urlParams.forEach(function (p) {
+        delete result[p.name];
+      });
+      return result;
+    }
   }, {
     key: 'createHref',
     value: function createHref(params) {

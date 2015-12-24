@@ -12,6 +12,9 @@
       </a>
     </div>
     <v-view>
+      <div class="loading">
+        Please wait...
+      </div>
     </v-view>
   </div>
 </template>

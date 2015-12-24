@@ -7,7 +7,7 @@ import UsersSelect from './select.vue';
 
 app.add('users', {
   parent: 'root',
-  url: '/users',
+  path: '/users',
   redirect: 'users.select',
   enter: (ctx) => UsersService.findAll().then(users => {
     ctx.data.users = users;

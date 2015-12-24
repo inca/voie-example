@@ -7,7 +7,7 @@ import CoursesSelect from './select.vue';
 
 app.add('courses', {
   parent: 'root',
-  url: '/courses',
+  path: '/courses',
   redirect: 'courses.select',
   enter: (ctx) => CoursesService.findAll().then(courses => {
     ctx.data.courses = courses;

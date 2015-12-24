@@ -10,7 +10,7 @@ import UserEnrollment from './enrollment.vue';
 
 app.add('user', {
   parent: 'users',
-  url: '/user/:userId',
+  path: '/user/:userId',
   redirect: 'user.info',
   enter: (ctx) => UsersService.findById(ctx.params.userId)
     .then(user => ctx.data.user = user),
@@ -22,14 +22,14 @@ app.add('user.info', {
 });
 
 app.add('user.courses', {
-  url: 'members',
+  path: 'members',
   enter: (ctx) => CoursesService.findByUser(ctx.data.user)
     .then(courses => ctx.data.courses = courses),
   component: UserCourses
 });
 
 app.add('user.enrollment', {
-  url: 'course/:courseId',
+  path: 'course/:courseId',
   enter: (ctx) =>
     CoursesService.findById(ctx.params.courseId)
       .then(course => {
