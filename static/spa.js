@@ -9803,7 +9803,7 @@ app.fakeDataDelay = 0;
 
 exports.default = app;
 
-},{"voie":69}],6:[function(require,module,exports){
+},{"voie":71}],6:[function(require,module,exports){
 module.exports=[
   {
     "id": "CS001",
@@ -10040,7 +10040,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _app2.default.add('course', {
   parent: 'courses',
-  url: '/course/:courseId',
+  path: '/course/:courseId',
   redirect: 'course.info',
   enter: function enter(ctx) {
     return _courses2.default.findById(ctx.params.courseId).then(function (course) {
@@ -10055,7 +10055,7 @@ _app2.default.add('course.info', {
 });
 
 _app2.default.add('course.members', {
-  url: 'members',
+  path: 'members',
   enter: function enter(ctx) {
     return _users2.default.findByCourse(ctx.data.course).then(function (users) {
       return ctx.data.members = users;
@@ -10131,7 +10131,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _app2.default.add('courses', {
   parent: 'root',
-  url: '/courses',
+  path: '/courses',
   redirect: 'courses.select',
   enter: function enter(ctx) {
     return _courses2.default.findAll().then(function (courses) {
@@ -10409,7 +10409,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _app2.default.add('user', {
   parent: 'users',
-  url: '/user/:userId',
+  path: '/user/:userId',
   redirect: 'user.info',
   enter: function enter(ctx) {
     return _users2.default.findById(ctx.params.userId).then(function (user) {
@@ -10424,7 +10424,7 @@ _app2.default.add('user.info', {
 });
 
 _app2.default.add('user.courses', {
-  url: 'members',
+  path: 'members',
   enter: function enter(ctx) {
     return _courses2.default.findByUser(ctx.data.user).then(function (courses) {
       return ctx.data.courses = courses;
@@ -10434,7 +10434,7 @@ _app2.default.add('user.courses', {
 });
 
 _app2.default.add('user.enrollment', {
-  url: 'course/:courseId',
+  path: 'course/:courseId',
   enter: function enter(ctx) {
     return _courses2.default.findById(ctx.params.courseId).then(function (course) {
       var user = ctx.data.user;
@@ -10460,7 +10460,7 @@ if (module.hot) {(function () {  module.hot.accept()
 })()}
 },{"vue":3,"vue-hot-reload-api":2}],28:[function(require,module,exports){
 var __vueify_style__ = require("vueify-insert-css").insert("\n  .user-layout {\n    -webkit-flex-flow: column nowrap;\n        -ms-flex-flow: column nowrap;\n            flex-flow: column nowrap;\n    -webkit-box-pack: start;\n    -webkit-justify-content: flex-start;\n        -ms-flex-pack: start;\n            justify-content: flex-start;\n    padding: 2em;\n  }\n")
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"user-layout\">\n    <h1>{{ user.name }}</h1>\n    <div class=\"user-nav\">\n      <a class=\"nav-link\" v-link=\"{ name: 'user.info' }\">\n        Information\n      </a>\n      <a class=\"nav-link\" v-link=\"{ name: 'user.courses' }\">\n        Courses\n      </a>\n    </div>\n    <v-view>\n    </v-view>\n  </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"user-layout\">\n    <h1>{{ user.name }}</h1>\n    <div class=\"user-nav\">\n      <a class=\"nav-link\" v-link=\"{ name: 'user.info' }\">\n        Information\n      </a>\n      <a class=\"nav-link\" v-link=\"{ name: 'user.courses' }\">\n        Courses\n      </a>\n    </div>\n    <v-view>\n      <div class=\"loading\">\n        Please wait...\n      </div>\n    </v-view>\n  </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -10499,7 +10499,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _app2.default.add('users', {
   parent: 'root',
-  url: '/users',
+  path: '/users',
   redirect: 'users.select',
   enter: function enter(ctx) {
     return _users2.default.findAll().then(function (users) {
@@ -13855,6 +13855,10 @@ module.exports = Array.isArray || function (arr) {
 };
 
 },{}],66:[function(require,module,exports){
+arguments[4][61][0].apply(exports,arguments)
+},{"dup":61,"strict-uri-encode":67}],67:[function(require,module,exports){
+arguments[4][62][0].apply(exports,arguments)
+},{"dup":62}],68:[function(require,module,exports){
 (function (process){
 /*!
  * Vue.js v1.0.10
@@ -23159,7 +23163,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = Vue;
 }).call(this,require('_process'))
-},{"_process":1}],67:[function(require,module,exports){
+},{"_process":1}],69:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -23270,7 +23274,7 @@ function resolveManager(vm) {
   return null;
 }
 
-},{"debug":32,"vue":66}],68:[function(require,module,exports){
+},{"debug":32,"vue":68}],70:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23313,7 +23317,7 @@ var RedirectLoopError = exports.RedirectLoopError = (function (_Error2) {
   return RedirectLoopError;
 })(Error);
 
-},{}],69:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23339,7 +23343,7 @@ exports.StateManager = _stateManager2.default;
 exports.State = _state2.default;
 exports.Transition = _transition2.default;
 
-},{"./state":71,"./state-manager":70,"./transition":72}],70:[function(require,module,exports){
+},{"./state":73,"./state-manager":72,"./transition":74}],72:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -23541,15 +23545,15 @@ var StateManager = (function (_EventEmitter) {
     value: function _matchLocation(location) {
       var _this4 = this;
 
-      var pathname = location.pathname;
-      if (pathname == this.context.pathname) {
+      var url = location.pathname + location.search;
+      if (url == this.context.url) {
         return;
       }
       var found = Object.keys(this.states).find(function (name) {
         var state = _this4.states[name];
-        var matched = state.match(pathname);
+        var matched = state._match(location);
         if (matched) {
-          debug('match url %s -> %s', pathname, name);
+          debug('match url %s -> %s', location.pathname, name);
           _this4.go({
             name: name,
             params: matched,
@@ -23560,7 +23564,7 @@ var StateManager = (function (_EventEmitter) {
       });
       if (!found) {
         /* eslint-disable no-console */
-        console.warn('No states match URL: ' + pathname);
+        console.warn('No states match URL: ' + location.pathname);
         /* eslint-enable no-console */
         this._updateHistory(true);
       }
@@ -23569,18 +23573,18 @@ var StateManager = (function (_EventEmitter) {
     key: '_updateHistory',
     value: function _updateHistory(replace) {
       var state = this.context.state;
-      var pathname = state ? state.urlFormat(this.context.params) : '/';
-      if (pathname == this.context.pathname) {
+      var url = state ? state._makeUrl(this.context.params) : '/';
+      if (url == this.context.url) {
         return;
       }
-      this.context.pathname = pathname;
+      this.context.url = url;
       if (replace) {
-        this.history.replace(pathname);
+        this.history.replace(url);
       } else {
-        this.history.push(pathname);
+        this.history.push(url);
       }
       this.emit('history_updated', {
-        pathname: pathname,
+        url: url,
         ctx: this.context
       });
     }
@@ -23592,7 +23596,7 @@ var StateManager = (function (_EventEmitter) {
 exports.default = StateManager;
 ;
 
-},{"./directives":67,"./state":71,"./transition":72,"debug":32,"eventemitter3":35,"history":51,"vue":66}],71:[function(require,module,exports){
+},{"./directives":69,"./state":73,"./transition":74,"debug":32,"eventemitter3":35,"history":51,"vue":68}],73:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -23607,6 +23611,10 @@ var _pathToRegexp = require('path-to-regexp');
 
 var _pathToRegexp2 = _interopRequireDefault(_pathToRegexp);
 
+var _queryString = require('query-string');
+
+var _queryString2 = _interopRequireDefault(_queryString);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23620,7 +23628,7 @@ var State = (function () {
     this._setupHierarchy(spec);
     this._setupComponent(spec);
     this._setupHooks(spec);
-    this._setupUrl(spec);
+    this._setupPath(spec);
     this._setupParams(spec);
     this._setupOptions(spec);
   }
@@ -23660,30 +23668,36 @@ var State = (function () {
       }
     }
   }, {
-    key: '_setupUrl',
-    value: function _setupUrl(spec) {
-      this.url = spec.url || '';
-      if (this.url.indexOf('/') == 0) {
-        this.fullUrl = this.url;
+    key: '_setupPath',
+    value: function _setupPath(spec) {
+      if (!spec.path && spec.url) {
+        /* eslint-disable no-console */
+        console.warn('state.url is deprecated; use state.path instead');
+        /* eslint-enable no-console */
+        spec.path = spec.url;
+      }
+      this.path = spec.path || '';
+      if (this.path.indexOf('/') == 0) {
+        this.fullPath = this.path;
       } else {
-        var parentUrl = this.parentState ? this.parentState.fullUrl : '/';
-        this.fullUrl = parentUrl.replace(/\/+$/, '') + (this.url ? '/' + this.url : '');
+        var parentPath = this.parentState ? this.parentState.fullPath : '/';
+        this.fullPath = parentPath.replace(/\/+$/, '') + (this.path ? '/' + this.path : '');
       }
-      if (!this.fullUrl) {
-        this.fullUrl = '/';
+      if (!this.fullPath) {
+        this.fullPath = '/';
       }
-      this.urlParams = [];
-      this.urlRegex = (0, _pathToRegexp2.default)(this.fullUrl, this.urlParams);
-      this.urlFormat = _pathToRegexp2.default.compile(this.fullUrl);
+      this._pathParams = [];
+      this._pathRegex = (0, _pathToRegexp2.default)(this.fullPath, this._pathParams);
+      this._pathFormat = _pathToRegexp2.default.compile(this.fullPath);
     }
   }, {
     key: '_setupParams',
     value: function _setupParams(spec) {
       var _this = this;
 
-      this.paramsSpec = Object.assign({}, spec.params);
-      this.urlParams.forEach(function (param) {
-        _this.paramsSpec[param.name] = null;
+      this._paramsSpec = Object.assign({}, spec.params);
+      this._pathParams.forEach(function (param) {
+        _this._paramsSpec[param.name] = null;
       });
     }
   }, {
@@ -23725,64 +23739,109 @@ var State = (function () {
     }
 
     /**
-     * Attempts to match `pathname` to this state's URL pattern.
+     * Attempts to match `location` to this state's `path` pattern.
      *
-     * @param {string} pathname
+     * @param {{ pathname, search }} location
      * @returns an object with extracted params or `null` if don't match.
+     * @private
      */
 
   }, {
-    key: 'match',
-    value: function match(pathname) {
-      var result = this.urlRegex.exec(pathname);
-      if (!result) {
+    key: '_match',
+    value: function _match(location) {
+      var matched = this._pathRegex.exec(location.pathname);
+      if (!matched) {
         return null;
       }
-      return this.urlParams.reduce(function (params, p, i) {
-        params[p.name] = result[i + 1];
+      var params = this._pathParams.reduce(function (params, p, i) {
+        params[p.name] = matched[i + 1];
         return params;
       }, {});
+      try {
+        var query = _queryString2.default.parse(location.search);
+        Object.assign(params, query);
+      } catch (e) {}
+      return params;
     }
 
     /**
      * Constructs a `params` object by dropping any parameters
-     * not specified in `paramsSpec` of this state.
-     * Values from `paramsSpec` act as defaults.
+     * not specified in `_paramsSpec` of this state.
+     * Values from `_paramsSpec` act as defaults.
      *
      * @param {object} params
+     * @private
      */
 
   }, {
-    key: 'makeParams',
-    value: function makeParams(params) {
+    key: '_makeParams',
+    value: function _makeParams(params) {
       var _this2 = this;
 
-      return Object.keys(this.paramsSpec).reduce(function (result, name) {
-        result[name] = name in params ? params[name] : _this2.paramsSpec[name];
+      return Object.keys(this._paramsSpec).reduce(function (result, name) {
+        result[name] = name in params ? params[name] : _this2._paramsSpec[name];
         return result;
       }, {});
     }
 
     /**
-     * Constructs query object consisting of params mentioned if `paramsSpec`
-     * but missing in `urlParams`.
+     * Constructs search string by serializing query params.
      *
-     * @param {object} params
+     * @param params
+     * @return {string} search
+     * @private
      */
 
   }, {
-    key: 'makeQuery',
-    value: function makeQuery(params) {
-      var result = this.makeParams(params);
-      this.urlParams.forEach(function (p) {
-        delete result[p.name];
+    key: '_makeSearch',
+    value: function _makeSearch(params) {
+      var query = Object.keys(params).reduce(function (query, key) {
+        var value = params[key];
+        if (value != null) {
+          query[key] = value;
+        }
+        return query;
+      }, {});
+      this._pathParams.forEach(function (p) {
+        delete query[p.name];
       });
-      return result;
+      try {
+        var search = _queryString2.default.stringify(query);
+        if (search) {
+          return '?' + search;
+        }
+      } catch (e) {}
+      return '';
     }
+
+    /**
+     * Constructs an URL by encoding `params` into URL pattern and query string.
+     *
+     * Note: params not mentioned in `_paramsSpec` are dropped.
+     *
+     * @param params
+     * @return {string} url
+     * @private
+     */
+
+  }, {
+    key: '_makeUrl',
+    value: function _makeUrl(params) {
+      return this._pathFormat(params) + this._makeSearch(params);
+    }
+
+    /**
+     * Creates href suitable for links (taking into account base URL and
+     * hash-based histories).
+     *
+     * @param params
+     * @return {string} href
+     */
+
   }, {
     key: 'createHref',
     value: function createHref(params) {
-      return this.manager.history.createHref(this.urlFormat(params));
+      return this.manager.history.createHref(this._makeUrl(params));
     }
   }]);
 
@@ -23792,7 +23851,7 @@ var State = (function () {
 exports.default = State;
 ;
 
-},{"./utils":73,"path-to-regexp":64}],72:[function(require,module,exports){
+},{"./utils":75,"path-to-regexp":64,"query-string":66}],74:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -23923,7 +23982,7 @@ var Transition = (function () {
       var nextContext = {
         parent: prevCtx,
         state: nextState,
-        params: Object.assign({}, prevCtx.params, nextState.makeParams(this.params)),
+        params: Object.assign({}, prevCtx.params, nextState._makeParams(this.params)),
         data: Object.assign({}, prevCtx.data)
       };
       return Promise.resolve().then(function () {
@@ -23976,7 +24035,7 @@ var Transition = (function () {
 
 exports.default = Transition;
 
-},{"./error":68,"./utils":73,"debug":32}],73:[function(require,module,exports){
+},{"./error":70,"./utils":75,"debug":32}],75:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23997,4 +24056,4 @@ function toVueComponent(obj) {
   return _vue2.default.extend(obj);
 }
 
-},{"vue":66}]},{},[8]);
+},{"vue":68}]},{},[8]);
