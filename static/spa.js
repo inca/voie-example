@@ -23184,7 +23184,11 @@ _vue2.default.elementDirective('v-view', {
     var state = _vm$$options.state;
     var manager = _vm$$options.manager;
 
-    manager.mountPoints[state.name] = this.el;
+    manager.mountPoints[state.name] = {
+      hostVm: this.vm,
+      viewEl: this.el,
+      viewElChildren: [].slice.call(this.el.children)
+    };
     debug('registered v-view', this.el);
   },
   unbind: function unbind() {
@@ -23452,7 +23456,12 @@ var StateManager = (function (_EventEmitter) {
         params: {},
         data: {}
       };
-      this.mountPoints = {};
+      this.mountPoints = {
+        '': {
+          viewEl: this.el,
+          viewElChildren: [].slice.call(this.el.children)
+        }
+      };
     }
   }, {
     key: 'handleUncaught',
@@ -23511,7 +23520,11 @@ var StateManager = (function (_EventEmitter) {
       var ctx = this.context;
       while (ctx && !el) {
         var state = ctx.state;
-        el = state ? this.mountPoints[state.name] : this.el;
+        if (state) {
+          el = this.mountPoints[state.name];
+        } else {
+          el = this.mountPoints[''];
+        }
         ctx = ctx.parent;
       }
       return el;
@@ -23955,13 +23968,18 @@ var Transition = (function () {
     key: 'cleanup',
     value: function cleanup(ctx) {
       if (ctx.vm) {
+        // Destroy vm and restore v-view element
         var el = ctx.vm.$el;
+        var mp = ctx.mountPoint;
         ctx.vm.$destroy();
-        if (ctx.mountPoint) {
-          el.parentNode.replaceChild(ctx.mountPoint, el);
-          ctx._mountPointChildren.forEach(function (el) {
-            return ctx.mountPoint.appendChild(el);
-          });
+        if (mp) {
+          (function () {
+            var viewEl = ctx.mountPoint.viewEl;
+            el.parentNode.replaceChild(viewEl, el);
+            mp.viewElChildren.forEach(function (el) {
+              return viewEl.appendChild(el);
+            });
+          })();
         }
       }
       this.manager.context = ctx.parent;
@@ -24017,11 +24035,10 @@ var Transition = (function () {
       var Comp = (0, _utils.toVueComponent)(comp);
       var mp = this.manager._getMountPoint();
       ctx.mountPoint = mp;
-      // Preserve mount point children, b/c they are destroyed by Vue
-      ctx._mountPointChildren = [].slice.call(mp.children);
       ctx.vm = new Comp({
         data: ctx.data,
-        el: mp,
+        el: mp.viewEl,
+        parent: mp.hostVm,
         params: ctx.params,
         ctx: ctx,
         state: state,
