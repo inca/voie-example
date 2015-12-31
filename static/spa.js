@@ -23618,8 +23618,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _utils = require('./utils');
-
 var _pathToRegexp = require('path-to-regexp');
 
 var _pathToRegexp2 = _interopRequireDefault(_pathToRegexp);
@@ -23664,7 +23662,10 @@ var State = (function () {
     key: '_setupComponent',
     value: function _setupComponent(spec) {
       if (spec.component) {
-        this.component = (0, _utils.toVueComponent)(spec.component);
+        this.component = spec.component;
+        if (!this.component.name) {
+          this.component.name = this.name.replace(/\./g, '-');
+        }
       }
     }
   }, {
@@ -23864,7 +23865,7 @@ var State = (function () {
 exports.default = State;
 ;
 
-},{"./utils":75,"path-to-regexp":64,"query-string":66}],74:[function(require,module,exports){
+},{"path-to-regexp":64,"query-string":66}],74:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
