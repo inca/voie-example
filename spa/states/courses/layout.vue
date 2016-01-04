@@ -1,7 +1,12 @@
 <template>
   <div class="courses-layout">
     <ul class="courses-list side-list">
-      <li v-for="course in courses">
+      <li>
+        <input type="search"
+               v-model="q"
+               placeholder="Filter courses"/>
+      </li>
+      <li v-for="course in filteredCourses">
         <a v-link="{ name: 'course', params: { courseId: course.id }}">
           {{ course.title }}
         </a>
@@ -14,6 +19,34 @@
     </v-view>
   </div>
 </template>
+
+<script>
+import app from 'spa/app';
+
+export default {
+
+  data() {
+    return {
+      q: this.$options.params.q
+    };
+  },
+
+  computed: {
+    filteredCourses() {
+      return this.q ?
+        this.courses.filter(c => c.title.indexOf(this.q) > -1) :
+        this.courses;
+    }
+  },
+
+  watch: {
+    q() {
+      app.update({ q: this.q });
+    }
+  }
+
+}
+</script>
 
 <style lang="stylus">
   .courses-layout {

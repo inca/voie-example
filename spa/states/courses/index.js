@@ -9,6 +9,9 @@ app.add('courses', {
   parent: 'root',
   path: '/courses',
   redirect: 'courses.select',
+  params: {
+    q: null
+  },
   enter: (ctx) => CoursesService.findAll().then(courses => {
     ctx.data.courses = courses;
   }),

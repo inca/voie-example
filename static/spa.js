@@ -9803,7 +9803,7 @@ app.fakeDataDelay = 0;
 
 exports.default = app;
 
-},{"voie":71}],6:[function(require,module,exports){
+},{"voie":34}],6:[function(require,module,exports){
 module.exports=[
   {
     "id": "CS001",
@@ -10133,6 +10133,9 @@ _app2.default.add('courses', {
   parent: 'root',
   path: '/courses',
   redirect: 'courses.select',
+  params: {
+    q: null
+  },
   enter: function enter(ctx) {
     return _courses2.default.findAll().then(function (courses) {
       ctx.data.courses = courses;
@@ -10147,7 +10150,44 @@ _app2.default.add('courses.select', {
 
 },{"./layout.vue":16,"./select.vue":17,"spa/app":5,"spa/services/courses":9}],16:[function(require,module,exports){
 var __vueify_style__ = require("vueify-insert-css").insert(".courses-layout {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: row nowrap;\n      -ms-flex-flow: row nowrap;\n          flex-flow: row nowrap;\n}\n.courses-view {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n}\n")
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"courses-layout\">\n    <ul class=\"courses-list side-list\">\n      <li v-for=\"course in courses\">\n        <a v-link=\"{ name: 'course', params: { courseId: course.id }}\">\n          {{ course.title }}\n        </a>\n      </li>\n    </ul>\n    <v-view class=\"courses-view\">\n      <div class=\"loading\">\n        Please wait...\n      </div>\n    </v-view>\n  </div>\n"
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _app = require('spa/app');
+
+var _app2 = _interopRequireDefault(_app);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  data: function data() {
+    return {
+      q: this.$options.params.q
+    };
+  },
+
+  computed: {
+    filteredCourses: function filteredCourses() {
+      var _this = this;
+
+      return this.q ? this.courses.filter(function (c) {
+        return c.title.indexOf(_this.q) > -1;
+      }) : this.courses;
+    }
+  },
+
+  watch: {
+    q: function q() {
+      _app2.default.update({ q: this.q });
+    }
+  }
+
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"courses-layout\">\n    <ul class=\"courses-list side-list\">\n      <li>\n        <input type=\"search\" v-model=\"q\" placeholder=\"Filter courses\">\n      </li>\n      <li v-for=\"course in filteredCourses\">\n        <a v-link=\"{ name: 'course', params: { courseId: course.id }}\">\n          {{ course.title }}\n        </a>\n      </li>\n    </ul>\n    <v-view class=\"courses-view\">\n      <div class=\"loading\">\n        Please wait...\n      </div>\n    </v-view>\n  </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -10163,7 +10203,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],17:[function(require,module,exports){
+},{"spa/app":5,"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],17:[function(require,module,exports){
 var __vueify_style__ = require("vueify-insert-css").insert("\n  .courses-select {\n    -webkit-flex-flow: column nowrap;\n        -ms-flex-flow: column nowrap;\n            flex-flow: column nowrap;\n    -webkit-box-pack: center;\n    -webkit-justify-content: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n  }\n")
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"courses-select\">\n    <h1>Welcome to courses!</h1>\n    ← Select a course on sidebar\n  </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
@@ -10288,7 +10328,7 @@ _app2.default.add('home', {
 });
 
 },{"./home.vue":19,"./root.vue":22,"spa/app":5}],22:[function(require,module,exports){
-var __vueify_style__ = require("vueify-insert-css").insert(".nav-link {\n  display: inline-block;\n  padding: 0 1em;\n  border-radius: 16px;\n  text-decoration: none;\n}\n.nav-link.active {\n  background: #40a6bf;\n  color: #fff;\n}\n.side-list {\n  display: block;\n  list-style: none;\n  padding: 0.5em 0;\n  margin: 0;\n  background: #f7f7f7;\n}\n.side-list li {\n  margin: 0;\n}\n.side-list a {\n  display: block;\n  padding: 0.5em 1em;\n  color: #40a6bf;\n  text-decoration: none;\n}\n.side-list a.active {\n  background: #40a6bf;\n  color: #f7f7f7;\n}\n.root {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: column nowrap;\n      -ms-flex-flow: column nowrap;\n          flex-flow: column nowrap;\n}\n.root-body {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n}\n")
+var __vueify_style__ = require("vueify-insert-css").insert(".nav-link {\n  display: inline-block;\n  padding: 0 1em;\n  border-radius: 16px;\n  text-decoration: none;\n}\n.nav-link.active {\n  background: #40a6bf;\n  color: #fff;\n}\n.side-list {\n  display: block;\n  list-style: none;\n  padding: 0.5em 0;\n  margin: 0;\n  background: #f7f7f7;\n  -webkit-flex-basis: 25%;\n      -ms-flex-preferred-size: 25%;\n          flex-basis: 25%;\n}\n.side-list li {\n  margin: 0;\n}\n.side-list a {\n  display: block;\n  padding: 0.5em 1em;\n  color: #40a6bf;\n  text-decoration: none;\n}\n.side-list a.active {\n  background: #40a6bf;\n  color: #f7f7f7;\n}\n.side-list input[type=\"search\"] {\n  margin: 1em;\n  border-radius: 32px;\n  border: 1px solid #ccc;\n  outline: 0;\n}\n.side-list input[type=\"search\"]:focus {\n  border-color: #40a6bf;\n  box-shadow: 0 0 5px rgba(64,166,191,0.5);\n}\n.root {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: column nowrap;\n      -ms-flex-flow: column nowrap;\n          flex-flow: column nowrap;\n}\n.root-body {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10321,7 +10361,7 @@ if (module.hot) {(function () {  module.hot.accept()
   if (!hotAPI.compatible) return
   var id = "/Users/inca/projects/voie-example/spa/states/root.vue"
   module.hot.dispose(function () {
-    require("vueify-insert-css").cache[".nav-link {\n  display: inline-block;\n  padding: 0 1em;\n  border-radius: 16px;\n  text-decoration: none;\n}\n.nav-link.active {\n  background: #40a6bf;\n  color: #fff;\n}\n.side-list {\n  display: block;\n  list-style: none;\n  padding: 0.5em 0;\n  margin: 0;\n  background: #f7f7f7;\n}\n.side-list li {\n  margin: 0;\n}\n.side-list a {\n  display: block;\n  padding: 0.5em 1em;\n  color: #40a6bf;\n  text-decoration: none;\n}\n.side-list a.active {\n  background: #40a6bf;\n  color: #f7f7f7;\n}\n.root {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: column nowrap;\n      -ms-flex-flow: column nowrap;\n          flex-flow: column nowrap;\n}\n.root-body {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n}\n"] = false
+    require("vueify-insert-css").cache[".nav-link {\n  display: inline-block;\n  padding: 0 1em;\n  border-radius: 16px;\n  text-decoration: none;\n}\n.nav-link.active {\n  background: #40a6bf;\n  color: #fff;\n}\n.side-list {\n  display: block;\n  list-style: none;\n  padding: 0.5em 0;\n  margin: 0;\n  background: #f7f7f7;\n  -webkit-flex-basis: 25%;\n      -ms-flex-preferred-size: 25%;\n          flex-basis: 25%;\n}\n.side-list li {\n  margin: 0;\n}\n.side-list a {\n  display: block;\n  padding: 0.5em 1em;\n  color: #40a6bf;\n  text-decoration: none;\n}\n.side-list a.active {\n  background: #40a6bf;\n  color: #f7f7f7;\n}\n.side-list input[type=\"search\"] {\n  margin: 1em;\n  border-radius: 32px;\n  border: 1px solid #ccc;\n  outline: 0;\n}\n.side-list input[type=\"search\"]:focus {\n  border-color: #40a6bf;\n  box-shadow: 0 0 5px rgba(64,166,191,0.5);\n}\n.root {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-flex-flow: column nowrap;\n      -ms-flex-flow: column nowrap;\n          flex-flow: column nowrap;\n}\n.root-body {\n  -webkit-box-flex: 1;\n  -webkit-flex: 1;\n      -ms-flex: 1;\n          flex: 1;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -ms-flexbox;\n  display: flex;\n}\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
@@ -10550,6 +10590,2742 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"vue":3,"vue-hot-reload-api":2,"vueify-insert-css":4}],32:[function(require,module,exports){
+'use strict';
+
+var _keys = require('babel-runtime/core-js/object/keys');
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _assign = require('babel-runtime/core-js/object/assign');
+
+var _assign2 = _interopRequireDefault(_assign);
+
+var _vue = require('vue');
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _debug = require('debug');
+
+var _debug2 = _interopRequireDefault(_debug);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var debug = (0, _debug2.default)('voie:directive');
+
+_vue2.default.elementDirective('v-view', {
+  bind: function bind() {
+    var _vm$$options = this.vm.$options;
+    var state = _vm$$options.state;
+    var manager = _vm$$options.manager;
+
+    manager.mountPoints[state.name] = {
+      hostVm: this.vm,
+      viewEl: this.el,
+      viewElChildren: [].slice.call(this.el.children)
+    };
+    debug('registered v-view', this.el);
+  },
+  unbind: function unbind() {
+    var _vm$$options2 = this.vm.$options;
+    var state = _vm$$options2.state;
+    var manager = _vm$$options2.manager;
+
+    delete manager.mountPoints[state.name];
+    debug('unregistered v-view', this.el);
+  }
+});
+
+_vue2.default.directive('link', {
+  bind: function bind() {
+    this.manager = resolveManager(this.vm);
+    if (!this.manager) {
+      throw new Error('Can\'t find state manager.');
+    }
+    this.manager.on('state_changed', this.updateElement, this);
+  },
+  unbind: function unbind() {
+    this.manager.off('state_changed', this.updateElement, this);
+  },
+  update: function update(value) {
+    var _this = this;
+
+    var manager = this.manager;
+    var name = null;
+    this.params = (0, _assign2.default)({}, manager.context.params);
+    if (!value) {
+      throw new Error('v-link: expression "' + this.expression + '" should resolve to { name: ..., params... }}');
+    }
+    if (typeof value == 'string') {
+      name = value;
+    } else {
+      (0, _assign2.default)(this.params, value.params || {});
+      name = value.name;
+    }
+    this.state = manager.get(name);
+    if (!this.state) {
+      /* eslint-disable no-console */
+      console.warn('State "' + name + '" not found.');
+      /* eslint-enable no-console */
+      return;
+    }
+    this.el.onclick = function (ev) {
+      ev.preventDefault();
+      manager.go({
+        name: name,
+        params: _this.params
+      });
+    };
+    this.updateElement();
+  },
+  updateElement: function updateElement() {
+    var _this2 = this;
+
+    var state = this.state;
+    if (!state) {
+      return;
+    }
+    this.el.setAttribute('href', state.createHref(this.params));
+    // Add active class
+    var manager = this.manager;
+    var ctx = manager.context;
+    this.el.classList.remove(manager.activeClass);
+    if (ctx.state) {
+      var paramsMatch = (0, _keys2.default)(this.params).every(function (key) {
+        return ctx.params[key] == _this2.params[key];
+      });
+      var active = ctx.state.includes(state) && paramsMatch;
+      if (active) {
+        this.el.classList.add(manager.activeClass);
+      }
+    }
+  }
+});
+
+function resolveManager(vm) {
+  var manager = vm.$options.manager;
+  if (manager) {
+    return manager;
+  }
+  if (vm.$parent) {
+    return resolveManager(vm.$parent);
+  }
+  return null;
+}
+},{"babel-runtime/core-js/object/assign":39,"babel-runtime/core-js/object/keys":43,"debug":125,"vue":159}],33:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.RedirectLoopError = exports.StateNotFoundError = undefined;
+
+var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = require('babel-runtime/helpers/inherits');
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var StateNotFoundError = exports.StateNotFoundError = (function (_Error) {
+  (0, _inherits3.default)(StateNotFoundError, _Error);
+
+  function StateNotFoundError(name) {
+    (0, _classCallCheck3.default)(this, StateNotFoundError);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(StateNotFoundError).call(this, 'State "' + name + '" not found.'));
+
+    _this.name = name;
+    return _this;
+  }
+
+  return StateNotFoundError;
+})(Error);
+
+var RedirectLoopError = exports.RedirectLoopError = (function (_Error2) {
+  (0, _inherits3.default)(RedirectLoopError, _Error2);
+
+  function RedirectLoopError(transition) {
+    (0, _classCallCheck3.default)(this, RedirectLoopError);
+
+    var _this2 = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(RedirectLoopError).call(this, 'Redirect loop detected ' + '(set maxRedirects on state manager to configure max redirects per transition)'));
+
+    _this2.transition = transition;
+    return _this2;
+  }
+
+  return RedirectLoopError;
+})(Error);
+},{"babel-runtime/core-js/object/get-prototype-of":42,"babel-runtime/helpers/classCallCheck":47,"babel-runtime/helpers/inherits":49,"babel-runtime/helpers/possibleConstructorReturn":50}],34:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Transition = exports.State = exports.StateManager = undefined;
+
+var _stateManager = require('./state-manager');
+
+var _stateManager2 = _interopRequireDefault(_stateManager);
+
+var _state = require('./state');
+
+var _state2 = _interopRequireDefault(_state);
+
+var _transition = require('./transition');
+
+var _transition2 = _interopRequireDefault(_transition);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.StateManager = _stateManager2.default;
+exports.State = _state2.default;
+exports.Transition = _transition2.default;
+},{"./state":36,"./state-manager":35,"./transition":37}],35:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _keys = require('babel-runtime/core-js/object/keys');
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _assign = require('babel-runtime/core-js/object/assign');
+
+var _assign2 = _interopRequireDefault(_assign);
+
+var _typeof2 = require('babel-runtime/helpers/typeof');
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+var _promise = require('babel-runtime/core-js/promise');
+
+var _promise2 = _interopRequireDefault(_promise);
+
+var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = require('babel-runtime/helpers/inherits');
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _debug = require('debug');
+
+var _debug2 = _interopRequireDefault(_debug);
+
+var _eventemitter = require('eventemitter3');
+
+var _eventemitter2 = _interopRequireDefault(_eventemitter);
+
+var _vue = require('vue');
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _state = require('./state');
+
+var _state2 = _interopRequireDefault(_state);
+
+var _transition = require('./transition');
+
+var _transition2 = _interopRequireDefault(_transition);
+
+var _history = require('history');
+
+require('./directives');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var debug = (0, _debug2.default)('voie:manager');
+
+/**
+ * State manager holds the hierarchy of application states,
+ * exposes methods for navigating around states and
+ * keeps track of current state and its `context`
+ * (object `{ state, params, data, ... }`).
+ *
+ * A typical application will have a single instance
+ * of state manager exposed as a module.
+ *
+ * ```es6
+ * import { StateManager } from 'voie';
+ *
+ * export default new StateManager({ ... });
+ * ```
+ *
+ * State manager emits following events:
+ *
+ *   * `history_updated`
+ *   * `transition_finished`
+ *
+ */
+
+var StateManager = (function (_EventEmitter) {
+  (0, _inherits3.default)(StateManager, _EventEmitter);
+
+  /**
+   * Instantiates new state manager.
+   *
+   * Options:
+   *
+   *   * `el` — required, root DOM element for rendering views
+   *     (can be either `HTMLElement` or selector string)
+   *
+   *   * history — a history object (see `rackt/history`)
+   *
+   *   * base — (only used when `history` is not specified), base href
+   *     for application (URL pathname prefix)
+   *
+   *   * `maxRedirects` — maximum number of redirects within
+   *     a single transition, when exceeded transition will fail with
+   *     `RedirectLoopError` (default is 10)
+   *
+   *   * `activeClass` — active class for `v-link` directive
+   *     (default is "active")'
+   *
+   *   * `handleUncaught` — `function(err) => Promise` invoked
+   *     when transition fails with error
+   */
+
+  function StateManager(spec) {
+    (0, _classCallCheck3.default)(this, StateManager);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(StateManager).call(this));
+
+    _this._setupEl(spec);
+    _this._setupHistory(spec);
+    _this._setupOptions(spec);
+    _this._setupState();
+    return _this;
+  }
+
+  (0, _createClass3.default)(StateManager, [{
+    key: '_setupEl',
+    value: function _setupEl(spec) {
+      this.el = spec.el instanceof HTMLElement ? spec.el : document.querySelector(spec.el);
+      if (!this.el) {
+        throw new Error('Please specify `el` as an entry-point node of your app.');
+      }
+    }
+  }, {
+    key: '_setupHistory',
+    value: function _setupHistory(spec) {
+      if (spec.history) {
+        this.history = spec.history;
+      } else {
+        this._setupDefaultHtml5History(spec);
+      }
+    }
+  }, {
+    key: '_setupDefaultHtml5History',
+    value: function _setupDefaultHtml5History(spec) {
+      var base = spec.base;
+      // Try to take base from `<base href=""/>`
+      if (!base) {
+        var baseEl = document.querySelector('base');
+        base = baseEl && baseEl.getAttribute('href');
+      }
+      base = (base || '').replace(/\/+$/, '');
+      this.history = (0, _history.useBasename)(_history.createHistory)({ basename: base });
+    }
+  }, {
+    key: '_setupOptions',
+    value: function _setupOptions(spec) {
+      if (spec.handleUncaught) {
+        this.handleUncaught = spec.handleUncaught;
+      }
+      this.maxRedirects = Number(spec.maxRedirects) || 10;
+      this.activeClass = spec.activeClass || 'active';
+    }
+  }, {
+    key: '_setupState',
+    value: function _setupState() {
+      this.states = {};
+      this.context = {
+        parent: null,
+        state: null, // root state
+        vm: null,
+        params: {},
+        data: {}
+      };
+      this.mountPoints = {
+        '': {
+          viewEl: this.el,
+          viewElChildren: [].slice.call(this.el.children)
+        }
+      };
+      this.transition = null;
+    }
+
+    /**
+     * Handles errors uncaught during transition.
+     * Used for overriding on a per-instance basis.
+     *
+     * @returns {Promise}
+     */
+
+  }, {
+    key: 'handleUncaught',
+    value: function handleUncaught(err) {
+      return _promise2.default.reject(err);
+    }
+
+    /**
+     * Registers a new state with specified `name`.
+     *
+     * You can use one of two styles:
+     *
+     * ```es6
+     * sm.add('foo', { ... });
+     * sm.add({ name: 'foo', ... });
+     * ```
+     *
+     * All options are passed to `State` constructor.
+     *
+     * @returns {State}
+     */
+
+  }, {
+    key: 'add',
+    value: function add(name, spec) {
+      if ((typeof name === 'undefined' ? 'undefined' : (0, _typeof3.default)(name)) == 'object') {
+        spec = name;
+        name = spec.name;
+      }
+      if (!name) {
+        throw new Error('State `name` is mandatory.');
+      }
+      if (this.states[name]) {
+        throw new Error('State "' + name + '" already added');
+      }
+      spec.name = name;
+      var state = new _state2.default(this, spec);
+      debug('add %s', name);
+      this.states[name] = state;
+      return state;
+    }
+
+    /**
+     * Retrieves a state previously registered via `add`.
+     *
+     * @returns {State}
+     */
+
+  }, {
+    key: 'get',
+    value: function get(name) {
+      return this.states[name];
+    }
+
+    /**
+     * Navigates to a state with specified `name`.
+     * Navigation is performed asynchronously, allowing
+     * state enter/leave hook to perform async tasks
+     * (e.g. fetch data).
+     *
+     * Throws an exception if another transition is
+     * taking place.
+     *
+     * Options:
+     *
+     *   * `name` — target state name (if null, will transition to same state
+     *     with updated params)
+     *   * `params` — object containing state parameters
+     *     (either path variables or query string parameters)
+     *   * `replace` — if `true` don't create a separate record
+     *     in browser history (default is `false`)
+     *
+     * Transition process:
+     *
+     *   * find nearest common ancestor state with matching parameters
+     *   * go "upstream", leaving states, cleaning up states,
+     *     destroying components
+     *   * go "downstream", entering states, instantiating and rendering
+     *     components
+     *   * update browser history to reflect target state
+     *     (e.g. set new URL in address bar)
+     *
+     *  Note that it is the responsibility of the state to compute
+     *  target URL.
+     *
+     *  @returns {Promise} resolved when navigation is finished.
+     */
+
+  }, {
+    key: 'go',
+    value: function go(options) {
+      var _this2 = this;
+
+      if (this.transition) {
+        throw new Error('Transition is in progress. Abort it before going elsewhere.');
+      }
+      this.transition = new _transition2.default(this, options);
+      return this.transition.run().then(function (result) {
+        _this2.transition = null;
+        _this2.emit('transition_finished');
+        return result;
+      }).catch(function (err) {
+        _this2.transition = null;
+        _this2.emit('transition_finished', err);
+        return _this2.handleUncaught(err);
+      }).then(function () {
+        return _this2._updateHistory(options.replace || false);
+      });
+    }
+
+    /**
+     * Updates browser history without actually performing
+     * any transitions.
+     *
+     * Typically used to serialize parameters into query string
+     * without performing navigation (e.g. when params are used
+     * only in Vue components).
+     */
+
+  }, {
+    key: 'update',
+    value: function update(params, replace) {
+      var _this3 = this;
+
+      (0, _assign2.default)(this.context.params, params);
+      return _promise2.default.resolve().then(function () {
+        return _this3._updateHistory(replace);
+      });
+    }
+
+    /**
+     * Resolves nearest mount point in current context tree.
+     *
+     * Mount point is a "slot" that corresponds to `v-view` directive
+     * (and the component that hosts it).
+     */
+
+  }, {
+    key: '_getMountPoint',
+    value: function _getMountPoint() {
+      var el = null;
+      var ctx = this.context;
+      while (ctx && !el) {
+        var state = ctx.state;
+        if (state) {
+          el = this.mountPoints[state.name];
+        } else {
+          el = this.mountPoints[''];
+        }
+        ctx = ctx.parent;
+      }
+      return el;
+    }
+
+    /**
+     * Begins listening for history events (e.g. browser back button)
+     * and performs initial navigation by matching current URL.
+     *
+     * @returns {Promise} resolved when initial navigation is finished.
+     */
+
+  }, {
+    key: 'start',
+    value: function start() {
+      var _this4 = this;
+
+      if (this._unlisten) {
+        return _promise2.default.resolve();
+      }
+      this._unlisten = this.history.listen(function (location) {
+        return _this4._matchLocation(location);
+      });
+      return new _promise2.default(function (resolve) {
+        return _this4.once('history_updated', resolve);
+      });
+    }
+
+    /**
+     * Stops listening for history events.
+     */
+
+  }, {
+    key: 'stop',
+    value: function stop() {
+      if (!this._unlisten) {
+        return;
+      }
+      this._unlisten();
+      delete this._unlisten;
+    }
+  }, {
+    key: '_matchLocation',
+    value: function _matchLocation(location) {
+      var _this5 = this;
+
+      var url = location.pathname + location.search;
+      if (url == this.context.url) {
+        return;
+      }
+      var found = (0, _keys2.default)(this.states).find(function (name) {
+        var state = _this5.states[name];
+        var matched = state._match(location);
+        if (matched) {
+          debug('match url %s -> %s', location.pathname, name);
+          _this5.go({
+            name: name,
+            params: matched,
+            replace: true
+          });
+          return true;
+        }
+      });
+      if (!found) {
+        /* eslint-disable no-console */
+        console.warn('No states match URL: ' + location.pathname);
+        /* eslint-enable no-console */
+        this._updateHistory(true);
+      }
+    }
+  }, {
+    key: '_updateHistory',
+    value: function _updateHistory(replace) {
+      var state = this.context.state;
+      var url = state ? state._makeUrl(this.context.params) : '/';
+      if (url == this.context.url) {
+        return;
+      }
+      this.context.url = url;
+      if (replace) {
+        this.history.replace(url);
+      } else {
+        this.history.push(url);
+      }
+      this.emit('history_updated', {
+        url: url,
+        ctx: this.context
+      });
+    }
+  }]);
+  return StateManager;
+})(_eventemitter2.default);
+
+exports.default = StateManager;
+;
+},{"./directives":32,"./state":36,"./transition":37,"babel-runtime/core-js/object/assign":39,"babel-runtime/core-js/object/get-prototype-of":42,"babel-runtime/core-js/object/keys":43,"babel-runtime/core-js/promise":45,"babel-runtime/helpers/classCallCheck":47,"babel-runtime/helpers/createClass":48,"babel-runtime/helpers/inherits":49,"babel-runtime/helpers/possibleConstructorReturn":50,"babel-runtime/helpers/typeof":51,"debug":125,"eventemitter3":128,"history":144,"vue":159}],36:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _keys = require('babel-runtime/core-js/object/keys');
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _promise = require('babel-runtime/core-js/promise');
+
+var _promise2 = _interopRequireDefault(_promise);
+
+var _assign = require('babel-runtime/core-js/object/assign');
+
+var _assign2 = _interopRequireDefault(_assign);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _pathToRegexp = require('path-to-regexp');
+
+var _pathToRegexp2 = _interopRequireDefault(_pathToRegexp);
+
+var _queryString = require('query-string');
+
+var _queryString2 = _interopRequireDefault(_queryString);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Represents a node in application states hierarchy.
+ *
+ * Most state features are optional, the only required
+ * setting is a unique `name` and a reference to `parent` state.
+ *
+ * Depending on features a state can represent:
+ *
+ *   * an abstract view (e.g. layout containing a component with `<v-view>`
+ *     directive)
+ *   * a concrete view
+ *   * a route with path pattern and query parameters
+ *   * a data resolver that provides data to its descendants
+ *   * a mix of above
+ *
+ * Invoking constructor directly is not recommended,
+ * use `StateManager#add` instead.
+ *
+ * @private
+ */
+
+var State = (function () {
+
+  /**
+   * Options:
+   *
+   *   * `name` — required, state name; if contains dots `.`
+   *     then parent state will be inferred from this name
+   *     (e.g. `layout.users` will become a parent of `layout.users.list`)
+   *     unless `parent` is specified explicitly
+   *
+   *   * `parent` — optional, parent state (this option disables
+   *     parent-from-name inference)
+   *
+   *   * `path` — optional pathname pattern for matching URLs and
+   *     extracting parameters (e.g. `/user/:userId`). If started with `/`,
+   *     then path is treated as an absolute pathname, otherwise
+   *     path is treated as a fragment (absolute pathname is inherited
+   *     from parent)
+   *
+   *   * `params` — optional object that specifies default values for
+   *     additional params that this state accepts; these params
+   *     will be encoded into query string
+   *
+   *   * `component` — optional Vue component to be rendered
+   *     when entering this state
+   *
+   *   * `redirect` — optional state name to redirect when navigating
+   *     to this state; typically used in "abstract" states (e.g. layouts,
+   *     data-preparation, etc.) to specify default sub-state
+   *
+   *   * `enter` — optional `function(ctx) => Promise` hook invoked
+   *     when transitioning into this state or its descendants
+   *
+   *   * `leave` — optional `function(ctx) => Promise` hook invoked
+   *     when transitioning from this state or its descendants
+   *
+   *   * `handleError` — optional `function(err, ctx) => Promise` invoked
+   *     when error occurs during transition into/over this state
+   *
+   * @param manager
+   * @param spec
+   */
+
+  function State(manager, spec) {
+    (0, _classCallCheck3.default)(this, State);
+
+    this.manager = manager;
+    this._setupName(spec);
+    this._setupHierarchy(spec);
+    this._setupComponent(spec);
+    this._setupHooks(spec);
+    this._setupPath(spec);
+    this._setupParams(spec);
+    this._setupOptions(spec);
+  }
+
+  (0, _createClass3.default)(State, [{
+    key: '_setupName',
+    value: function _setupName(spec) {
+      this.name = spec.name;
+      if (!this.name) {
+        throw new Error('State `name` is required');
+      }
+    }
+  }, {
+    key: '_setupHierarchy',
+    value: function _setupHierarchy(spec) {
+      this.parentState = this.manager.get(spec.parent || this.name.split('.').slice(0, -1).join('.')) || null;
+      this.lineage = this.parentState ? this.parentState.lineage.concat([this]) : [this];
+    }
+  }, {
+    key: '_setupComponent',
+    value: function _setupComponent(spec) {
+      if (spec.component) {
+        this.component = spec.component;
+        if (!this.component.name) {
+          this.component.name = this.name.replace(/\./g, '-');
+        }
+      }
+    }
+  }, {
+    key: '_setupHooks',
+    value: function _setupHooks(spec) {
+      if (spec.enter) {
+        this.enter = spec.enter;
+      }
+      if (spec.leave) {
+        this.leave = spec.leave;
+      }
+      if (spec.handleError) {
+        this.handleError = spec.handleError;
+      }
+    }
+  }, {
+    key: '_setupPath',
+    value: function _setupPath(spec) {
+      if (!spec.path && spec.url) {
+        /* eslint-disable no-console */
+        console.warn('state.url is deprecated; use state.path instead');
+        /* eslint-enable no-console */
+        spec.path = spec.url;
+      }
+      this.path = spec.path || '';
+      if (this.path.indexOf('/') == 0) {
+        this.fullPath = this.path;
+      } else {
+        var parentPath = this.parentState ? this.parentState.fullPath : '/';
+        this.fullPath = parentPath.replace(/\/+$/, '') + (this.path ? '/' + this.path : '');
+      }
+      if (!this.fullPath) {
+        this.fullPath = '/';
+      }
+      this._pathParams = [];
+      this._pathRegex = (0, _pathToRegexp2.default)(this.fullPath, this._pathParams);
+      this._pathFormat = _pathToRegexp2.default.compile(this.fullPath);
+    }
+  }, {
+    key: '_setupParams',
+    value: function _setupParams(spec) {
+      var _this = this;
+
+      this._paramsSpec = (0, _assign2.default)({}, spec.params);
+      this._pathParams.forEach(function (param) {
+        _this._paramsSpec[param.name] = null;
+      });
+    }
+  }, {
+    key: '_setupOptions',
+    value: function _setupOptions(spec) {
+      if (spec.redirect) {
+        this.redirect = spec.redirect;
+      }
+    }
+
+    /**
+     * Invoked when going "downstream" (either into this state or
+     * through this state to one of its descendants).
+     *
+     * Primary usage is to process `ctx.params` and populate `ctx.data`.
+     *
+     * Can redirect to another state by resolving `{ redirect: anotherStateName }`
+     * (e.g. for authentication).
+     *
+     * It is also possible to render a custom Vue component instead
+     * by resolving `{ component: customVueComponent }`.
+     *
+     * @param ctx — object `{ state, params, data }`
+     * @returns {Promise}
+     */
+
+  }, {
+    key: 'enter',
+    value: function enter(ctx) {
+      return _promise2.default.resolve();
+    }
+
+    /**
+     * Invoked when going "upstream" (either from this state or
+     * through this state from one of its descendants).
+     * Typically used from cleaning up stuff used by this state.
+     *
+     * Like with `enter`, it is possible to redirect to another state
+     * by resolving `{ redirect: anotherStateName }`.
+     *
+     * @param ctx — object `{ state, params, data }`
+     * @returns {Promise}
+     */
+
+  }, {
+    key: 'leave',
+    value: function leave(ctx) {
+      return _promise2.default.resolve();
+    }
+
+    /**
+     * Invoked when error occurs during entering this state.
+     *
+     * Can redirect to another state by resolving `{ redirect: anotherStateName }`
+     * (e.g. for authentication).
+     *
+     * It is also possible to render a custom Vue component instead
+     * by resolving `{ component: customVueComponent }`.
+     *
+     * @param ctx — object `{ state, params, data }`
+     * @returns {Promise}
+     */
+
+  }, {
+    key: 'handleError',
+    value: function handleError(err, ctx) {
+      return _promise2.default.reject(err);
+    }
+
+    /**
+     * Returns true if this state is equal to `stateOrName`
+     * or contains `stateOrName` somewhere up the hierarchy.
+     *
+     * @param {string|State} stateOrName
+     * @return {boolean}
+     */
+
+  }, {
+    key: 'includes',
+    value: function includes(stateOrName) {
+      var state = stateOrName instanceof State ? stateOrName : this.manager.get(stateOrName);
+      return this.lineage.indexOf(state) > -1;
+    }
+
+    /**
+     * Attempts to match `location` to this state's `path` pattern.
+     *
+     * @param {{ pathname, search }} location
+     * @returns an object with extracted params or `null` if don't match.
+     * @private
+     */
+
+  }, {
+    key: '_match',
+    value: function _match(location) {
+      var matched = this._pathRegex.exec(location.pathname);
+      if (!matched) {
+        return null;
+      }
+      var params = this._pathParams.reduce(function (params, p, i) {
+        params[p.name] = matched[i + 1];
+        return params;
+      }, {});
+      try {
+        var query = _queryString2.default.parse(location.search);
+        (0, _assign2.default)(params, query);
+      } catch (e) {}
+      return params;
+    }
+
+    /**
+     * Constructs a `params` object by dropping any parameters
+     * not specified in `_paramsSpec` of this state.
+     * Values from `_paramsSpec` act as defaults.
+     *
+     * @param {object} params
+     * @private
+     */
+
+  }, {
+    key: '_makeParams',
+    value: function _makeParams(params) {
+      var _this2 = this;
+
+      return (0, _keys2.default)(this._paramsSpec).reduce(function (result, name) {
+        result[name] = name in params ? params[name] : _this2._paramsSpec[name];
+        return result;
+      }, {});
+    }
+
+    /**
+     * Constructs search string by serializing query params.
+     *
+     * @param params
+     * @return {string} search
+     * @private
+     */
+
+  }, {
+    key: '_makeSearch',
+    value: function _makeSearch(params) {
+      var query = (0, _keys2.default)(params).reduce(function (query, key) {
+        var value = params[key];
+        if (value != null) {
+          query[key] = value;
+        }
+        return query;
+      }, {});
+      this._pathParams.forEach(function (p) {
+        delete query[p.name];
+      });
+      try {
+        var search = _queryString2.default.stringify(query);
+        if (search) {
+          return '?' + search;
+        }
+      } catch (e) {}
+      return '';
+    }
+
+    /**
+     * Constructs an URL by encoding `params` into URL pattern and query string.
+     *
+     * Note: params not mentioned in `_paramsSpec` are dropped.
+     *
+     * @param params
+     * @return {string} url
+     * @private
+     */
+
+  }, {
+    key: '_makeUrl',
+    value: function _makeUrl(params) {
+      return this._pathFormat(params) + this._makeSearch(params);
+    }
+
+    /**
+     * Creates href suitable for links (taking into account base URL and
+     * hash-based histories).
+     *
+     * @param params
+     * @return {string} href
+     */
+
+  }, {
+    key: 'createHref',
+    value: function createHref(params) {
+      return this.manager.history.createHref(this._makeUrl(params));
+    }
+  }]);
+  return State;
+})();
+
+exports.default = State;
+;
+},{"babel-runtime/core-js/object/assign":39,"babel-runtime/core-js/object/keys":43,"babel-runtime/core-js/promise":45,"babel-runtime/helpers/classCallCheck":47,"babel-runtime/helpers/createClass":48,"path-to-regexp":155,"query-string":157}],37:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _assign = require('babel-runtime/core-js/object/assign');
+
+var _assign2 = _interopRequireDefault(_assign);
+
+var _keys = require('babel-runtime/core-js/object/keys');
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _promise = require('babel-runtime/core-js/promise');
+
+var _promise2 = _interopRequireDefault(_promise);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _debug = require('debug');
+
+var _debug2 = _interopRequireDefault(_debug);
+
+var _error = require('./error');
+
+var _utils = require('./utils');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var debug = (0, _debug2.default)('voie:transition');
+
+var Transition = (function () {
+  function Transition(manager, spec) {
+    (0, _classCallCheck3.default)(this, Transition);
+
+    this.manager = manager;
+    this.redirectsCount = 0;
+    var currentState = manager.context.state;
+    var dstStateName = undefined;
+    if (typeof spec === 'string') {
+      dstStateName = spec;
+      spec = {};
+    } else if (spec.name) {
+      dstStateName = spec.name;
+    } else if (currentState) {
+      dstStateName = currentState.name;
+    } else {
+      throw new Error('Destination state not specified');
+    }
+    debug('go to %s', dstStateName);
+    this.resolveDstState(dstStateName);
+    this.params = spec.params || {};
+  }
+
+  (0, _createClass3.default)(Transition, [{
+    key: 'resolveDstState',
+    value: function resolveDstState(name, isRedirect) {
+      if (isRedirect) {
+        debug('redirect to %s', name);
+      }
+      var state = this.manager.get(name);
+      if (!state) {
+        throw new _error.StateNotFoundError(name);
+      }
+      this.dstState = state;
+      if (state.redirect) {
+        this.redirectsCount++;
+        if (this.redirectsCount > this.manager.maxRedirects) {
+          throw new _error.RedirectLoopError(this);
+        }
+        this.resolveDstState(state.redirect, true);
+      }
+    }
+  }, {
+    key: 'run',
+    value: function run() {
+      var _this = this;
+
+      return this.goUpstream().then(function () {
+        return _this.goDownstream();
+      });
+    }
+  }, {
+    key: 'goUpstream',
+    value: function goUpstream() {
+      var _this2 = this;
+
+      var ctx = this.manager.context;
+      if (!ctx.state) {
+        // We're at root state, no cleanup is necessary
+        return _promise2.default.resolve();
+      }
+      // Stop going up if state is common with dst branch
+      var state = ctx.state;
+      if (this.dstState.includes(state)) {
+        // All ctx params must match target ones
+        // (e.g. when going from /user/1 to /user/2)
+        var paramsMatch = (0, _keys2.default)(ctx.params).every(function (key) {
+          return ctx.params[key] == _this2.params[key];
+        });
+        if (paramsMatch) {
+          return _promise2.default.resolve();
+        }
+      }
+      return _promise2.default.resolve().then(function () {
+        return state.leave(ctx);
+      }).then(function () {
+        debug(' <- left %s', state.name);
+        _this2.cleanup(ctx);
+      }).then(function () {
+        return _this2.goUpstream();
+      });
+    }
+  }, {
+    key: 'cleanup',
+    value: function cleanup(ctx) {
+      if (ctx.vm) {
+        // Destroy vm and restore v-view element
+        var el = ctx.vm.$el;
+        var mp = ctx.mountPoint;
+        ctx.vm.$destroy();
+        if (mp) {
+          (function () {
+            var viewEl = ctx.mountPoint.viewEl;
+            el.parentNode.replaceChild(viewEl, el);
+            mp.viewElChildren.forEach(function (el) {
+              return viewEl.appendChild(el);
+            });
+          })();
+        }
+      }
+      this.manager.context = ctx.parent;
+      this.manager.emit('state_changed', this.manager.context);
+    }
+  }, {
+    key: 'goDownstream',
+    value: function goDownstream() {
+      var _this3 = this;
+
+      var prevCtx = this.manager.context;
+      var dstLineage = this.dstState.lineage;
+      var nextState = dstLineage[dstLineage.indexOf(prevCtx.state) + 1];
+      if (!nextState) {
+        return _promise2.default.resolve();
+      }
+      // New context inherits params and data from parent
+      var nextContext = {
+        parent: prevCtx,
+        state: nextState,
+        params: (0, _assign2.default)({}, prevCtx.params, nextState._makeParams(this.params)),
+        data: (0, _assign2.default)({}, prevCtx.data)
+      };
+      return _promise2.default.resolve().then(function () {
+        return nextState.enter(nextContext);
+      }).catch(function (err) {
+        return nextState.handleError(err, nextContext);
+      }).then(function (obj) {
+        obj = obj || {};
+        debug(' -> entered %s', nextState.name);
+        // hooks can return { redirect: 'new.state.name' }
+        if (typeof obj.redirect == 'string') {
+          _this3.resolveDstState(obj.redirect, true);
+          return _this3.run();
+        }
+        _this3.manager.context = nextContext;
+        // hooks can also return { component: <VueComponent> }
+        _this3.render(nextContext, obj.component);
+        _this3.manager.emit('state_changed', _this3.manager.context);
+        if (nextState != _this3.dstState) {
+          return _this3.goDownstream();
+        }
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render(ctx, comp) {
+      var state = ctx.state;
+      comp = comp || state.component;
+      if (!comp) {
+        return;
+      }
+      var Comp = (0, _utils.toVueComponent)(comp);
+      var mp = this.manager._getMountPoint();
+      ctx.mountPoint = mp;
+      ctx.vm = new Comp({
+        data: ctx.data,
+        el: mp.viewEl,
+        parent: mp.hostVm,
+        params: ctx.params,
+        ctx: ctx,
+        state: state,
+        manager: this.manager
+      });
+    }
+  }]);
+  return Transition;
+})();
+
+exports.default = Transition;
+},{"./error":33,"./utils":38,"babel-runtime/core-js/object/assign":39,"babel-runtime/core-js/object/keys":43,"babel-runtime/core-js/promise":45,"babel-runtime/helpers/classCallCheck":47,"babel-runtime/helpers/createClass":48,"debug":125}],38:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.toVueComponent = toVueComponent;
+
+var _vue = require('vue');
+
+var _vue2 = _interopRequireDefault(_vue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function toVueComponent(obj) {
+  if (obj.name == 'VueComponent') {
+    return obj;
+  }
+  return _vue2.default.extend(obj);
+}
+},{"vue":159}],39:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/assign"), __esModule: true };
+},{"core-js/library/fn/object/assign":52}],40:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/create"), __esModule: true };
+},{"core-js/library/fn/object/create":53}],41:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/define-property"), __esModule: true };
+},{"core-js/library/fn/object/define-property":54}],42:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/get-prototype-of"), __esModule: true };
+},{"core-js/library/fn/object/get-prototype-of":55}],43:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/keys"), __esModule: true };
+},{"core-js/library/fn/object/keys":56}],44:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/set-prototype-of"), __esModule: true };
+},{"core-js/library/fn/object/set-prototype-of":57}],45:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/promise"), __esModule: true };
+},{"core-js/library/fn/promise":58}],46:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/symbol"), __esModule: true };
+},{"core-js/library/fn/symbol":59}],47:[function(require,module,exports){
+"use strict";
+
+exports.default = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+exports.__esModule = true;
+},{}],48:[function(require,module,exports){
+"use strict";
+
+var _defineProperty = require("babel-runtime/core-js/object/define-property");
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = (function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      (0, _defineProperty2.default)(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+})();
+
+exports.__esModule = true;
+},{"babel-runtime/core-js/object/define-property":41}],49:[function(require,module,exports){
+"use strict";
+
+var _Object$create = require("babel-runtime/core-js/object/create")["default"];
+
+var _Object$setPrototypeOf = require("babel-runtime/core-js/object/set-prototype-of")["default"];
+
+exports["default"] = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = _Object$create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _Object$setPrototypeOf ? _Object$setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+};
+
+exports.__esModule = true;
+},{"babel-runtime/core-js/object/create":40,"babel-runtime/core-js/object/set-prototype-of":44}],50:[function(require,module,exports){
+"use strict";
+
+var _typeof2 = require("babel-runtime/helpers/typeof");
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && ((typeof call === "undefined" ? "undefined" : (0, _typeof3.default)(call)) === "object" || typeof call === "function") ? call : self;
+};
+
+exports.__esModule = true;
+},{"babel-runtime/helpers/typeof":51}],51:[function(require,module,exports){
+"use strict";
+
+var _Symbol = require("babel-runtime/core-js/symbol")["default"];
+
+exports["default"] = function (obj) {
+  return obj && obj.constructor === _Symbol ? "symbol" : typeof obj;
+};
+
+exports.__esModule = true;
+},{"babel-runtime/core-js/symbol":46}],52:[function(require,module,exports){
+require('../../modules/es6.object.assign');
+module.exports = require('../../modules/$.core').Object.assign;
+},{"../../modules/$.core":65,"../../modules/es6.object.assign":116}],53:[function(require,module,exports){
+var $ = require('../../modules/$');
+module.exports = function create(P, D){
+  return $.create(P, D);
+};
+},{"../../modules/$":90}],54:[function(require,module,exports){
+var $ = require('../../modules/$');
+module.exports = function defineProperty(it, key, desc){
+  return $.setDesc(it, key, desc);
+};
+},{"../../modules/$":90}],55:[function(require,module,exports){
+require('../../modules/es6.object.get-prototype-of');
+module.exports = require('../../modules/$.core').Object.getPrototypeOf;
+},{"../../modules/$.core":65,"../../modules/es6.object.get-prototype-of":117}],56:[function(require,module,exports){
+require('../../modules/es6.object.keys');
+module.exports = require('../../modules/$.core').Object.keys;
+},{"../../modules/$.core":65,"../../modules/es6.object.keys":118}],57:[function(require,module,exports){
+require('../../modules/es6.object.set-prototype-of');
+module.exports = require('../../modules/$.core').Object.setPrototypeOf;
+},{"../../modules/$.core":65,"../../modules/es6.object.set-prototype-of":119}],58:[function(require,module,exports){
+require('../modules/es6.object.to-string');
+require('../modules/es6.string.iterator');
+require('../modules/web.dom.iterable');
+require('../modules/es6.promise');
+module.exports = require('../modules/$.core').Promise;
+},{"../modules/$.core":65,"../modules/es6.object.to-string":120,"../modules/es6.promise":121,"../modules/es6.string.iterator":122,"../modules/web.dom.iterable":124}],59:[function(require,module,exports){
+require('../../modules/es6.symbol');
+require('../../modules/es6.object.to-string');
+module.exports = require('../../modules/$.core').Symbol;
+},{"../../modules/$.core":65,"../../modules/es6.object.to-string":120,"../../modules/es6.symbol":123}],60:[function(require,module,exports){
+module.exports = function(it){
+  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+  return it;
+};
+},{}],61:[function(require,module,exports){
+module.exports = function(){ /* empty */ };
+},{}],62:[function(require,module,exports){
+var isObject = require('./$.is-object');
+module.exports = function(it){
+  if(!isObject(it))throw TypeError(it + ' is not an object!');
+  return it;
+};
+},{"./$.is-object":83}],63:[function(require,module,exports){
+// getting tag from 19.1.3.6 Object.prototype.toString()
+var cof = require('./$.cof')
+  , TAG = require('./$.wks')('toStringTag')
+  // ES3 wrong here
+  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
+
+module.exports = function(it){
+  var O, T, B;
+  return it === undefined ? 'Undefined' : it === null ? 'Null'
+    // @@toStringTag case
+    : typeof (T = (O = Object(it))[TAG]) == 'string' ? T
+    // builtinTag case
+    : ARG ? cof(O)
+    // ES3 arguments fallback
+    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+};
+},{"./$.cof":64,"./$.wks":113}],64:[function(require,module,exports){
+var toString = {}.toString;
+
+module.exports = function(it){
+  return toString.call(it).slice(8, -1);
+};
+},{}],65:[function(require,module,exports){
+var core = module.exports = {version: '1.2.6'};
+if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+},{}],66:[function(require,module,exports){
+// optional / simple context binding
+var aFunction = require('./$.a-function');
+module.exports = function(fn, that, length){
+  aFunction(fn);
+  if(that === undefined)return fn;
+  switch(length){
+    case 1: return function(a){
+      return fn.call(that, a);
+    };
+    case 2: return function(a, b){
+      return fn.call(that, a, b);
+    };
+    case 3: return function(a, b, c){
+      return fn.call(that, a, b, c);
+    };
+  }
+  return function(/* ...args */){
+    return fn.apply(that, arguments);
+  };
+};
+},{"./$.a-function":60}],67:[function(require,module,exports){
+// 7.2.1 RequireObjectCoercible(argument)
+module.exports = function(it){
+  if(it == undefined)throw TypeError("Can't call method on  " + it);
+  return it;
+};
+},{}],68:[function(require,module,exports){
+// Thank's IE8 for his funny defineProperty
+module.exports = !require('./$.fails')(function(){
+  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
+});
+},{"./$.fails":72}],69:[function(require,module,exports){
+var isObject = require('./$.is-object')
+  , document = require('./$.global').document
+  // in old IE typeof document.createElement is 'object'
+  , is = isObject(document) && isObject(document.createElement);
+module.exports = function(it){
+  return is ? document.createElement(it) : {};
+};
+},{"./$.global":75,"./$.is-object":83}],70:[function(require,module,exports){
+// all enumerable object keys, includes symbols
+var $ = require('./$');
+module.exports = function(it){
+  var keys       = $.getKeys(it)
+    , getSymbols = $.getSymbols;
+  if(getSymbols){
+    var symbols = getSymbols(it)
+      , isEnum  = $.isEnum
+      , i       = 0
+      , key;
+    while(symbols.length > i)if(isEnum.call(it, key = symbols[i++]))keys.push(key);
+  }
+  return keys;
+};
+},{"./$":90}],71:[function(require,module,exports){
+var global    = require('./$.global')
+  , core      = require('./$.core')
+  , ctx       = require('./$.ctx')
+  , PROTOTYPE = 'prototype';
+
+var $export = function(type, name, source){
+  var IS_FORCED = type & $export.F
+    , IS_GLOBAL = type & $export.G
+    , IS_STATIC = type & $export.S
+    , IS_PROTO  = type & $export.P
+    , IS_BIND   = type & $export.B
+    , IS_WRAP   = type & $export.W
+    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
+    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE]
+    , key, own, out;
+  if(IS_GLOBAL)source = name;
+  for(key in source){
+    // contains in native
+    own = !IS_FORCED && target && key in target;
+    if(own && key in exports)continue;
+    // export native or passed
+    out = own ? target[key] : source[key];
+    // prevent global pollution for namespaces
+    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+    // bind timers to global for call from export context
+    : IS_BIND && own ? ctx(out, global)
+    // wrap global constructors for prevent change them in library
+    : IS_WRAP && target[key] == out ? (function(C){
+      var F = function(param){
+        return this instanceof C ? new C(param) : C(param);
+      };
+      F[PROTOTYPE] = C[PROTOTYPE];
+      return F;
+    // make static versions for prototype methods
+    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+    if(IS_PROTO)(exports[PROTOTYPE] || (exports[PROTOTYPE] = {}))[key] = out;
+  }
+};
+// type bitmap
+$export.F = 1;  // forced
+$export.G = 2;  // global
+$export.S = 4;  // static
+$export.P = 8;  // proto
+$export.B = 16; // bind
+$export.W = 32; // wrap
+module.exports = $export;
+},{"./$.core":65,"./$.ctx":66,"./$.global":75}],72:[function(require,module,exports){
+module.exports = function(exec){
+  try {
+    return !!exec();
+  } catch(e){
+    return true;
+  }
+};
+},{}],73:[function(require,module,exports){
+var ctx         = require('./$.ctx')
+  , call        = require('./$.iter-call')
+  , isArrayIter = require('./$.is-array-iter')
+  , anObject    = require('./$.an-object')
+  , toLength    = require('./$.to-length')
+  , getIterFn   = require('./core.get-iterator-method');
+module.exports = function(iterable, entries, fn, that){
+  var iterFn = getIterFn(iterable)
+    , f      = ctx(fn, that, entries ? 2 : 1)
+    , index  = 0
+    , length, step, iterator;
+  if(typeof iterFn != 'function')throw TypeError(iterable + ' is not iterable!');
+  // fast case for arrays with default iterator
+  if(isArrayIter(iterFn))for(length = toLength(iterable.length); length > index; index++){
+    entries ? f(anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
+  } else for(iterator = iterFn.call(iterable); !(step = iterator.next()).done; ){
+    call(iterator, f, step.value, entries);
+  }
+};
+},{"./$.an-object":62,"./$.ctx":66,"./$.is-array-iter":81,"./$.iter-call":84,"./$.to-length":110,"./core.get-iterator-method":114}],74:[function(require,module,exports){
+// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
+var toIObject = require('./$.to-iobject')
+  , getNames  = require('./$').getNames
+  , toString  = {}.toString;
+
+var windowNames = typeof window == 'object' && Object.getOwnPropertyNames
+  ? Object.getOwnPropertyNames(window) : [];
+
+var getWindowNames = function(it){
+  try {
+    return getNames(it);
+  } catch(e){
+    return windowNames.slice();
+  }
+};
+
+module.exports.get = function getOwnPropertyNames(it){
+  if(windowNames && toString.call(it) == '[object Window]')return getWindowNames(it);
+  return getNames(toIObject(it));
+};
+},{"./$":90,"./$.to-iobject":109}],75:[function(require,module,exports){
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math
+  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
+if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
+},{}],76:[function(require,module,exports){
+var hasOwnProperty = {}.hasOwnProperty;
+module.exports = function(it, key){
+  return hasOwnProperty.call(it, key);
+};
+},{}],77:[function(require,module,exports){
+var $          = require('./$')
+  , createDesc = require('./$.property-desc');
+module.exports = require('./$.descriptors') ? function(object, key, value){
+  return $.setDesc(object, key, createDesc(1, value));
+} : function(object, key, value){
+  object[key] = value;
+  return object;
+};
+},{"./$":90,"./$.descriptors":68,"./$.property-desc":96}],78:[function(require,module,exports){
+module.exports = require('./$.global').document && document.documentElement;
+},{"./$.global":75}],79:[function(require,module,exports){
+// fast apply, http://jsperf.lnkit.com/fast-apply/5
+module.exports = function(fn, args, that){
+  var un = that === undefined;
+  switch(args.length){
+    case 0: return un ? fn()
+                      : fn.call(that);
+    case 1: return un ? fn(args[0])
+                      : fn.call(that, args[0]);
+    case 2: return un ? fn(args[0], args[1])
+                      : fn.call(that, args[0], args[1]);
+    case 3: return un ? fn(args[0], args[1], args[2])
+                      : fn.call(that, args[0], args[1], args[2]);
+    case 4: return un ? fn(args[0], args[1], args[2], args[3])
+                      : fn.call(that, args[0], args[1], args[2], args[3]);
+  } return              fn.apply(that, args);
+};
+},{}],80:[function(require,module,exports){
+// fallback for non-array-like ES3 and non-enumerable old V8 strings
+var cof = require('./$.cof');
+module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
+  return cof(it) == 'String' ? it.split('') : Object(it);
+};
+},{"./$.cof":64}],81:[function(require,module,exports){
+// check on default Array iterator
+var Iterators  = require('./$.iterators')
+  , ITERATOR   = require('./$.wks')('iterator')
+  , ArrayProto = Array.prototype;
+
+module.exports = function(it){
+  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
+};
+},{"./$.iterators":89,"./$.wks":113}],82:[function(require,module,exports){
+// 7.2.2 IsArray(argument)
+var cof = require('./$.cof');
+module.exports = Array.isArray || function(arg){
+  return cof(arg) == 'Array';
+};
+},{"./$.cof":64}],83:[function(require,module,exports){
+module.exports = function(it){
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};
+},{}],84:[function(require,module,exports){
+// call something on iterator step with safe closing on error
+var anObject = require('./$.an-object');
+module.exports = function(iterator, fn, value, entries){
+  try {
+    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
+  // 7.4.6 IteratorClose(iterator, completion)
+  } catch(e){
+    var ret = iterator['return'];
+    if(ret !== undefined)anObject(ret.call(iterator));
+    throw e;
+  }
+};
+},{"./$.an-object":62}],85:[function(require,module,exports){
+'use strict';
+var $              = require('./$')
+  , descriptor     = require('./$.property-desc')
+  , setToStringTag = require('./$.set-to-string-tag')
+  , IteratorPrototype = {};
+
+// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
+require('./$.hide')(IteratorPrototype, require('./$.wks')('iterator'), function(){ return this; });
+
+module.exports = function(Constructor, NAME, next){
+  Constructor.prototype = $.create(IteratorPrototype, {next: descriptor(1, next)});
+  setToStringTag(Constructor, NAME + ' Iterator');
+};
+},{"./$":90,"./$.hide":77,"./$.property-desc":96,"./$.set-to-string-tag":102,"./$.wks":113}],86:[function(require,module,exports){
+'use strict';
+var LIBRARY        = require('./$.library')
+  , $export        = require('./$.export')
+  , redefine       = require('./$.redefine')
+  , hide           = require('./$.hide')
+  , has            = require('./$.has')
+  , Iterators      = require('./$.iterators')
+  , $iterCreate    = require('./$.iter-create')
+  , setToStringTag = require('./$.set-to-string-tag')
+  , getProto       = require('./$').getProto
+  , ITERATOR       = require('./$.wks')('iterator')
+  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
+  , FF_ITERATOR    = '@@iterator'
+  , KEYS           = 'keys'
+  , VALUES         = 'values';
+
+var returnThis = function(){ return this; };
+
+module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED){
+  $iterCreate(Constructor, NAME, next);
+  var getMethod = function(kind){
+    if(!BUGGY && kind in proto)return proto[kind];
+    switch(kind){
+      case KEYS: return function keys(){ return new Constructor(this, kind); };
+      case VALUES: return function values(){ return new Constructor(this, kind); };
+    } return function entries(){ return new Constructor(this, kind); };
+  };
+  var TAG        = NAME + ' Iterator'
+    , DEF_VALUES = DEFAULT == VALUES
+    , VALUES_BUG = false
+    , proto      = Base.prototype
+    , $native    = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT]
+    , $default   = $native || getMethod(DEFAULT)
+    , methods, key;
+  // Fix native
+  if($native){
+    var IteratorPrototype = getProto($default.call(new Base));
+    // Set @@toStringTag to native iterators
+    setToStringTag(IteratorPrototype, TAG, true);
+    // FF fix
+    if(!LIBRARY && has(proto, FF_ITERATOR))hide(IteratorPrototype, ITERATOR, returnThis);
+    // fix Array#{values, @@iterator}.name in V8 / FF
+    if(DEF_VALUES && $native.name !== VALUES){
+      VALUES_BUG = true;
+      $default = function values(){ return $native.call(this); };
+    }
+  }
+  // Define iterator
+  if((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])){
+    hide(proto, ITERATOR, $default);
+  }
+  // Plug for library
+  Iterators[NAME] = $default;
+  Iterators[TAG]  = returnThis;
+  if(DEFAULT){
+    methods = {
+      values:  DEF_VALUES  ? $default : getMethod(VALUES),
+      keys:    IS_SET      ? $default : getMethod(KEYS),
+      entries: !DEF_VALUES ? $default : getMethod('entries')
+    };
+    if(FORCED)for(key in methods){
+      if(!(key in proto))redefine(proto, key, methods[key]);
+    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
+  }
+  return methods;
+};
+},{"./$":90,"./$.export":71,"./$.has":76,"./$.hide":77,"./$.iter-create":85,"./$.iterators":89,"./$.library":92,"./$.redefine":98,"./$.set-to-string-tag":102,"./$.wks":113}],87:[function(require,module,exports){
+var ITERATOR     = require('./$.wks')('iterator')
+  , SAFE_CLOSING = false;
+
+try {
+  var riter = [7][ITERATOR]();
+  riter['return'] = function(){ SAFE_CLOSING = true; };
+  Array.from(riter, function(){ throw 2; });
+} catch(e){ /* empty */ }
+
+module.exports = function(exec, skipClosing){
+  if(!skipClosing && !SAFE_CLOSING)return false;
+  var safe = false;
+  try {
+    var arr  = [7]
+      , iter = arr[ITERATOR]();
+    iter.next = function(){ safe = true; };
+    arr[ITERATOR] = function(){ return iter; };
+    exec(arr);
+  } catch(e){ /* empty */ }
+  return safe;
+};
+},{"./$.wks":113}],88:[function(require,module,exports){
+module.exports = function(done, value){
+  return {value: value, done: !!done};
+};
+},{}],89:[function(require,module,exports){
+module.exports = {};
+},{}],90:[function(require,module,exports){
+var $Object = Object;
+module.exports = {
+  create:     $Object.create,
+  getProto:   $Object.getPrototypeOf,
+  isEnum:     {}.propertyIsEnumerable,
+  getDesc:    $Object.getOwnPropertyDescriptor,
+  setDesc:    $Object.defineProperty,
+  setDescs:   $Object.defineProperties,
+  getKeys:    $Object.keys,
+  getNames:   $Object.getOwnPropertyNames,
+  getSymbols: $Object.getOwnPropertySymbols,
+  each:       [].forEach
+};
+},{}],91:[function(require,module,exports){
+var $         = require('./$')
+  , toIObject = require('./$.to-iobject');
+module.exports = function(object, el){
+  var O      = toIObject(object)
+    , keys   = $.getKeys(O)
+    , length = keys.length
+    , index  = 0
+    , key;
+  while(length > index)if(O[key = keys[index++]] === el)return key;
+};
+},{"./$":90,"./$.to-iobject":109}],92:[function(require,module,exports){
+module.exports = true;
+},{}],93:[function(require,module,exports){
+var global    = require('./$.global')
+  , macrotask = require('./$.task').set
+  , Observer  = global.MutationObserver || global.WebKitMutationObserver
+  , process   = global.process
+  , Promise   = global.Promise
+  , isNode    = require('./$.cof')(process) == 'process'
+  , head, last, notify;
+
+var flush = function(){
+  var parent, domain, fn;
+  if(isNode && (parent = process.domain)){
+    process.domain = null;
+    parent.exit();
+  }
+  while(head){
+    domain = head.domain;
+    fn     = head.fn;
+    if(domain)domain.enter();
+    fn(); // <- currently we use it only for Promise - try / catch not required
+    if(domain)domain.exit();
+    head = head.next;
+  } last = undefined;
+  if(parent)parent.enter();
+};
+
+// Node.js
+if(isNode){
+  notify = function(){
+    process.nextTick(flush);
+  };
+// browsers with MutationObserver
+} else if(Observer){
+  var toggle = 1
+    , node   = document.createTextNode('');
+  new Observer(flush).observe(node, {characterData: true}); // eslint-disable-line no-new
+  notify = function(){
+    node.data = toggle = -toggle;
+  };
+// environments with maybe non-completely correct, but existent Promise
+} else if(Promise && Promise.resolve){
+  notify = function(){
+    Promise.resolve().then(flush);
+  };
+// for other environments - macrotask based on:
+// - setImmediate
+// - MessageChannel
+// - window.postMessag
+// - onreadystatechange
+// - setTimeout
+} else {
+  notify = function(){
+    // strange IE + webpack dev server bug - use .call(global)
+    macrotask.call(global, flush);
+  };
+}
+
+module.exports = function asap(fn){
+  var task = {fn: fn, next: undefined, domain: isNode && process.domain};
+  if(last)last.next = task;
+  if(!head){
+    head = task;
+    notify();
+  } last = task;
+};
+},{"./$.cof":64,"./$.global":75,"./$.task":107}],94:[function(require,module,exports){
+// 19.1.2.1 Object.assign(target, source, ...)
+var $        = require('./$')
+  , toObject = require('./$.to-object')
+  , IObject  = require('./$.iobject');
+
+// should work with symbols and should have deterministic property order (V8 bug)
+module.exports = require('./$.fails')(function(){
+  var a = Object.assign
+    , A = {}
+    , B = {}
+    , S = Symbol()
+    , K = 'abcdefghijklmnopqrst';
+  A[S] = 7;
+  K.split('').forEach(function(k){ B[k] = k; });
+  return a({}, A)[S] != 7 || Object.keys(a({}, B)).join('') != K;
+}) ? function assign(target, source){ // eslint-disable-line no-unused-vars
+  var T     = toObject(target)
+    , $$    = arguments
+    , $$len = $$.length
+    , index = 1
+    , getKeys    = $.getKeys
+    , getSymbols = $.getSymbols
+    , isEnum     = $.isEnum;
+  while($$len > index){
+    var S      = IObject($$[index++])
+      , keys   = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S)
+      , length = keys.length
+      , j      = 0
+      , key;
+    while(length > j)if(isEnum.call(S, key = keys[j++]))T[key] = S[key];
+  }
+  return T;
+} : Object.assign;
+},{"./$":90,"./$.fails":72,"./$.iobject":80,"./$.to-object":111}],95:[function(require,module,exports){
+// most Object methods by ES6 should accept primitives
+var $export = require('./$.export')
+  , core    = require('./$.core')
+  , fails   = require('./$.fails');
+module.exports = function(KEY, exec){
+  var fn  = (core.Object || {})[KEY] || Object[KEY]
+    , exp = {};
+  exp[KEY] = exec(fn);
+  $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
+};
+},{"./$.core":65,"./$.export":71,"./$.fails":72}],96:[function(require,module,exports){
+module.exports = function(bitmap, value){
+  return {
+    enumerable  : !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable    : !(bitmap & 4),
+    value       : value
+  };
+};
+},{}],97:[function(require,module,exports){
+var redefine = require('./$.redefine');
+module.exports = function(target, src){
+  for(var key in src)redefine(target, key, src[key]);
+  return target;
+};
+},{"./$.redefine":98}],98:[function(require,module,exports){
+module.exports = require('./$.hide');
+},{"./$.hide":77}],99:[function(require,module,exports){
+// 7.2.9 SameValue(x, y)
+module.exports = Object.is || function is(x, y){
+  return x === y ? x !== 0 || 1 / x === 1 / y : x != x && y != y;
+};
+},{}],100:[function(require,module,exports){
+// Works with __proto__ only. Old v8 can't work with null proto objects.
+/* eslint-disable no-proto */
+var getDesc  = require('./$').getDesc
+  , isObject = require('./$.is-object')
+  , anObject = require('./$.an-object');
+var check = function(O, proto){
+  anObject(O);
+  if(!isObject(proto) && proto !== null)throw TypeError(proto + ": can't set as prototype!");
+};
+module.exports = {
+  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
+    function(test, buggy, set){
+      try {
+        set = require('./$.ctx')(Function.call, getDesc(Object.prototype, '__proto__').set, 2);
+        set(test, []);
+        buggy = !(test instanceof Array);
+      } catch(e){ buggy = true; }
+      return function setPrototypeOf(O, proto){
+        check(O, proto);
+        if(buggy)O.__proto__ = proto;
+        else set(O, proto);
+        return O;
+      };
+    }({}, false) : undefined),
+  check: check
+};
+},{"./$":90,"./$.an-object":62,"./$.ctx":66,"./$.is-object":83}],101:[function(require,module,exports){
+'use strict';
+var core        = require('./$.core')
+  , $           = require('./$')
+  , DESCRIPTORS = require('./$.descriptors')
+  , SPECIES     = require('./$.wks')('species');
+
+module.exports = function(KEY){
+  var C = core[KEY];
+  if(DESCRIPTORS && C && !C[SPECIES])$.setDesc(C, SPECIES, {
+    configurable: true,
+    get: function(){ return this; }
+  });
+};
+},{"./$":90,"./$.core":65,"./$.descriptors":68,"./$.wks":113}],102:[function(require,module,exports){
+var def = require('./$').setDesc
+  , has = require('./$.has')
+  , TAG = require('./$.wks')('toStringTag');
+
+module.exports = function(it, tag, stat){
+  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
+};
+},{"./$":90,"./$.has":76,"./$.wks":113}],103:[function(require,module,exports){
+var global = require('./$.global')
+  , SHARED = '__core-js_shared__'
+  , store  = global[SHARED] || (global[SHARED] = {});
+module.exports = function(key){
+  return store[key] || (store[key] = {});
+};
+},{"./$.global":75}],104:[function(require,module,exports){
+// 7.3.20 SpeciesConstructor(O, defaultConstructor)
+var anObject  = require('./$.an-object')
+  , aFunction = require('./$.a-function')
+  , SPECIES   = require('./$.wks')('species');
+module.exports = function(O, D){
+  var C = anObject(O).constructor, S;
+  return C === undefined || (S = anObject(C)[SPECIES]) == undefined ? D : aFunction(S);
+};
+},{"./$.a-function":60,"./$.an-object":62,"./$.wks":113}],105:[function(require,module,exports){
+module.exports = function(it, Constructor, name){
+  if(!(it instanceof Constructor))throw TypeError(name + ": use the 'new' operator!");
+  return it;
+};
+},{}],106:[function(require,module,exports){
+var toInteger = require('./$.to-integer')
+  , defined   = require('./$.defined');
+// true  -> String#at
+// false -> String#codePointAt
+module.exports = function(TO_STRING){
+  return function(that, pos){
+    var s = String(defined(that))
+      , i = toInteger(pos)
+      , l = s.length
+      , a, b;
+    if(i < 0 || i >= l)return TO_STRING ? '' : undefined;
+    a = s.charCodeAt(i);
+    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
+      ? TO_STRING ? s.charAt(i) : a
+      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
+  };
+};
+},{"./$.defined":67,"./$.to-integer":108}],107:[function(require,module,exports){
+var ctx                = require('./$.ctx')
+  , invoke             = require('./$.invoke')
+  , html               = require('./$.html')
+  , cel                = require('./$.dom-create')
+  , global             = require('./$.global')
+  , process            = global.process
+  , setTask            = global.setImmediate
+  , clearTask          = global.clearImmediate
+  , MessageChannel     = global.MessageChannel
+  , counter            = 0
+  , queue              = {}
+  , ONREADYSTATECHANGE = 'onreadystatechange'
+  , defer, channel, port;
+var run = function(){
+  var id = +this;
+  if(queue.hasOwnProperty(id)){
+    var fn = queue[id];
+    delete queue[id];
+    fn();
+  }
+};
+var listner = function(event){
+  run.call(event.data);
+};
+// Node.js 0.9+ & IE10+ has setImmediate, otherwise:
+if(!setTask || !clearTask){
+  setTask = function setImmediate(fn){
+    var args = [], i = 1;
+    while(arguments.length > i)args.push(arguments[i++]);
+    queue[++counter] = function(){
+      invoke(typeof fn == 'function' ? fn : Function(fn), args);
+    };
+    defer(counter);
+    return counter;
+  };
+  clearTask = function clearImmediate(id){
+    delete queue[id];
+  };
+  // Node.js 0.8-
+  if(require('./$.cof')(process) == 'process'){
+    defer = function(id){
+      process.nextTick(ctx(run, id, 1));
+    };
+  // Browsers with MessageChannel, includes WebWorkers
+  } else if(MessageChannel){
+    channel = new MessageChannel;
+    port    = channel.port2;
+    channel.port1.onmessage = listner;
+    defer = ctx(port.postMessage, port, 1);
+  // Browsers with postMessage, skip WebWorkers
+  // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
+  } else if(global.addEventListener && typeof postMessage == 'function' && !global.importScripts){
+    defer = function(id){
+      global.postMessage(id + '', '*');
+    };
+    global.addEventListener('message', listner, false);
+  // IE8-
+  } else if(ONREADYSTATECHANGE in cel('script')){
+    defer = function(id){
+      html.appendChild(cel('script'))[ONREADYSTATECHANGE] = function(){
+        html.removeChild(this);
+        run.call(id);
+      };
+    };
+  // Rest old browsers
+  } else {
+    defer = function(id){
+      setTimeout(ctx(run, id, 1), 0);
+    };
+  }
+}
+module.exports = {
+  set:   setTask,
+  clear: clearTask
+};
+},{"./$.cof":64,"./$.ctx":66,"./$.dom-create":69,"./$.global":75,"./$.html":78,"./$.invoke":79}],108:[function(require,module,exports){
+// 7.1.4 ToInteger
+var ceil  = Math.ceil
+  , floor = Math.floor;
+module.exports = function(it){
+  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+};
+},{}],109:[function(require,module,exports){
+// to indexed object, toObject with fallback for non-array-like ES3 strings
+var IObject = require('./$.iobject')
+  , defined = require('./$.defined');
+module.exports = function(it){
+  return IObject(defined(it));
+};
+},{"./$.defined":67,"./$.iobject":80}],110:[function(require,module,exports){
+// 7.1.15 ToLength
+var toInteger = require('./$.to-integer')
+  , min       = Math.min;
+module.exports = function(it){
+  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+};
+},{"./$.to-integer":108}],111:[function(require,module,exports){
+// 7.1.13 ToObject(argument)
+var defined = require('./$.defined');
+module.exports = function(it){
+  return Object(defined(it));
+};
+},{"./$.defined":67}],112:[function(require,module,exports){
+var id = 0
+  , px = Math.random();
+module.exports = function(key){
+  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+};
+},{}],113:[function(require,module,exports){
+var store  = require('./$.shared')('wks')
+  , uid    = require('./$.uid')
+  , Symbol = require('./$.global').Symbol;
+module.exports = function(name){
+  return store[name] || (store[name] =
+    Symbol && Symbol[name] || (Symbol || uid)('Symbol.' + name));
+};
+},{"./$.global":75,"./$.shared":103,"./$.uid":112}],114:[function(require,module,exports){
+var classof   = require('./$.classof')
+  , ITERATOR  = require('./$.wks')('iterator')
+  , Iterators = require('./$.iterators');
+module.exports = require('./$.core').getIteratorMethod = function(it){
+  if(it != undefined)return it[ITERATOR]
+    || it['@@iterator']
+    || Iterators[classof(it)];
+};
+},{"./$.classof":63,"./$.core":65,"./$.iterators":89,"./$.wks":113}],115:[function(require,module,exports){
+'use strict';
+var addToUnscopables = require('./$.add-to-unscopables')
+  , step             = require('./$.iter-step')
+  , Iterators        = require('./$.iterators')
+  , toIObject        = require('./$.to-iobject');
+
+// 22.1.3.4 Array.prototype.entries()
+// 22.1.3.13 Array.prototype.keys()
+// 22.1.3.29 Array.prototype.values()
+// 22.1.3.30 Array.prototype[@@iterator]()
+module.exports = require('./$.iter-define')(Array, 'Array', function(iterated, kind){
+  this._t = toIObject(iterated); // target
+  this._i = 0;                   // next index
+  this._k = kind;                // kind
+// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
+}, function(){
+  var O     = this._t
+    , kind  = this._k
+    , index = this._i++;
+  if(!O || index >= O.length){
+    this._t = undefined;
+    return step(1);
+  }
+  if(kind == 'keys'  )return step(0, index);
+  if(kind == 'values')return step(0, O[index]);
+  return step(0, [index, O[index]]);
+}, 'values');
+
+// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
+Iterators.Arguments = Iterators.Array;
+
+addToUnscopables('keys');
+addToUnscopables('values');
+addToUnscopables('entries');
+},{"./$.add-to-unscopables":61,"./$.iter-define":86,"./$.iter-step":88,"./$.iterators":89,"./$.to-iobject":109}],116:[function(require,module,exports){
+// 19.1.3.1 Object.assign(target, source)
+var $export = require('./$.export');
+
+$export($export.S + $export.F, 'Object', {assign: require('./$.object-assign')});
+},{"./$.export":71,"./$.object-assign":94}],117:[function(require,module,exports){
+// 19.1.2.9 Object.getPrototypeOf(O)
+var toObject = require('./$.to-object');
+
+require('./$.object-sap')('getPrototypeOf', function($getPrototypeOf){
+  return function getPrototypeOf(it){
+    return $getPrototypeOf(toObject(it));
+  };
+});
+},{"./$.object-sap":95,"./$.to-object":111}],118:[function(require,module,exports){
+// 19.1.2.14 Object.keys(O)
+var toObject = require('./$.to-object');
+
+require('./$.object-sap')('keys', function($keys){
+  return function keys(it){
+    return $keys(toObject(it));
+  };
+});
+},{"./$.object-sap":95,"./$.to-object":111}],119:[function(require,module,exports){
+// 19.1.3.19 Object.setPrototypeOf(O, proto)
+var $export = require('./$.export');
+$export($export.S, 'Object', {setPrototypeOf: require('./$.set-proto').set});
+},{"./$.export":71,"./$.set-proto":100}],120:[function(require,module,exports){
+
+},{}],121:[function(require,module,exports){
+'use strict';
+var $          = require('./$')
+  , LIBRARY    = require('./$.library')
+  , global     = require('./$.global')
+  , ctx        = require('./$.ctx')
+  , classof    = require('./$.classof')
+  , $export    = require('./$.export')
+  , isObject   = require('./$.is-object')
+  , anObject   = require('./$.an-object')
+  , aFunction  = require('./$.a-function')
+  , strictNew  = require('./$.strict-new')
+  , forOf      = require('./$.for-of')
+  , setProto   = require('./$.set-proto').set
+  , same       = require('./$.same-value')
+  , SPECIES    = require('./$.wks')('species')
+  , speciesConstructor = require('./$.species-constructor')
+  , asap       = require('./$.microtask')
+  , PROMISE    = 'Promise'
+  , process    = global.process
+  , isNode     = classof(process) == 'process'
+  , P          = global[PROMISE]
+  , Wrapper;
+
+var testResolve = function(sub){
+  var test = new P(function(){});
+  if(sub)test.constructor = Object;
+  return P.resolve(test) === test;
+};
+
+var USE_NATIVE = function(){
+  var works = false;
+  function P2(x){
+    var self = new P(x);
+    setProto(self, P2.prototype);
+    return self;
+  }
+  try {
+    works = P && P.resolve && testResolve();
+    setProto(P2, P);
+    P2.prototype = $.create(P.prototype, {constructor: {value: P2}});
+    // actual Firefox has broken subclass support, test that
+    if(!(P2.resolve(5).then(function(){}) instanceof P2)){
+      works = false;
+    }
+    // actual V8 bug, https://code.google.com/p/v8/issues/detail?id=4162
+    if(works && require('./$.descriptors')){
+      var thenableThenGotten = false;
+      P.resolve($.setDesc({}, 'then', {
+        get: function(){ thenableThenGotten = true; }
+      }));
+      works = thenableThenGotten;
+    }
+  } catch(e){ works = false; }
+  return works;
+}();
+
+// helpers
+var sameConstructor = function(a, b){
+  // library wrapper special case
+  if(LIBRARY && a === P && b === Wrapper)return true;
+  return same(a, b);
+};
+var getConstructor = function(C){
+  var S = anObject(C)[SPECIES];
+  return S != undefined ? S : C;
+};
+var isThenable = function(it){
+  var then;
+  return isObject(it) && typeof (then = it.then) == 'function' ? then : false;
+};
+var PromiseCapability = function(C){
+  var resolve, reject;
+  this.promise = new C(function($$resolve, $$reject){
+    if(resolve !== undefined || reject !== undefined)throw TypeError('Bad Promise constructor');
+    resolve = $$resolve;
+    reject  = $$reject;
+  });
+  this.resolve = aFunction(resolve),
+  this.reject  = aFunction(reject)
+};
+var perform = function(exec){
+  try {
+    exec();
+  } catch(e){
+    return {error: e};
+  }
+};
+var notify = function(record, isReject){
+  if(record.n)return;
+  record.n = true;
+  var chain = record.c;
+  asap(function(){
+    var value = record.v
+      , ok    = record.s == 1
+      , i     = 0;
+    var run = function(reaction){
+      var handler = ok ? reaction.ok : reaction.fail
+        , resolve = reaction.resolve
+        , reject  = reaction.reject
+        , result, then;
+      try {
+        if(handler){
+          if(!ok)record.h = true;
+          result = handler === true ? value : handler(value);
+          if(result === reaction.promise){
+            reject(TypeError('Promise-chain cycle'));
+          } else if(then = isThenable(result)){
+            then.call(result, resolve, reject);
+          } else resolve(result);
+        } else reject(value);
+      } catch(e){
+        reject(e);
+      }
+    };
+    while(chain.length > i)run(chain[i++]); // variable length - can't use forEach
+    chain.length = 0;
+    record.n = false;
+    if(isReject)setTimeout(function(){
+      var promise = record.p
+        , handler, console;
+      if(isUnhandled(promise)){
+        if(isNode){
+          process.emit('unhandledRejection', value, promise);
+        } else if(handler = global.onunhandledrejection){
+          handler({promise: promise, reason: value});
+        } else if((console = global.console) && console.error){
+          console.error('Unhandled promise rejection', value);
+        }
+      } record.a = undefined;
+    }, 1);
+  });
+};
+var isUnhandled = function(promise){
+  var record = promise._d
+    , chain  = record.a || record.c
+    , i      = 0
+    , reaction;
+  if(record.h)return false;
+  while(chain.length > i){
+    reaction = chain[i++];
+    if(reaction.fail || !isUnhandled(reaction.promise))return false;
+  } return true;
+};
+var $reject = function(value){
+  var record = this;
+  if(record.d)return;
+  record.d = true;
+  record = record.r || record; // unwrap
+  record.v = value;
+  record.s = 2;
+  record.a = record.c.slice();
+  notify(record, true);
+};
+var $resolve = function(value){
+  var record = this
+    , then;
+  if(record.d)return;
+  record.d = true;
+  record = record.r || record; // unwrap
+  try {
+    if(record.p === value)throw TypeError("Promise can't be resolved itself");
+    if(then = isThenable(value)){
+      asap(function(){
+        var wrapper = {r: record, d: false}; // wrap
+        try {
+          then.call(value, ctx($resolve, wrapper, 1), ctx($reject, wrapper, 1));
+        } catch(e){
+          $reject.call(wrapper, e);
+        }
+      });
+    } else {
+      record.v = value;
+      record.s = 1;
+      notify(record, false);
+    }
+  } catch(e){
+    $reject.call({r: record, d: false}, e); // wrap
+  }
+};
+
+// constructor polyfill
+if(!USE_NATIVE){
+  // 25.4.3.1 Promise(executor)
+  P = function Promise(executor){
+    aFunction(executor);
+    var record = this._d = {
+      p: strictNew(this, P, PROMISE),         // <- promise
+      c: [],                                  // <- awaiting reactions
+      a: undefined,                           // <- checked in isUnhandled reactions
+      s: 0,                                   // <- state
+      d: false,                               // <- done
+      v: undefined,                           // <- value
+      h: false,                               // <- handled rejection
+      n: false                                // <- notify
+    };
+    try {
+      executor(ctx($resolve, record, 1), ctx($reject, record, 1));
+    } catch(err){
+      $reject.call(record, err);
+    }
+  };
+  require('./$.redefine-all')(P.prototype, {
+    // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
+    then: function then(onFulfilled, onRejected){
+      var reaction = new PromiseCapability(speciesConstructor(this, P))
+        , promise  = reaction.promise
+        , record   = this._d;
+      reaction.ok   = typeof onFulfilled == 'function' ? onFulfilled : true;
+      reaction.fail = typeof onRejected == 'function' && onRejected;
+      record.c.push(reaction);
+      if(record.a)record.a.push(reaction);
+      if(record.s)notify(record, false);
+      return promise;
+    },
+    // 25.4.5.1 Promise.prototype.catch(onRejected)
+    'catch': function(onRejected){
+      return this.then(undefined, onRejected);
+    }
+  });
+}
+
+$export($export.G + $export.W + $export.F * !USE_NATIVE, {Promise: P});
+require('./$.set-to-string-tag')(P, PROMISE);
+require('./$.set-species')(PROMISE);
+Wrapper = require('./$.core')[PROMISE];
+
+// statics
+$export($export.S + $export.F * !USE_NATIVE, PROMISE, {
+  // 25.4.4.5 Promise.reject(r)
+  reject: function reject(r){
+    var capability = new PromiseCapability(this)
+      , $$reject   = capability.reject;
+    $$reject(r);
+    return capability.promise;
+  }
+});
+$export($export.S + $export.F * (!USE_NATIVE || testResolve(true)), PROMISE, {
+  // 25.4.4.6 Promise.resolve(x)
+  resolve: function resolve(x){
+    // instanceof instead of internal slot check because we should fix it without replacement native Promise core
+    if(x instanceof P && sameConstructor(x.constructor, this))return x;
+    var capability = new PromiseCapability(this)
+      , $$resolve  = capability.resolve;
+    $$resolve(x);
+    return capability.promise;
+  }
+});
+$export($export.S + $export.F * !(USE_NATIVE && require('./$.iter-detect')(function(iter){
+  P.all(iter)['catch'](function(){});
+})), PROMISE, {
+  // 25.4.4.1 Promise.all(iterable)
+  all: function all(iterable){
+    var C          = getConstructor(this)
+      , capability = new PromiseCapability(C)
+      , resolve    = capability.resolve
+      , reject     = capability.reject
+      , values     = [];
+    var abrupt = perform(function(){
+      forOf(iterable, false, values.push, values);
+      var remaining = values.length
+        , results   = Array(remaining);
+      if(remaining)$.each.call(values, function(promise, index){
+        var alreadyCalled = false;
+        C.resolve(promise).then(function(value){
+          if(alreadyCalled)return;
+          alreadyCalled = true;
+          results[index] = value;
+          --remaining || resolve(results);
+        }, reject);
+      });
+      else resolve(results);
+    });
+    if(abrupt)reject(abrupt.error);
+    return capability.promise;
+  },
+  // 25.4.4.4 Promise.race(iterable)
+  race: function race(iterable){
+    var C          = getConstructor(this)
+      , capability = new PromiseCapability(C)
+      , reject     = capability.reject;
+    var abrupt = perform(function(){
+      forOf(iterable, false, function(promise){
+        C.resolve(promise).then(capability.resolve, reject);
+      });
+    });
+    if(abrupt)reject(abrupt.error);
+    return capability.promise;
+  }
+});
+},{"./$":90,"./$.a-function":60,"./$.an-object":62,"./$.classof":63,"./$.core":65,"./$.ctx":66,"./$.descriptors":68,"./$.export":71,"./$.for-of":73,"./$.global":75,"./$.is-object":83,"./$.iter-detect":87,"./$.library":92,"./$.microtask":93,"./$.redefine-all":97,"./$.same-value":99,"./$.set-proto":100,"./$.set-species":101,"./$.set-to-string-tag":102,"./$.species-constructor":104,"./$.strict-new":105,"./$.wks":113}],122:[function(require,module,exports){
+'use strict';
+var $at  = require('./$.string-at')(true);
+
+// 21.1.3.27 String.prototype[@@iterator]()
+require('./$.iter-define')(String, 'String', function(iterated){
+  this._t = String(iterated); // target
+  this._i = 0;                // next index
+// 21.1.5.2.1 %StringIteratorPrototype%.next()
+}, function(){
+  var O     = this._t
+    , index = this._i
+    , point;
+  if(index >= O.length)return {value: undefined, done: true};
+  point = $at(O, index);
+  this._i += point.length;
+  return {value: point, done: false};
+});
+},{"./$.iter-define":86,"./$.string-at":106}],123:[function(require,module,exports){
+'use strict';
+// ECMAScript 6 symbols shim
+var $              = require('./$')
+  , global         = require('./$.global')
+  , has            = require('./$.has')
+  , DESCRIPTORS    = require('./$.descriptors')
+  , $export        = require('./$.export')
+  , redefine       = require('./$.redefine')
+  , $fails         = require('./$.fails')
+  , shared         = require('./$.shared')
+  , setToStringTag = require('./$.set-to-string-tag')
+  , uid            = require('./$.uid')
+  , wks            = require('./$.wks')
+  , keyOf          = require('./$.keyof')
+  , $names         = require('./$.get-names')
+  , enumKeys       = require('./$.enum-keys')
+  , isArray        = require('./$.is-array')
+  , anObject       = require('./$.an-object')
+  , toIObject      = require('./$.to-iobject')
+  , createDesc     = require('./$.property-desc')
+  , getDesc        = $.getDesc
+  , setDesc        = $.setDesc
+  , _create        = $.create
+  , getNames       = $names.get
+  , $Symbol        = global.Symbol
+  , $JSON          = global.JSON
+  , _stringify     = $JSON && $JSON.stringify
+  , setter         = false
+  , HIDDEN         = wks('_hidden')
+  , isEnum         = $.isEnum
+  , SymbolRegistry = shared('symbol-registry')
+  , AllSymbols     = shared('symbols')
+  , useNative      = typeof $Symbol == 'function'
+  , ObjectProto    = Object.prototype;
+
+// fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
+var setSymbolDesc = DESCRIPTORS && $fails(function(){
+  return _create(setDesc({}, 'a', {
+    get: function(){ return setDesc(this, 'a', {value: 7}).a; }
+  })).a != 7;
+}) ? function(it, key, D){
+  var protoDesc = getDesc(ObjectProto, key);
+  if(protoDesc)delete ObjectProto[key];
+  setDesc(it, key, D);
+  if(protoDesc && it !== ObjectProto)setDesc(ObjectProto, key, protoDesc);
+} : setDesc;
+
+var wrap = function(tag){
+  var sym = AllSymbols[tag] = _create($Symbol.prototype);
+  sym._k = tag;
+  DESCRIPTORS && setter && setSymbolDesc(ObjectProto, tag, {
+    configurable: true,
+    set: function(value){
+      if(has(this, HIDDEN) && has(this[HIDDEN], tag))this[HIDDEN][tag] = false;
+      setSymbolDesc(this, tag, createDesc(1, value));
+    }
+  });
+  return sym;
+};
+
+var isSymbol = function(it){
+  return typeof it == 'symbol';
+};
+
+var $defineProperty = function defineProperty(it, key, D){
+  if(D && has(AllSymbols, key)){
+    if(!D.enumerable){
+      if(!has(it, HIDDEN))setDesc(it, HIDDEN, createDesc(1, {}));
+      it[HIDDEN][key] = true;
+    } else {
+      if(has(it, HIDDEN) && it[HIDDEN][key])it[HIDDEN][key] = false;
+      D = _create(D, {enumerable: createDesc(0, false)});
+    } return setSymbolDesc(it, key, D);
+  } return setDesc(it, key, D);
+};
+var $defineProperties = function defineProperties(it, P){
+  anObject(it);
+  var keys = enumKeys(P = toIObject(P))
+    , i    = 0
+    , l = keys.length
+    , key;
+  while(l > i)$defineProperty(it, key = keys[i++], P[key]);
+  return it;
+};
+var $create = function create(it, P){
+  return P === undefined ? _create(it) : $defineProperties(_create(it), P);
+};
+var $propertyIsEnumerable = function propertyIsEnumerable(key){
+  var E = isEnum.call(this, key);
+  return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key]
+    ? E : true;
+};
+var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key){
+  var D = getDesc(it = toIObject(it), key);
+  if(D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key]))D.enumerable = true;
+  return D;
+};
+var $getOwnPropertyNames = function getOwnPropertyNames(it){
+  var names  = getNames(toIObject(it))
+    , result = []
+    , i      = 0
+    , key;
+  while(names.length > i)if(!has(AllSymbols, key = names[i++]) && key != HIDDEN)result.push(key);
+  return result;
+};
+var $getOwnPropertySymbols = function getOwnPropertySymbols(it){
+  var names  = getNames(toIObject(it))
+    , result = []
+    , i      = 0
+    , key;
+  while(names.length > i)if(has(AllSymbols, key = names[i++]))result.push(AllSymbols[key]);
+  return result;
+};
+var $stringify = function stringify(it){
+  if(it === undefined || isSymbol(it))return; // IE8 returns string on undefined
+  var args = [it]
+    , i    = 1
+    , $$   = arguments
+    , replacer, $replacer;
+  while($$.length > i)args.push($$[i++]);
+  replacer = args[1];
+  if(typeof replacer == 'function')$replacer = replacer;
+  if($replacer || !isArray(replacer))replacer = function(key, value){
+    if($replacer)value = $replacer.call(this, key, value);
+    if(!isSymbol(value))return value;
+  };
+  args[1] = replacer;
+  return _stringify.apply($JSON, args);
+};
+var buggyJSON = $fails(function(){
+  var S = $Symbol();
+  // MS Edge converts symbol values to JSON as {}
+  // WebKit converts symbol values to JSON as null
+  // V8 throws on boxed symbols
+  return _stringify([S]) != '[null]' || _stringify({a: S}) != '{}' || _stringify(Object(S)) != '{}';
+});
+
+// 19.4.1.1 Symbol([description])
+if(!useNative){
+  $Symbol = function Symbol(){
+    if(isSymbol(this))throw TypeError('Symbol is not a constructor');
+    return wrap(uid(arguments.length > 0 ? arguments[0] : undefined));
+  };
+  redefine($Symbol.prototype, 'toString', function toString(){
+    return this._k;
+  });
+
+  isSymbol = function(it){
+    return it instanceof $Symbol;
+  };
+
+  $.create     = $create;
+  $.isEnum     = $propertyIsEnumerable;
+  $.getDesc    = $getOwnPropertyDescriptor;
+  $.setDesc    = $defineProperty;
+  $.setDescs   = $defineProperties;
+  $.getNames   = $names.get = $getOwnPropertyNames;
+  $.getSymbols = $getOwnPropertySymbols;
+
+  if(DESCRIPTORS && !require('./$.library')){
+    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
+  }
+}
+
+var symbolStatics = {
+  // 19.4.2.1 Symbol.for(key)
+  'for': function(key){
+    return has(SymbolRegistry, key += '')
+      ? SymbolRegistry[key]
+      : SymbolRegistry[key] = $Symbol(key);
+  },
+  // 19.4.2.5 Symbol.keyFor(sym)
+  keyFor: function keyFor(key){
+    return keyOf(SymbolRegistry, key);
+  },
+  useSetter: function(){ setter = true; },
+  useSimple: function(){ setter = false; }
+};
+// 19.4.2.2 Symbol.hasInstance
+// 19.4.2.3 Symbol.isConcatSpreadable
+// 19.4.2.4 Symbol.iterator
+// 19.4.2.6 Symbol.match
+// 19.4.2.8 Symbol.replace
+// 19.4.2.9 Symbol.search
+// 19.4.2.10 Symbol.species
+// 19.4.2.11 Symbol.split
+// 19.4.2.12 Symbol.toPrimitive
+// 19.4.2.13 Symbol.toStringTag
+// 19.4.2.14 Symbol.unscopables
+$.each.call((
+  'hasInstance,isConcatSpreadable,iterator,match,replace,search,' +
+  'species,split,toPrimitive,toStringTag,unscopables'
+).split(','), function(it){
+  var sym = wks(it);
+  symbolStatics[it] = useNative ? sym : wrap(sym);
+});
+
+setter = true;
+
+$export($export.G + $export.W, {Symbol: $Symbol});
+
+$export($export.S, 'Symbol', symbolStatics);
+
+$export($export.S + $export.F * !useNative, 'Object', {
+  // 19.1.2.2 Object.create(O [, Properties])
+  create: $create,
+  // 19.1.2.4 Object.defineProperty(O, P, Attributes)
+  defineProperty: $defineProperty,
+  // 19.1.2.3 Object.defineProperties(O, Properties)
+  defineProperties: $defineProperties,
+  // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+  getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
+  // 19.1.2.7 Object.getOwnPropertyNames(O)
+  getOwnPropertyNames: $getOwnPropertyNames,
+  // 19.1.2.8 Object.getOwnPropertySymbols(O)
+  getOwnPropertySymbols: $getOwnPropertySymbols
+});
+
+// 24.3.2 JSON.stringify(value [, replacer [, space]])
+$JSON && $export($export.S + $export.F * (!useNative || buggyJSON), 'JSON', {stringify: $stringify});
+
+// 19.4.3.5 Symbol.prototype[@@toStringTag]
+setToStringTag($Symbol, 'Symbol');
+// 20.2.1.9 Math[@@toStringTag]
+setToStringTag(Math, 'Math', true);
+// 24.3.3 JSON[@@toStringTag]
+setToStringTag(global.JSON, 'JSON', true);
+},{"./$":90,"./$.an-object":62,"./$.descriptors":68,"./$.enum-keys":70,"./$.export":71,"./$.fails":72,"./$.get-names":74,"./$.global":75,"./$.has":76,"./$.is-array":82,"./$.keyof":91,"./$.library":92,"./$.property-desc":96,"./$.redefine":98,"./$.set-to-string-tag":102,"./$.shared":103,"./$.to-iobject":109,"./$.uid":112,"./$.wks":113}],124:[function(require,module,exports){
+require('./es6.array.iterator');
+var Iterators = require('./$.iterators');
+Iterators.NodeList = Iterators.HTMLCollection = Iterators.Array;
+},{"./$.iterators":89,"./es6.array.iterator":115}],125:[function(require,module,exports){
 
 /**
  * This is the web browser implementation of `debug()`.
@@ -10719,7 +13495,7 @@ function localstorage(){
   } catch (e) {}
 }
 
-},{"./debug":33}],33:[function(require,module,exports){
+},{"./debug":126}],126:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -10918,7 +13694,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":34}],34:[function(require,module,exports){
+},{"ms":127}],127:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -11045,7 +13821,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],35:[function(require,module,exports){
+},{}],128:[function(require,module,exports){
 'use strict';
 
 //
@@ -11309,7 +14085,7 @@ if ('undefined' !== typeof module) {
   module.exports = EventEmitter;
 }
 
-},{}],36:[function(require,module,exports){
+},{}],129:[function(require,module,exports){
 /**
  * Indicates that navigation was caused by a call to history.push.
  */
@@ -11341,7 +14117,7 @@ exports['default'] = {
   REPLACE: REPLACE,
   POP: POP
 };
-},{}],37:[function(require,module,exports){
+},{}],130:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -11368,7 +14144,7 @@ function loopAsync(turns, work, callback) {
 
   next();
 }
-},{}],38:[function(require,module,exports){
+},{}],131:[function(require,module,exports){
 (function (process){
 /*eslint-disable no-empty */
 'use strict';
@@ -11439,7 +14215,7 @@ function readState(key) {
   return null;
 }
 }).call(this,require('_process'))
-},{"_process":1,"warning":63}],39:[function(require,module,exports){
+},{"_process":1,"warning":154}],132:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -11520,13 +14296,13 @@ function supportsGoWithoutReloadUsingHash() {
   var ua = navigator.userAgent;
   return ua.indexOf('Firefox') === -1;
 }
-},{}],40:[function(require,module,exports){
+},{}],133:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
 var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 exports.canUseDOM = canUseDOM;
-},{}],41:[function(require,module,exports){
+},{}],134:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -11707,7 +14483,7 @@ function createBrowserHistory() {
 exports['default'] = createBrowserHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./Actions":36,"./DOMStateStorage":38,"./DOMUtils":39,"./ExecutionEnvironment":40,"./createDOMHistory":42,"./parsePath":52,"_process":1,"invariant":60}],42:[function(require,module,exports){
+},{"./Actions":129,"./DOMStateStorage":131,"./DOMUtils":132,"./ExecutionEnvironment":133,"./createDOMHistory":135,"./parsePath":145,"_process":1,"invariant":153}],135:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -11750,7 +14526,7 @@ function createDOMHistory(options) {
 exports['default'] = createDOMHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./DOMUtils":39,"./ExecutionEnvironment":40,"./createHistory":44,"_process":1,"invariant":60}],43:[function(require,module,exports){
+},{"./DOMUtils":132,"./ExecutionEnvironment":133,"./createHistory":137,"_process":1,"invariant":153}],136:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -12001,7 +14777,7 @@ function createHashHistory() {
 exports['default'] = createHashHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./Actions":36,"./DOMStateStorage":38,"./DOMUtils":39,"./ExecutionEnvironment":40,"./createDOMHistory":42,"./parsePath":52,"_process":1,"invariant":60,"warning":63}],44:[function(require,module,exports){
+},{"./Actions":129,"./DOMStateStorage":131,"./DOMUtils":132,"./ExecutionEnvironment":133,"./createDOMHistory":135,"./parsePath":145,"_process":1,"invariant":153,"warning":154}],137:[function(require,module,exports){
 //import warning from 'warning'
 'use strict';
 
@@ -12293,7 +15069,7 @@ function createHistory() {
 
 exports['default'] = createHistory;
 module.exports = exports['default'];
-},{"./Actions":36,"./AsyncUtils":37,"./createLocation":45,"./deprecate":47,"./parsePath":52,"./runTransitionHook":53,"deep-equal":57}],45:[function(require,module,exports){
+},{"./Actions":129,"./AsyncUtils":130,"./createLocation":138,"./deprecate":140,"./parsePath":145,"./runTransitionHook":146,"deep-equal":150}],138:[function(require,module,exports){
 //import warning from 'warning'
 'use strict';
 
@@ -12348,7 +15124,7 @@ function createLocation() {
 
 exports['default'] = createLocation;
 module.exports = exports['default'];
-},{"./Actions":36,"./parsePath":52}],46:[function(require,module,exports){
+},{"./Actions":129,"./parsePath":145}],139:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -12357,6 +15133,10 @@ exports.__esModule = true;
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _warning = require('warning');
+
+var _warning2 = _interopRequireDefault(_warning);
 
 var _invariant = require('invariant');
 
@@ -12463,7 +15243,10 @@ function createMemoryHistory() {
 
   function go(n) {
     if (n) {
-      !canGo(n) ? process.env.NODE_ENV !== 'production' ? _invariant2['default'](false, 'Cannot go(%s) there is not enough history', n) : _invariant2['default'](false) : undefined;
+      if (!canGo(n)) {
+        process.env.NODE_ENV !== 'production' ? _warning2['default'](false, 'Cannot go(%s) there is not enough history', n) : undefined;
+        return;
+      }
 
       current += n;
 
@@ -12499,7 +15282,7 @@ function createMemoryHistory() {
 exports['default'] = createMemoryHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./Actions":36,"./createHistory":44,"./parsePath":52,"_process":1,"invariant":60}],47:[function(require,module,exports){
+},{"./Actions":129,"./createHistory":137,"./parsePath":145,"_process":1,"invariant":153,"warning":154}],140:[function(require,module,exports){
 //import warning from 'warning'
 
 "use strict";
@@ -12515,7 +15298,7 @@ function deprecate(fn) {
 
 exports["default"] = deprecate;
 module.exports = exports["default"];
-},{}],48:[function(require,module,exports){
+},{}],141:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -12532,7 +15315,7 @@ var _useBeforeUnload2 = _interopRequireDefault(_useBeforeUnload);
 
 exports['default'] = _deprecate2['default'](_useBeforeUnload2['default'], 'enableBeforeUnload is deprecated, use useBeforeUnload instead');
 module.exports = exports['default'];
-},{"./deprecate":47,"./useBeforeUnload":55}],49:[function(require,module,exports){
+},{"./deprecate":140,"./useBeforeUnload":148}],142:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -12549,7 +15332,7 @@ var _useQueries2 = _interopRequireDefault(_useQueries);
 
 exports['default'] = _deprecate2['default'](_useQueries2['default'], 'enableQueries is deprecated, use useQueries instead');
 module.exports = exports['default'];
-},{"./deprecate":47,"./useQueries":56}],50:[function(require,module,exports){
+},{"./deprecate":140,"./useQueries":149}],143:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -12563,7 +15346,7 @@ function extractPath(string) {
 
 exports["default"] = extractPath;
 module.exports = exports["default"];
-},{}],51:[function(require,module,exports){
+},{}],144:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -12635,7 +15418,7 @@ var _enableQueries3 = _interopRequireDefault(_enableQueries2);
 exports.enableQueries = _enableQueries3['default'];
 var createLocation = _deprecate2['default'](_createLocation3['default'], 'Using createLocation without a history instance is deprecated; please use history.createLocation instead');
 exports.createLocation = createLocation;
-},{"./Actions":36,"./createBrowserHistory":41,"./createHashHistory":43,"./createLocation":45,"./createMemoryHistory":46,"./deprecate":47,"./enableBeforeUnload":48,"./enableQueries":49,"./useBasename":54,"./useBeforeUnload":55,"./useQueries":56}],52:[function(require,module,exports){
+},{"./Actions":129,"./createBrowserHistory":134,"./createHashHistory":136,"./createLocation":138,"./createMemoryHistory":139,"./deprecate":140,"./enableBeforeUnload":141,"./enableQueries":142,"./useBasename":147,"./useBeforeUnload":148,"./useQueries":149}],145:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -12682,7 +15465,7 @@ function parsePath(path) {
 exports['default'] = parsePath;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./extractPath":50,"_process":1,"warning":63}],53:[function(require,module,exports){
+},{"./extractPath":143,"_process":1,"warning":154}],146:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -12709,7 +15492,7 @@ function runTransitionHook(hook, location, callback) {
 exports['default'] = runTransitionHook;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"_process":1,"warning":63}],54:[function(require,module,exports){
+},{"_process":1,"warning":154}],147:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -12850,7 +15633,7 @@ function useBasename(createHistory) {
 
 exports['default'] = useBasename;
 module.exports = exports['default'];
-},{"./ExecutionEnvironment":40,"./deprecate":47,"./extractPath":50,"./parsePath":52,"./runTransitionHook":53}],55:[function(require,module,exports){
+},{"./ExecutionEnvironment":133,"./deprecate":140,"./extractPath":143,"./parsePath":145,"./runTransitionHook":146}],148:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -12964,7 +15747,7 @@ function useBeforeUnload(createHistory) {
 exports['default'] = useBeforeUnload;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./DOMUtils":39,"./ExecutionEnvironment":40,"./deprecate":47,"_process":1,"warning":63}],56:[function(require,module,exports){
+},{"./DOMUtils":132,"./ExecutionEnvironment":133,"./deprecate":140,"_process":1,"warning":154}],149:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -13088,12 +15871,18 @@ function useQueries(createHistory) {
     }
 
     function createPath(location, query) {
-      process.env.NODE_ENV !== 'production' ? _warning2['default'](query, 'the query argument to createPath is deprecated; use a location descriptor instead') : undefined;
+      //warning(
+      //  !query,
+      //  'the query argument to createPath is deprecated; use a location descriptor instead'
+      //)
       return history.createPath(appendQuery(location, query || location.query));
     }
 
     function createHref(location, query) {
-      process.env.NODE_ENV !== 'production' ? _warning2['default'](query, 'the query argument to createHref is deprecated; use a location descriptor instead') : undefined;
+      //warning(
+      //  !query,
+      //  'the query argument to createHref is deprecated; use a location descriptor instead'
+      //)
       return history.createHref(appendQuery(location, query || location.query));
     }
 
@@ -13133,7 +15922,7 @@ function useQueries(createHistory) {
 exports['default'] = useQueries;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./deprecate":47,"./parsePath":52,"./runTransitionHook":53,"_process":1,"query-string":61,"warning":63}],57:[function(require,module,exports){
+},{"./deprecate":140,"./parsePath":145,"./runTransitionHook":146,"_process":1,"query-string":157,"warning":154}],150:[function(require,module,exports){
 var pSlice = Array.prototype.slice;
 var objectKeys = require('./lib/keys.js');
 var isArguments = require('./lib/is_arguments.js');
@@ -13229,7 +16018,7 @@ function objEquiv(a, b, opts) {
   return typeof a === typeof b;
 }
 
-},{"./lib/is_arguments.js":58,"./lib/keys.js":59}],58:[function(require,module,exports){
+},{"./lib/is_arguments.js":151,"./lib/keys.js":152}],151:[function(require,module,exports){
 var supportsArgumentsClass = (function(){
   return Object.prototype.toString.call(arguments)
 })() == '[object Arguments]';
@@ -13251,7 +16040,7 @@ function unsupported(object){
     false;
 };
 
-},{}],59:[function(require,module,exports){
+},{}],152:[function(require,module,exports){
 exports = module.exports = typeof Object.keys === 'function'
   ? Object.keys : shim;
 
@@ -13262,7 +16051,7 @@ function shim (obj) {
   return keys;
 }
 
-},{}],60:[function(require,module,exports){
+},{}],153:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -13317,83 +16106,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":1}],61:[function(require,module,exports){
-'use strict';
-var strictUriEncode = require('strict-uri-encode');
-
-exports.extract = function (str) {
-	return str.split('?')[1] || '';
-};
-
-exports.parse = function (str) {
-	if (typeof str !== 'string') {
-		return {};
-	}
-
-	str = str.trim().replace(/^(\?|#|&)/, '');
-
-	if (!str) {
-		return {};
-	}
-
-	return str.split('&').reduce(function (ret, param) {
-		var parts = param.replace(/\+/g, ' ').split('=');
-		// Firefox (pre 40) decodes `%3D` to `=`
-		// https://github.com/sindresorhus/query-string/pull/37
-		var key = parts.shift();
-		var val = parts.length > 0 ? parts.join('=') : undefined;
-
-		key = decodeURIComponent(key);
-
-		// missing `=` should be `null`:
-		// http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters
-		val = val === undefined ? null : decodeURIComponent(val);
-
-		if (!ret.hasOwnProperty(key)) {
-			ret[key] = val;
-		} else if (Array.isArray(ret[key])) {
-			ret[key].push(val);
-		} else {
-			ret[key] = [ret[key], val];
-		}
-
-		return ret;
-	}, {});
-};
-
-exports.stringify = function (obj) {
-	return obj ? Object.keys(obj).sort().map(function (key) {
-		var val = obj[key];
-
-		if (val === undefined) {
-			return '';
-		}
-
-		if (val === null) {
-			return key;
-		}
-
-		if (Array.isArray(val)) {
-			return val.sort().map(function (val2) {
-				return strictUriEncode(key) + '=' + strictUriEncode(val2);
-			}).join('&');
-		}
-
-		return strictUriEncode(key) + '=' + strictUriEncode(val);
-	}).filter(function (x) {
-		return x.length > 0;
-	}).join('&') : '';
-};
-
-},{"strict-uri-encode":62}],62:[function(require,module,exports){
-'use strict';
-module.exports = function (str) {
-	return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
-		return '%' + c.charCodeAt(0).toString(16);
-	});
-};
-
-},{}],63:[function(require,module,exports){
+},{"_process":1}],154:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -13457,7 +16170,7 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"_process":1}],64:[function(require,module,exports){
+},{"_process":1}],155:[function(require,module,exports){
 var isarray = require('isarray')
 
 /**
@@ -13849,19 +16562,91 @@ function pathToRegexp (path, keys, options) {
   return stringToRegexp(path, keys, options)
 }
 
-},{"isarray":65}],65:[function(require,module,exports){
+},{"isarray":156}],156:[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
-},{}],66:[function(require,module,exports){
-arguments[4][61][0].apply(exports,arguments)
-},{"dup":61,"strict-uri-encode":67}],67:[function(require,module,exports){
-arguments[4][62][0].apply(exports,arguments)
-},{"dup":62}],68:[function(require,module,exports){
+},{}],157:[function(require,module,exports){
+'use strict';
+var strictUriEncode = require('strict-uri-encode');
+
+exports.extract = function (str) {
+	return str.split('?')[1] || '';
+};
+
+exports.parse = function (str) {
+	if (typeof str !== 'string') {
+		return {};
+	}
+
+	str = str.trim().replace(/^(\?|#|&)/, '');
+
+	if (!str) {
+		return {};
+	}
+
+	return str.split('&').reduce(function (ret, param) {
+		var parts = param.replace(/\+/g, ' ').split('=');
+		// Firefox (pre 40) decodes `%3D` to `=`
+		// https://github.com/sindresorhus/query-string/pull/37
+		var key = parts.shift();
+		var val = parts.length > 0 ? parts.join('=') : undefined;
+
+		key = decodeURIComponent(key);
+
+		// missing `=` should be `null`:
+		// http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters
+		val = val === undefined ? null : decodeURIComponent(val);
+
+		if (!ret.hasOwnProperty(key)) {
+			ret[key] = val;
+		} else if (Array.isArray(ret[key])) {
+			ret[key].push(val);
+		} else {
+			ret[key] = [ret[key], val];
+		}
+
+		return ret;
+	}, {});
+};
+
+exports.stringify = function (obj) {
+	return obj ? Object.keys(obj).sort().map(function (key) {
+		var val = obj[key];
+
+		if (val === undefined) {
+			return '';
+		}
+
+		if (val === null) {
+			return key;
+		}
+
+		if (Array.isArray(val)) {
+			return val.sort().map(function (val2) {
+				return strictUriEncode(key) + '=' + strictUriEncode(val2);
+			}).join('&');
+		}
+
+		return strictUriEncode(key) + '=' + strictUriEncode(val);
+	}).filter(function (x) {
+		return x.length > 0;
+	}).join('&') : '';
+};
+
+},{"strict-uri-encode":158}],158:[function(require,module,exports){
+'use strict';
+module.exports = function (str) {
+	return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
+		return '%' + c.charCodeAt(0).toString(16);
+	});
+};
+
+},{}],159:[function(require,module,exports){
 (function (process){
 /*!
- * Vue.js v1.0.10
+ * Vue.js v1.0.13
  * (c) 2015 Evan You
  * Released under the MIT License.
  */
@@ -13891,6 +16676,7 @@ function set(obj, key, val) {
       vm._digest();
     }
   }
+  return val;
 }
 
 /**
@@ -14422,6 +17208,7 @@ var reservedArgRE = /^in$|^-?\d+/;
 var str;
 var dir;
 var c;
+var prev;
 var i;
 var l;
 var lastFilterIndex;
@@ -14507,13 +17294,14 @@ function parseDirective(s) {
   dir = {};
 
   for (i = 0, l = str.length; i < l; i++) {
+    prev = c;
     c = str.charCodeAt(i);
     if (inSingle) {
       // check single quote
-      if (c === 0x27) inSingle = !inSingle;
+      if (c === 0x27 && prev !== 0x5C) inSingle = !inSingle;
     } else if (inDouble) {
       // check double quote
-      if (c === 0x22) inDouble = !inDouble;
+      if (c === 0x22 && prev !== 0x5C) inDouble = !inDouble;
     } else if (c === 0x7C && // pipe
     str.charCodeAt(i + 1) !== 0x7C && str.charCodeAt(i - 1) !== 0x7C) {
       if (dir.expression == null) {
@@ -14984,6 +17772,18 @@ function getBindAttr(node, name) {
 }
 
 /**
+ * Check the presence of a bind attribute.
+ *
+ * @param {Node} node
+ * @param {String} name
+ * @return {Boolean}
+ */
+
+function hasBindAttr(node, name) {
+  return node.hasAttribute(name) || node.hasAttribute(':' + name) || node.hasAttribute('v-bind:' + name);
+}
+
+/**
  * Insert el before target
  *
  * @param {Element} el
@@ -15073,10 +17873,29 @@ function off(el, event, cb) {
 }
 
 /**
+ * In IE9, setAttribute('class') will result in empty class
+ * if the element also has the :class attribute; However in
+ * PhantomJS, setting `className` does not work on SVG elements...
+ * So we have to do a conditional check here.
+ *
+ * @param {Element} el
+ * @param {String} cls
+ */
+
+function setClass(el, cls) {
+  /* istanbul ignore if */
+  if (isIE9 && !(el instanceof SVGElement)) {
+    el.className = cls;
+  } else {
+    el.setAttribute('class', cls);
+  }
+}
+
+/**
  * Add class with compatibility for IE & SVG
  *
  * @param {Element} el
- * @param {Strong} cls
+ * @param {String} cls
  */
 
 function addClass(el, cls) {
@@ -15085,7 +17904,7 @@ function addClass(el, cls) {
   } else {
     var cur = ' ' + (el.getAttribute('class') || '') + ' ';
     if (cur.indexOf(' ' + cls + ' ') < 0) {
-      el.setAttribute('class', (cur + cls).trim());
+      setClass(el, (cur + cls).trim());
     }
   }
 }
@@ -15094,7 +17913,7 @@ function addClass(el, cls) {
  * Remove class with compatibility for IE & SVG
  *
  * @param {Element} el
- * @param {Strong} cls
+ * @param {String} cls
  */
 
 function removeClass(el, cls) {
@@ -15106,7 +17925,7 @@ function removeClass(el, cls) {
     while (cur.indexOf(tar) >= 0) {
       cur = cur.replace(tar, ' ');
     }
-    el.setAttribute('class', cur.trim());
+    setClass(el, cur.trim());
   }
   if (!el.className) {
     el.removeAttribute('class');
@@ -15266,6 +18085,7 @@ function removeNodeRange(start, end, vm, frag, cb) {
 }
 
 var commonTagRE = /^(div|p|span|img|a|b|i|br|ul|ol|li|h1|h2|h3|h4|h5|h6|code|pre|table|th|td|tr|form|label|input|select|option|nav|article|section|header|footer)$/;
+var reservedTagRE = /^(slot|partial|component)$/;
 
 /**
  * Check if an element is a component, if yes return its
@@ -15279,7 +18099,7 @@ var commonTagRE = /^(div|p|span|img|a|b|i|br|ul|ol|li|h1|h2|h3|h4|h5|h6|code|pre
 function checkComponentAttr(el, options) {
   var tag = el.tagName.toLowerCase();
   var hasAttrs = el.hasAttributes();
-  if (!commonTagRE.test(tag) && tag !== 'component') {
+  if (!commonTagRE.test(tag) && !reservedTagRE.test(tag)) {
     if (resolveAsset(options, 'components', tag)) {
       return { id: tag };
     } else {
@@ -15330,6 +18150,7 @@ function getIsBinding(el) {
 
 function initProp(vm, prop, value) {
   var key = prop.path;
+  value = coerceProp(prop, value);
   vm[key] = vm._data[key] = assertProp(prop, value) ? value : undefined;
 }
 
@@ -15385,6 +18206,23 @@ function assertProp(prop, value) {
     }
   }
   return true;
+}
+
+/**
+ * Force parsing value with coerce option.
+ *
+ * @param {*} value
+ * @param {Object} options
+ * @return {*}
+ */
+
+function coerceProp(prop, value) {
+  var coerce = prop.options.coerce;
+  if (!coerce) {
+    return value;
+  }
+  // coerce is a function
+  return coerce(value);
 }
 
 function formatType(val) {
@@ -15572,8 +18410,8 @@ function guardComponents(options) {
     var ids = Object.keys(components);
     for (var i = 0, l = ids.length; i < l; i++) {
       var key = ids[i];
-      if (commonTagRE.test(key)) {
-        process.env.NODE_ENV !== 'production' && warn('Do not use built-in HTML elements as component ' + 'id: ' + key);
+      if (commonTagRE.test(key) || reservedTagRE.test(key)) {
+        process.env.NODE_ENV !== 'production' && warn('Do not use built-in or reserved HTML elements as component ' + 'id: ' + key);
         continue;
       }
       def = components[key];
@@ -15760,7 +18598,7 @@ var arrayMethods = Object.create(arrayProto)
 
 def(arrayProto, '$set', function $set(index, val) {
   if (index >= this.length) {
-    this.length = index + 1;
+    this.length = Number(index) + 1;
   }
   return this.splice(index, 1, val)[0];
 });
@@ -15876,8 +18714,7 @@ function Observer(value) {
 
 Observer.prototype.walk = function (obj) {
   var keys = Object.keys(obj);
-  var i = keys.length;
-  while (i--) {
+  for (var i = 0, l = keys.length; i < l; i++) {
     this.convert(keys[i], obj[keys[i]]);
   }
 };
@@ -15889,8 +18726,7 @@ Observer.prototype.walk = function (obj) {
  */
 
 Observer.prototype.observeArray = function (items) {
-  var i = items.length;
-  while (i--) {
+  for (var i = 0, l = items.length; i < l; i++) {
     observe(items[i]);
   }
 };
@@ -15954,10 +18790,8 @@ function protoAugment(target, src) {
  */
 
 function copyAugment(target, src, keys) {
-  var i = keys.length;
-  var key;
-  while (i--) {
-    key = keys[i];
+  for (var i = 0, l = keys.length; i < l; i++) {
+    var key = keys[i];
     def(target, key, src[key]);
   }
 }
@@ -15980,7 +18814,7 @@ function observe(value, vm) {
   var ob;
   if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
     ob = value.__ob__;
-  } else if ((isArray(value) || isPlainObject(value)) && !Object.isFrozen(value) && !value._isVue) {
+  } else if ((isArray(value) || isPlainObject(value)) && Object.isExtensible(value) && !value._isVue) {
     ob = new Observer(value);
   }
   if (ob && vm) {
@@ -16085,6 +18919,7 @@ var util = Object.freeze({
 	inDoc: inDoc,
 	getAttr: getAttr,
 	getBindAttr: getBindAttr,
+	hasBindAttr: hasBindAttr,
 	before: before,
 	after: after,
 	remove: remove,
@@ -16092,6 +18927,7 @@ var util = Object.freeze({
 	replace: replace,
 	on: on$1,
 	off: off,
+	setClass: setClass,
 	addClass: addClass,
 	removeClass: removeClass,
 	extractContent: extractContent,
@@ -16107,7 +18943,9 @@ var util = Object.freeze({
 	checkComponentAttr: checkComponentAttr,
 	initProp: initProp,
 	assertProp: assertProp,
+	coerceProp: coerceProp,
 	commonTagRE: commonTagRE,
+	reservedTagRE: reservedTagRE,
 	get warn () { return warn; }
 });
 
@@ -16558,11 +19396,11 @@ var improperKeywordsRE = new RegExp('^(' + improperKeywords.replace(/,/g, '\\b|'
 
 var wsRE = /\s/g;
 var newlineRE = /\n/g;
-var saveRE = /[\{,]\s*[\w\$_]+\s*:|('[^']*'|"[^"]*")|new |typeof |void /g;
+var saveRE = /[\{,]\s*[\w\$_]+\s*:|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")|new |typeof |void /g;
 var restoreRE = /"(\d+)"/g;
-var pathTestRE = /^[A-Za-z_$][\w$]*(\.[A-Za-z_$][\w$]*|\['.*?'\]|\[".*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/;
-var pathReplaceRE = /[^\w$\.]([A-Za-z_$][\w$]*(\.[A-Za-z_$][\w$]*|\['.*?'\]|\[".*?"\])*)/g;
-var booleanLiteralRE = /^(true|false)$/;
+var pathTestRE = /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['.*?'\]|\[".*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/;
+var identRE = /[^\w$\.](?:[A-Za-z_$][\w$]*)/g;
+var booleanLiteralRE = /^(?:true|false)$/;
 
 /**
  * Save / Rewrite / Restore
@@ -16645,7 +19483,7 @@ function compileGetter(exp) {
   var body = exp.replace(saveRE, save).replace(wsRE, '');
   // rewrite all paths
   // pad 1 space here becaue the regex matches 1 extra char
-  body = (' ' + body).replace(pathReplaceRE, rewrite).replace(restoreRE, restore);
+  body = (' ' + body).replace(identRE, rewrite).replace(restoreRE, restore);
   return makeGetterFn(body);
 }
 
@@ -17035,11 +19873,11 @@ Watcher.prototype.run = function () {
   if (this.active) {
     var value = this.get();
     if (value !== this.value ||
-    // Deep watchers and Array watchers should fire even
+    // Deep watchers and watchers on Object/Arrays should fire even
     // when the value is the same, because the value may
     // have mutated; but only do so if this is a
     // non-shallow update (caused by a vm digest).
-    (isArray(value) || this.deep) && !this.shallow) {
+    (isObject(value) || this.deep) && !this.shallow) {
       // set new value
       var oldValue = this.value;
       this.value = value;
@@ -17137,7 +19975,7 @@ function traverse(val) {
 var cloak = {
   bind: function bind() {
     var el = this.el;
-    this.vm.$once('hook:compiled', function () {
+    this.vm.$once('pre-hook:compiled', function () {
       el.removeAttribute('v-cloak');
     });
   }
@@ -17149,9 +19987,20 @@ var ref = {
   }
 };
 
+var ON = 700;
+var MODEL = 800;
+var BIND = 850;
+var TRANSITION = 1100;
+var EL = 1500;
+var COMPONENT = 1500;
+var PARTIAL = 1750;
+var SLOT = 1750;
+var FOR = 2000;
+var IF = 2000;
+
 var el = {
 
-  priority: 1500,
+  priority: EL,
 
   bind: function bind() {
     /* istanbul ignore if */
@@ -17285,13 +20134,12 @@ function prefix(prop) {
 var xlinkNS = 'http://www.w3.org/1999/xlink';
 var xlinkRE = /^xlink:/;
 
-// these input element attributes should also set their
-// corresponding properties
-var inputProps = {
-  value: 1,
-  checked: 1,
-  selected: 1
-};
+// check for attributes that prohibit interpolations
+var disallowedInterpAttrRE = /^v-|^:|^@|^(is|transition|transition-mode|debounce|track-by|stagger|enter-stagger|leave-stagger)$/;
+
+// these attributes should also set their corresponding properties
+// because they only affect the initial state of the element
+var attrWithPropsRE = /^(value|checked|selected|muted)$/;
 
 // these attributes should set a hidden property for
 // binding v-model to object values
@@ -17301,12 +20149,9 @@ var modelProps = {
   'false-value': '_falseValue'
 };
 
-// check for attributes that prohibit interpolations
-var disallowedInterpAttrRE = /^v-|^:|^@|^(is|transition|transition-mode|debounce|track-by|stagger|enter-stagger|leave-stagger)$/;
-
 var bind = {
 
-  priority: 850,
+  priority: BIND,
 
   bind: function bind() {
     var attr = this.arg;
@@ -17356,34 +20201,43 @@ var bind = {
   handleObject: style.handleObject,
 
   handleSingle: function handleSingle(attr, value) {
-    if (inputProps[attr] && attr in this.el) {
-      this.el[attr] = attr === 'value' ? value || '' : // IE9 will set input.value to "null" for null...
-      value;
+    var el = this.el;
+    var interp = this.descriptor.interp;
+    if (!interp && attrWithPropsRE.test(attr) && attr in el) {
+      el[attr] = attr === 'value' ? value == null // IE9 will set input.value to "null" for null...
+      ? '' : value : value;
     }
     // set model props
     var modelProp = modelProps[attr];
-    if (modelProp) {
-      this.el[modelProp] = value;
+    if (!interp && modelProp) {
+      el[modelProp] = value;
       // update v-model if present
-      var model = this.el.__v_model;
+      var model = el.__v_model;
       if (model) {
         model.listener();
       }
     }
     // do not set value attribute for textarea
-    if (attr === 'value' && this.el.tagName === 'TEXTAREA') {
-      this.el.removeAttribute(attr);
+    if (attr === 'value' && el.tagName === 'TEXTAREA') {
+      el.removeAttribute(attr);
       return;
     }
     // update attribute
     if (value != null && value !== false) {
-      if (xlinkRE.test(attr)) {
-        this.el.setAttributeNS(xlinkNS, attr, value);
+      if (attr === 'class') {
+        // handle edge case #1960:
+        // class interpolation should not overwrite Vue transition class
+        if (el.__v_trans) {
+          value += ' ' + el.__v_trans.id + '-transition';
+        }
+        setClass(el, value);
+      } else if (xlinkRE.test(attr)) {
+        el.setAttributeNS(xlinkNS, attr, value);
       } else {
-        this.el.setAttribute(attr, value);
+        el.setAttribute(attr, value);
       }
     } else {
-      this.el.removeAttribute(attr);
+      el.removeAttribute(attr);
     }
   }
 };
@@ -17439,7 +20293,7 @@ function preventFilter(handler) {
 var on = {
 
   acceptStatement: true,
-  priority: 700,
+  priority: ON,
 
   bind: function bind() {
     // deal with iframes
@@ -17539,7 +20393,7 @@ var checkbox = {
     };
 
     this.on('change', this.listener);
-    if (el.checked) {
+    if (el.hasAttribute('checked')) {
       this.afterBind = this.listener;
     }
   },
@@ -17685,7 +20539,7 @@ var radio = {
     };
     this.on('change', this.listener);
 
-    if (el.checked) {
+    if (el.hasAttribute('checked')) {
       this.afterBind = this.listener;
     }
   },
@@ -17739,13 +20593,18 @@ var text$2 = {
       });
       this.on('blur', function () {
         self.focused = false;
-        self.listener();
+        // do not sync value after fragment removal (#2017)
+        if (!self._frag || self._frag.inserted) {
+          self.rawListener();
+        }
       });
     }
 
     // Now attach the main listener
-    this.listener = function () {
-      if (composing) return;
+    this.listener = this.rawListener = function () {
+      if (composing || !self._bound) {
+        return;
+      }
       var val = number || isRange ? toNumber(el.value) : el.value;
       self.set(val);
       // force update on next tick to avoid lock & same value
@@ -17825,7 +20684,7 @@ var handlers = {
 
 var model = {
 
-  priority: 800,
+  priority: MODEL,
   twoWay: true,
   handlers: handlers,
   params: ['lazy', 'number', 'debounce'],
@@ -17909,9 +20768,14 @@ var show = {
   },
 
   apply: function apply(el, value) {
-    applyTransition(el, value ? 1 : -1, function () {
+    if (inDoc(el)) {
+      applyTransition(el, value ? 1 : -1, toggle, this.vm);
+    } else {
+      toggle();
+    }
+    function toggle() {
       el.style.display = value ? '' : 'none';
-    }, this.vm);
+    }
   }
 };
 
@@ -17946,7 +20810,7 @@ function isRealTemplate(node) {
 }
 
 var tagRE$1 = /<([\w:]+)/;
-var entityRE = /&\w+;|&#\d+;|&#x[\dA-F]+;/;
+var entityRE = /&#?\w+?;/;
 
 /**
  * Convert a string template to a DocumentFragment.
@@ -18392,7 +21256,7 @@ FragmentFactory.prototype.create = function (host, scope, parentFrag) {
 
 var vIf = {
 
-  priority: 2000,
+  priority: IF,
 
   bind: function bind() {
     var el = this.el;
@@ -18455,7 +21319,7 @@ var uid$1 = 0;
 
 var vFor = {
 
-  priority: 2000,
+  priority: FOR,
 
   params: ['track-by', 'stagger', 'enter-stagger', 'leave-stagger'],
 
@@ -19450,7 +22314,7 @@ function isHidden(el) {
 
 var transition = {
 
-  priority: 1100,
+  priority: TRANSITION,
 
   update: function update(id, oldId) {
     var el = this.el;
@@ -19481,6 +22345,7 @@ var propDef = {
     var twoWay = prop.mode === bindingModes.TWO_WAY;
 
     var parentWatcher = this.parentWatcher = new Watcher(parent, parentKey, function (val) {
+      val = coerceProp(prop, val);
       if (assertProp(prop, val)) {
         child[childKey] = val;
       }
@@ -19500,7 +22365,7 @@ var propDef = {
       // important: defer the child watcher creation until
       // the created hook (after data observation)
       var self = this;
-      child.$once('hook:created', function () {
+      child.$once('pre-hook:created', function () {
         self.childWatcher = new Watcher(child, childKey, function (val) {
           parentWatcher.set(val);
         }, {
@@ -19523,7 +22388,7 @@ var propDef = {
 
 var component = {
 
-  priority: 1500,
+  priority: COMPONENT,
 
   params: ['keep-alive', 'transition-mode', 'inline-template'],
 
@@ -19648,6 +22513,9 @@ var component = {
     if (activateHook && !cached) {
       this.waitingFor = newComponent;
       activateHook.call(newComponent, function () {
+        if (self.waitingFor !== newComponent) {
+          return;
+        }
         self.waitingFor = null;
         self.transition(newComponent, cb);
       });
@@ -19932,7 +22800,7 @@ var propBindingModes = config._propBindingModes;
 var empty = {};
 
 // regexes
-var identRE = /^[$_a-zA-Z]+[\w$]*$/;
+var identRE$1 = /^[$_a-zA-Z]+[\w$]*$/;
 var settablePathRE = /^[A-Za-z_$][\w$]*(\.[A-Za-z_$][\w$]*|\[[^\[\]]+\])*$/;
 
 /**
@@ -19962,7 +22830,7 @@ function compileProps(el, propOptions) {
     // interpreted as minus calculations by the parser
     // so we need to camelize the path here
     path = camelize(name);
-    if (!identRE.test(path)) {
+    if (!identRE$1.test(path)) {
       process.env.NODE_ENV !== 'production' && warn('Invalid prop key: "' + name + '". Prop keys ' + 'must be valid identifiers.');
       continue;
     }
@@ -20570,6 +23438,11 @@ function makeChildLinkFn(linkFns) {
 function checkElementDirectives(el, options) {
   var tag = el.tagName.toLowerCase();
   if (commonTagRE.test(tag)) return;
+  // special case: give named slot a higher priority
+  // than unnamed slots
+  if (tag === 'slot' && hasBindAttr(el, 'name')) {
+    tag = '_namedSlot';
+  }
   var def = resolveAsset(options, 'elementDirectives', tag);
   if (def) {
     return makeTerminalNodeLinkFn(el, tag, '', options, def);
@@ -20910,7 +23783,7 @@ function transcludeTemplate(el, options) {
       // non-element template
       replacer.nodeType !== 1 ||
       // single nested component
-      tag === 'component' || resolveAsset(options, 'components', tag) || replacer.hasAttribute('is') || replacer.hasAttribute(':is') || replacer.hasAttribute('v-bind:is') ||
+      tag === 'component' || resolveAsset(options, 'components', tag) || hasBindAttr(replacer, 'is') ||
       // element directive
       resolveAsset(options, 'elementDirectives', tag) ||
       // for block
@@ -21370,6 +24243,7 @@ function eventsMixin (Vue) {
    */
 
   Vue.prototype._callHook = function (hook) {
+    this.$emit('pre-hook:' + hook);
     var handlers = this.$options[hook];
     if (handlers) {
       for (var i = 0, j = handlers.length; i < j; i++) {
@@ -21464,6 +24338,7 @@ Directive.prototype._bind = function () {
   if (this.bind) {
     this.bind();
   }
+  this._bound = true;
 
   if (this.literal) {
     this.update && this.update(descriptor.raw);
@@ -21499,7 +24374,6 @@ Directive.prototype._bind = function () {
       this.update(watcher.value);
     }
   }
-  this._bound = true;
 };
 
 /**
@@ -21556,7 +24430,8 @@ Directive.prototype._setupParamWatcher = function (key, expression) {
       called = true;
     }
   }, {
-    immediate: true
+    immediate: true,
+    user: false
   });(this._paramUnwatchFns || (this._paramUnwatchFns = [])).push(unwatch);
 };
 
@@ -21720,6 +24595,11 @@ function lifecycleMixin (Vue) {
     el = transclude(el, options);
     this._initElement(el);
 
+    // handle v-pre on root node (#2026)
+    if (el.nodeType === 1 && getAttr(el, 'v-pre') !== null) {
+      return;
+    }
+
     // root is always compiled per-instance, because
     // container attrs and props can be different every time.
     var contextOptions = this._context && this._context.$options;
@@ -21817,6 +24697,30 @@ function lifecycleMixin (Vue) {
       }
       return;
     }
+
+    var destroyReady;
+    var pendingRemoval;
+
+    var self = this;
+    // Cleanup should be called either synchronously or asynchronoysly as
+    // callback of this.$remove(), or if remove and deferCleanup are false.
+    // In any case it should be called after all other removing, unbinding and
+    // turning of is done
+    var cleanupIfPossible = function cleanupIfPossible() {
+      if (destroyReady && !pendingRemoval && !deferCleanup) {
+        self._cleanup();
+      }
+    };
+
+    // remove DOM element
+    if (remove && this.$el) {
+      pendingRemoval = true;
+      this.$remove(function () {
+        pendingRemoval = false;
+        cleanupIfPossible();
+      });
+    }
+
     this._callHook('beforeDestroy');
     this._isBeingDestroyed = true;
     var i;
@@ -21850,15 +24754,9 @@ function lifecycleMixin (Vue) {
     if (this.$el) {
       this.$el.__vue__ = null;
     }
-    // remove DOM element
-    var self = this;
-    if (remove && this.$el) {
-      this.$remove(function () {
-        self._cleanup();
-      });
-    } else if (!deferCleanup) {
-      this._cleanup();
-    }
+
+    destroyReady = true;
+    cleanupIfPossible();
   };
 
   /**
@@ -22039,6 +24937,12 @@ function globalAPI (Vue) {
       return extendOptions._Ctor;
     }
     var name = extendOptions.name || Super.options.name;
+    if (process.env.NODE_ENV !== 'production') {
+      if (!/^[a-zA-Z][\w-]+$/.test(name)) {
+        warn('Invalid component name: ' + name);
+        name = null;
+      }
+    }
     var Sub = createClass(name || 'VueComponent');
     Sub.prototype = Object.create(Super.prototype);
     Sub.prototype.constructor = Sub;
@@ -22123,8 +25027,8 @@ function globalAPI (Vue) {
       } else {
         /* istanbul ignore if */
         if (process.env.NODE_ENV !== 'production') {
-          if (type === 'component' && commonTagRE.test(id)) {
-            warn('Do not use built-in HTML elements as component ' + 'id: ' + id);
+          if (type === 'component' && (commonTagRE.test(id) || reservedTagRE.test(id))) {
+            warn('Do not use built-in or reserved HTML elements as component ' + 'id: ' + id);
           }
         }
         if (type === 'component' && isPlainObject(definition)) {
@@ -22156,7 +25060,9 @@ function dataAPI (Vue) {
       if (asStatement && !isSimplePath(exp)) {
         var self = this;
         return function statementHandler() {
+          self.$arguments = toArray(arguments);
           res.get.call(self, self);
+          self.$arguments = null;
         };
       } else {
         try {
@@ -22213,7 +25119,9 @@ function dataAPI (Vue) {
     }
     var watcher = new Watcher(vm, expOrFn, cb, {
       deep: options && options.deep,
-      filters: parsed && parsed.filters
+      sync: options && options.sync,
+      filters: parsed && parsed.filters,
+      user: !options || options.user !== false
     });
     if (options && options.immediate) {
       cb.call(vm, watcher.value);
@@ -22977,7 +25885,7 @@ var filters = {
 
 var partial = {
 
-  priority: 1750,
+  priority: PARTIAL,
 
   params: ['name'],
 
@@ -23020,55 +25928,46 @@ var partial = {
 // instance being stored as `$options._content` during
 // the transclude phase.
 
+// We are exporting two versions, one for named and one
+// for unnamed, because the unnamed slots must be compiled
+// AFTER all named slots have selected their content. So
+// we need to give them different priorities in the compilation
+// process. (See #1965)
+
 var slot = {
 
-  priority: 1750,
-
-  params: ['name'],
+  priority: SLOT,
 
   bind: function bind() {
     var host = this.vm;
     var raw = host.$options._content;
-    var content;
     if (!raw) {
       this.fallback();
       return;
     }
     var context = host._context;
-    var slotName = this.params.name;
+    var slotName = this.params && this.params.name;
     if (!slotName) {
-      // Default content
-      var self = this;
-      var compileDefaultContent = function compileDefaultContent() {
-        self.compile(extractFragment(raw.childNodes, raw, true), context, host);
-      };
-      if (!host._isCompiled) {
-        // defer until the end of instance compilation,
-        // because the default outlet must wait until all
-        // other possible outlets with selectors have picked
-        // out their contents.
-        host.$once('hook:compiled', compileDefaultContent);
-      } else {
-        compileDefaultContent();
-      }
+      // Default slot
+      this.tryCompile(extractFragment(raw.childNodes, raw, true), context, host);
     } else {
+      // Named slot
       var selector = '[slot="' + slotName + '"]';
       var nodes = raw.querySelectorAll(selector);
       if (nodes.length) {
-        content = extractFragment(nodes, raw);
-        if (content.hasChildNodes()) {
-          this.compile(content, context, host);
-        } else {
-          this.fallback();
-        }
+        this.tryCompile(extractFragment(nodes, raw), context, host);
       } else {
         this.fallback();
       }
     }
   },
 
-  fallback: function fallback() {
-    this.compile(extractContent(this.el, true), this.vm);
+  tryCompile: function tryCompile(content, context, host) {
+    if (content.hasChildNodes()) {
+      this.compile(content, context, host);
+    } else {
+      this.fallback();
+    }
   },
 
   compile: function compile(content, context, host) {
@@ -23083,12 +25982,21 @@ var slot = {
     }
   },
 
+  fallback: function fallback() {
+    this.compile(extractContent(this.el, true), this.vm);
+  },
+
   unbind: function unbind() {
     if (this.unlink) {
       this.unlink();
     }
   }
 };
+
+var namedSlot = extend(extend({}, slot), {
+  priority: slot.priority + 1,
+  params: ['name']
+});
 
 /**
  * Extract qualified content nodes from a node list.
@@ -23129,10 +26037,11 @@ function extractFragment(nodes, parent, main) {
 
 var elementDirectives = {
   slot: slot,
+  _namedSlot: namedSlot, // same as slot but with higher priority
   partial: partial
 };
 
-Vue.version = '1.0.10';
+Vue.version = '1.0.13';
 
 /**
  * Vue and every constructor that extends Vue has an
@@ -23155,923 +26064,14 @@ Vue.options = {
 
 // devtools global hook
 /* istanbul ignore if */
-if (process.env.NODE_ENV !== 'production') {
-  if (inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__) {
+if (process.env.NODE_ENV !== 'production' && inBrowser) {
+  if (window.__VUE_DEVTOOLS_GLOBAL_HOOK__) {
     window.__VUE_DEVTOOLS_GLOBAL_HOOK__.emit('init', Vue);
+  } else if (/Chrome\/\d+/.test(navigator.userAgent)) {
+    console.log('Download the Vue Devtools for a better development experience:\n' + 'https://github.com/vuejs/vue-devtools');
   }
 }
 
 module.exports = Vue;
 }).call(this,require('_process'))
-},{"_process":1}],69:[function(require,module,exports){
-'use strict';
-
-var _vue = require('vue');
-
-var _vue2 = _interopRequireDefault(_vue);
-
-var _debug = require('debug');
-
-var _debug2 = _interopRequireDefault(_debug);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var debug = (0, _debug2.default)('voie:directive');
-
-_vue2.default.elementDirective('v-view', {
-  bind: function bind() {
-    var _vm$$options = this.vm.$options;
-    var state = _vm$$options.state;
-    var manager = _vm$$options.manager;
-
-    manager.mountPoints[state.name] = {
-      hostVm: this.vm,
-      viewEl: this.el,
-      viewElChildren: [].slice.call(this.el.children)
-    };
-    debug('registered v-view', this.el);
-  },
-  unbind: function unbind() {
-    var _vm$$options2 = this.vm.$options;
-    var state = _vm$$options2.state;
-    var manager = _vm$$options2.manager;
-
-    delete manager.mountPoints[state.name];
-    debug('unregistered v-view', this.el);
-  }
-});
-
-_vue2.default.directive('link', {
-  bind: function bind() {
-    this.manager = resolveManager(this.vm);
-    if (!this.manager) {
-      throw new Error('Can\'t find state manager.');
-    }
-    this.manager.on('state_changed', this.updateElement, this);
-  },
-  unbind: function unbind() {
-    this.manager.off('state_changed', this.updateElement, this);
-  },
-  update: function update(value) {
-    var _this = this;
-
-    var manager = this.manager;
-    var name = null;
-    this.params = Object.assign({}, manager.context.params);
-    if (!value) {
-      throw new Error('v-link: expression "' + this.expression + '" should resolve to { name: ..., params... }}');
-    }
-    if (typeof value == 'string') {
-      name = value;
-    } else {
-      Object.assign(this.params, value.params || {});
-      name = value.name;
-    }
-    this.state = manager.get(name);
-    if (!this.state) {
-      /* eslint-disable no-console */
-      console.warn('State "' + name + '" not found.');
-      /* eslint-enable no-console */
-      return;
-    }
-    this.el.onclick = function (ev) {
-      ev.preventDefault();
-      manager.go({
-        name: name,
-        params: _this.params
-      });
-    };
-    this.updateElement();
-  },
-  updateElement: function updateElement() {
-    var _this2 = this;
-
-    var state = this.state;
-    if (!state) {
-      return;
-    }
-    this.el.setAttribute('href', state.createHref(this.params));
-    // Add active class
-    var manager = this.manager;
-    var ctx = manager.context;
-    this.el.classList.remove(manager.activeClass);
-    if (ctx.state) {
-      var paramsMatch = Object.keys(this.params).every(function (key) {
-        return ctx.params[key] == _this2.params[key];
-      });
-      var active = ctx.state.includes(state) && paramsMatch;
-      if (active) {
-        this.el.classList.add(manager.activeClass);
-      }
-    }
-  }
-});
-
-function resolveManager(vm) {
-  var manager = vm.$options.manager;
-  if (manager) {
-    return manager;
-  }
-  if (vm.$parent) {
-    return resolveManager(vm.$parent);
-  }
-  return null;
-}
-
-},{"debug":32,"vue":68}],70:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var StateNotFoundError = exports.StateNotFoundError = (function (_Error) {
-  _inherits(StateNotFoundError, _Error);
-
-  function StateNotFoundError(name) {
-    _classCallCheck(this, StateNotFoundError);
-
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(StateNotFoundError).call(this, 'State "' + name + '" not found.'));
-
-    _this.name = name;
-    return _this;
-  }
-
-  return StateNotFoundError;
-})(Error);
-
-var RedirectLoopError = exports.RedirectLoopError = (function (_Error2) {
-  _inherits(RedirectLoopError, _Error2);
-
-  function RedirectLoopError(transition) {
-    _classCallCheck(this, RedirectLoopError);
-
-    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(RedirectLoopError).call(this, 'Redirect loop detected ' + '(set maxRedirects on state manager to configure max redirects per transition)'));
-
-    _this2.transition = transition;
-    return _this2;
-  }
-
-  return RedirectLoopError;
-})(Error);
-
-},{}],71:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Transition = exports.State = exports.StateManager = undefined;
-
-var _stateManager = require('./state-manager');
-
-var _stateManager2 = _interopRequireDefault(_stateManager);
-
-var _state = require('./state');
-
-var _state2 = _interopRequireDefault(_state);
-
-var _transition = require('./transition');
-
-var _transition2 = _interopRequireDefault(_transition);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.StateManager = _stateManager2.default;
-exports.State = _state2.default;
-exports.Transition = _transition2.default;
-
-},{"./state":73,"./state-manager":72,"./transition":74}],72:[function(require,module,exports){
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _debug = require('debug');
-
-var _debug2 = _interopRequireDefault(_debug);
-
-var _eventemitter = require('eventemitter3');
-
-var _eventemitter2 = _interopRequireDefault(_eventemitter);
-
-var _vue = require('vue');
-
-var _vue2 = _interopRequireDefault(_vue);
-
-var _state = require('./state');
-
-var _state2 = _interopRequireDefault(_state);
-
-var _transition = require('./transition');
-
-var _transition2 = _interopRequireDefault(_transition);
-
-var _history = require('history');
-
-require('./directives');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var debug = (0, _debug2.default)('voie:manager');
-
-var StateManager = (function (_EventEmitter) {
-  _inherits(StateManager, _EventEmitter);
-
-  function StateManager(spec) {
-    _classCallCheck(this, StateManager);
-
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(StateManager).call(this));
-
-    _this._setupEl(spec);
-    _this._setupHistory(spec);
-    _this._setupOptions(spec);
-    _this._setupState();
-    return _this;
-  }
-
-  _createClass(StateManager, [{
-    key: '_setupEl',
-    value: function _setupEl(spec) {
-      this.el = spec.el instanceof HTMLElement ? spec.el : document.querySelector(spec.el);
-      if (!this.el) {
-        throw new Error('Please specify `el` as an entry-point node of your app.');
-      }
-    }
-  }, {
-    key: '_setupHistory',
-    value: function _setupHistory(spec) {
-      if (spec.history) {
-        this.history = spec.history;
-      } else {
-        this._setupDefaultHtml5History(spec);
-      }
-    }
-  }, {
-    key: '_setupDefaultHtml5History',
-    value: function _setupDefaultHtml5History(spec) {
-      var base = spec.base;
-      // Try to take base from `<base href=""/>`
-      if (!base) {
-        var baseEl = document.querySelector('base');
-        base = baseEl && baseEl.getAttribute('href');
-      }
-      base = (base || '').replace(/\/+$/, '');
-      this.history = (0, _history.useBasename)(_history.createHistory)({ basename: base });
-    }
-  }, {
-    key: '_setupOptions',
-    value: function _setupOptions(spec) {
-      if (spec.handleUncaught) {
-        this.handleUncaught = spec.handleUncaught;
-      }
-      this.maxRedirects = Number(spec.maxRedirects) || 10;
-      this.activeClass = spec.activeClass || 'active';
-    }
-  }, {
-    key: '_setupState',
-    value: function _setupState() {
-      this.states = {};
-      this.context = {
-        parent: null,
-        state: null, // root state
-        vm: null,
-        params: {},
-        data: {}
-      };
-      this.mountPoints = {
-        '': {
-          viewEl: this.el,
-          viewElChildren: [].slice.call(this.el.children)
-        }
-      };
-    }
-  }, {
-    key: 'handleUncaught',
-    value: function handleUncaught(err) {
-      return Promise.reject(err);
-    }
-  }, {
-    key: 'add',
-    value: function add(name, spec) {
-      if ((typeof name === 'undefined' ? 'undefined' : _typeof(name)) == 'object') {
-        spec = name;
-        name = spec.name;
-      }
-      if (!name) {
-        throw new Error('State `name` is mandatory.');
-      }
-      if (this.states[name]) {
-        throw new Error('State "' + name + '" already added');
-      }
-      spec.name = name;
-      var state = new _state2.default(this, spec);
-      debug('add %s', name);
-      this.states[name] = state;
-      return state;
-    }
-  }, {
-    key: 'get',
-    value: function get(name) {
-      return this.states[name];
-    }
-  }, {
-    key: 'go',
-    value: function go(options) {
-      var _this2 = this;
-
-      if (this.transition) {
-        throw new Error('Transition is in progress. Abort it before going elsewhere.');
-      }
-      this.transition = new _transition2.default(this, options);
-      return this.transition.run().then(function (result) {
-        delete _this2.transition;
-        _this2.emit('transition_finished');
-        return result;
-      }).catch(function (err) {
-        delete _this2.transition;
-        _this2.emit('transition_finished', err);
-        return _this2.handleUncaught(err);
-      }).then(function () {
-        return _this2._updateHistory(options.replace || false);
-      });
-    }
-  }, {
-    key: '_getMountPoint',
-    value: function _getMountPoint() {
-      var el = null;
-      var ctx = this.context;
-      while (ctx && !el) {
-        var state = ctx.state;
-        if (state) {
-          el = this.mountPoints[state.name];
-        } else {
-          el = this.mountPoints[''];
-        }
-        ctx = ctx.parent;
-      }
-      return el;
-    }
-  }, {
-    key: 'start',
-    value: function start() {
-      var _this3 = this;
-
-      if (this._unlisten) {
-        return Promise.resolve();
-      }
-      this._unlisten = this.history.listen(function (location) {
-        return _this3._matchLocation(location);
-      });
-      return new Promise(function (resolve) {
-        return _this3.once('history_updated', resolve);
-      });
-    }
-  }, {
-    key: 'stop',
-    value: function stop() {
-      if (!this._unlisten) {
-        return;
-      }
-      this._unlisten();
-      delete this._unlisten;
-    }
-  }, {
-    key: '_matchLocation',
-    value: function _matchLocation(location) {
-      var _this4 = this;
-
-      var url = location.pathname + location.search;
-      if (url == this.context.url) {
-        return;
-      }
-      var found = Object.keys(this.states).find(function (name) {
-        var state = _this4.states[name];
-        var matched = state._match(location);
-        if (matched) {
-          debug('match url %s -> %s', location.pathname, name);
-          _this4.go({
-            name: name,
-            params: matched,
-            replace: true
-          });
-          return true;
-        }
-      });
-      if (!found) {
-        /* eslint-disable no-console */
-        console.warn('No states match URL: ' + location.pathname);
-        /* eslint-enable no-console */
-        this._updateHistory(true);
-      }
-    }
-  }, {
-    key: '_updateHistory',
-    value: function _updateHistory(replace) {
-      var state = this.context.state;
-      var url = state ? state._makeUrl(this.context.params) : '/';
-      if (url == this.context.url) {
-        return;
-      }
-      this.context.url = url;
-      if (replace) {
-        this.history.replace(url);
-      } else {
-        this.history.push(url);
-      }
-      this.emit('history_updated', {
-        url: url,
-        ctx: this.context
-      });
-    }
-  }]);
-
-  return StateManager;
-})(_eventemitter2.default);
-
-exports.default = StateManager;
-;
-
-},{"./directives":69,"./state":73,"./transition":74,"debug":32,"eventemitter3":35,"history":51,"vue":68}],73:[function(require,module,exports){
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _pathToRegexp = require('path-to-regexp');
-
-var _pathToRegexp2 = _interopRequireDefault(_pathToRegexp);
-
-var _queryString = require('query-string');
-
-var _queryString2 = _interopRequireDefault(_queryString);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var State = (function () {
-  function State(manager, spec) {
-    _classCallCheck(this, State);
-
-    this.manager = manager;
-    this._setupName(spec);
-    this._setupHierarchy(spec);
-    this._setupComponent(spec);
-    this._setupHooks(spec);
-    this._setupPath(spec);
-    this._setupParams(spec);
-    this._setupOptions(spec);
-  }
-
-  _createClass(State, [{
-    key: '_setupName',
-    value: function _setupName(spec) {
-      this.name = spec.name;
-      if (!this.name) {
-        throw new Error('State `name` is required');
-      }
-    }
-  }, {
-    key: '_setupHierarchy',
-    value: function _setupHierarchy(spec) {
-      this.parentState = this.manager.get(spec.parent || this.name.split('.').slice(0, -1).join('.')) || null;
-      this.lineage = this.parentState ? this.parentState.lineage.concat([this]) : [this];
-    }
-  }, {
-    key: '_setupComponent',
-    value: function _setupComponent(spec) {
-      if (spec.component) {
-        this.component = spec.component;
-        if (!this.component.name) {
-          this.component.name = this.name.replace(/\./g, '-');
-        }
-      }
-    }
-  }, {
-    key: '_setupHooks',
-    value: function _setupHooks(spec) {
-      if (spec.enter) {
-        this.enter = spec.enter;
-      }
-      if (spec.leave) {
-        this.leave = spec.leave;
-      }
-      if (spec.handleError) {
-        this.handleError = spec.handleError;
-      }
-    }
-  }, {
-    key: '_setupPath',
-    value: function _setupPath(spec) {
-      if (!spec.path && spec.url) {
-        /* eslint-disable no-console */
-        console.warn('state.url is deprecated; use state.path instead');
-        /* eslint-enable no-console */
-        spec.path = spec.url;
-      }
-      this.path = spec.path || '';
-      if (this.path.indexOf('/') == 0) {
-        this.fullPath = this.path;
-      } else {
-        var parentPath = this.parentState ? this.parentState.fullPath : '/';
-        this.fullPath = parentPath.replace(/\/+$/, '') + (this.path ? '/' + this.path : '');
-      }
-      if (!this.fullPath) {
-        this.fullPath = '/';
-      }
-      this._pathParams = [];
-      this._pathRegex = (0, _pathToRegexp2.default)(this.fullPath, this._pathParams);
-      this._pathFormat = _pathToRegexp2.default.compile(this.fullPath);
-    }
-  }, {
-    key: '_setupParams',
-    value: function _setupParams(spec) {
-      var _this = this;
-
-      this._paramsSpec = Object.assign({}, spec.params);
-      this._pathParams.forEach(function (param) {
-        _this._paramsSpec[param.name] = null;
-      });
-    }
-  }, {
-    key: '_setupOptions',
-    value: function _setupOptions(spec) {
-      if (spec.redirect) {
-        this.redirect = spec.redirect;
-      }
-    }
-  }, {
-    key: 'enter',
-    value: function enter() {
-      return Promise.resolve();
-    }
-  }, {
-    key: 'leave',
-    value: function leave() {
-      return Promise.resolve();
-    }
-  }, {
-    key: 'handleError',
-    value: function handleError(err) {
-      return Promise.reject(err);
-    }
-
-    /**
-     * Returns true if this state is equal to `stateOrName`
-     * or contains `stateOrName` somewhere up the hierarchy.
-     *
-     * @param {string|State} stateOrName
-     * @return {boolean}
-     */
-
-  }, {
-    key: 'includes',
-    value: function includes(stateOrName) {
-      var state = stateOrName instanceof State ? stateOrName : this.manager.get(stateOrName);
-      return this.lineage.indexOf(state) > -1;
-    }
-
-    /**
-     * Attempts to match `location` to this state's `path` pattern.
-     *
-     * @param {{ pathname, search }} location
-     * @returns an object with extracted params or `null` if don't match.
-     * @private
-     */
-
-  }, {
-    key: '_match',
-    value: function _match(location) {
-      var matched = this._pathRegex.exec(location.pathname);
-      if (!matched) {
-        return null;
-      }
-      var params = this._pathParams.reduce(function (params, p, i) {
-        params[p.name] = matched[i + 1];
-        return params;
-      }, {});
-      try {
-        var query = _queryString2.default.parse(location.search);
-        Object.assign(params, query);
-      } catch (e) {}
-      return params;
-    }
-
-    /**
-     * Constructs a `params` object by dropping any parameters
-     * not specified in `_paramsSpec` of this state.
-     * Values from `_paramsSpec` act as defaults.
-     *
-     * @param {object} params
-     * @private
-     */
-
-  }, {
-    key: '_makeParams',
-    value: function _makeParams(params) {
-      var _this2 = this;
-
-      return Object.keys(this._paramsSpec).reduce(function (result, name) {
-        result[name] = name in params ? params[name] : _this2._paramsSpec[name];
-        return result;
-      }, {});
-    }
-
-    /**
-     * Constructs search string by serializing query params.
-     *
-     * @param params
-     * @return {string} search
-     * @private
-     */
-
-  }, {
-    key: '_makeSearch',
-    value: function _makeSearch(params) {
-      var query = Object.keys(params).reduce(function (query, key) {
-        var value = params[key];
-        if (value != null) {
-          query[key] = value;
-        }
-        return query;
-      }, {});
-      this._pathParams.forEach(function (p) {
-        delete query[p.name];
-      });
-      try {
-        var search = _queryString2.default.stringify(query);
-        if (search) {
-          return '?' + search;
-        }
-      } catch (e) {}
-      return '';
-    }
-
-    /**
-     * Constructs an URL by encoding `params` into URL pattern and query string.
-     *
-     * Note: params not mentioned in `_paramsSpec` are dropped.
-     *
-     * @param params
-     * @return {string} url
-     * @private
-     */
-
-  }, {
-    key: '_makeUrl',
-    value: function _makeUrl(params) {
-      return this._pathFormat(params) + this._makeSearch(params);
-    }
-
-    /**
-     * Creates href suitable for links (taking into account base URL and
-     * hash-based histories).
-     *
-     * @param params
-     * @return {string} href
-     */
-
-  }, {
-    key: 'createHref',
-    value: function createHref(params) {
-      return this.manager.history.createHref(this._makeUrl(params));
-    }
-  }]);
-
-  return State;
-})();
-
-exports.default = State;
-;
-
-},{"path-to-regexp":64,"query-string":66}],74:[function(require,module,exports){
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _debug = require('debug');
-
-var _debug2 = _interopRequireDefault(_debug);
-
-var _error = require('./error');
-
-var _utils = require('./utils');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var debug = (0, _debug2.default)('voie:transition');
-
-var Transition = (function () {
-  function Transition(manager, spec) {
-    _classCallCheck(this, Transition);
-
-    this.manager = manager;
-    this.redirectsCount = 0;
-    var dstStateName = undefined;
-    if (typeof spec === 'string') {
-      dstStateName = spec;
-      spec = {};
-    } else {
-      dstStateName = spec.name;
-    }
-    debug('go to %s', dstStateName);
-    this.resolveDstState(dstStateName);
-    this.params = spec.params || {};
-  }
-
-  _createClass(Transition, [{
-    key: 'resolveDstState',
-    value: function resolveDstState(name, isRedirect) {
-      if (isRedirect) {
-        debug('redirect to %s', name);
-      }
-      var state = this.manager.get(name);
-      if (!state) {
-        throw new _error.StateNotFoundError(name);
-      }
-      this.dstState = state;
-      if (state.redirect) {
-        this.redirectsCount++;
-        if (this.redirectsCount > this.manager.maxRedirects) {
-          throw new _error.RedirectLoopError(this);
-        }
-        this.resolveDstState(state.redirect, true);
-      }
-    }
-  }, {
-    key: 'run',
-    value: function run() {
-      var _this = this;
-
-      return this.goUpstream().then(function () {
-        return _this.goDownstream();
-      });
-    }
-  }, {
-    key: 'goUpstream',
-    value: function goUpstream() {
-      var _this2 = this;
-
-      var ctx = this.manager.context;
-      if (!ctx.state) {
-        // We're at root state, no cleanup is necessary
-        return Promise.resolve();
-      }
-      // Stop going up if state is common with dst branch
-      var state = ctx.state;
-      if (this.dstState.includes(state)) {
-        // All ctx params must match target ones
-        // (e.g. when going from /user/1 to /user/2)
-        var paramsMatch = Object.keys(ctx.params).every(function (key) {
-          return ctx.params[key] == _this2.params[key];
-        });
-        if (paramsMatch) {
-          return Promise.resolve();
-        }
-      }
-      return Promise.resolve().then(function () {
-        return state.leave(ctx);
-      }).then(function () {
-        debug(' <- left %s', state.name);
-        _this2.cleanup(ctx);
-      }).then(function () {
-        return _this2.goUpstream();
-      });
-    }
-  }, {
-    key: 'cleanup',
-    value: function cleanup(ctx) {
-      if (ctx.vm) {
-        // Destroy vm and restore v-view element
-        var el = ctx.vm.$el;
-        var mp = ctx.mountPoint;
-        ctx.vm.$destroy();
-        if (mp) {
-          (function () {
-            var viewEl = ctx.mountPoint.viewEl;
-            el.parentNode.replaceChild(viewEl, el);
-            mp.viewElChildren.forEach(function (el) {
-              return viewEl.appendChild(el);
-            });
-          })();
-        }
-      }
-      this.manager.context = ctx.parent;
-      this.manager.emit('state_changed', this.manager.context);
-    }
-  }, {
-    key: 'goDownstream',
-    value: function goDownstream() {
-      var _this3 = this;
-
-      var prevCtx = this.manager.context;
-      var dstLineage = this.dstState.lineage;
-      var nextState = dstLineage[dstLineage.indexOf(prevCtx.state) + 1];
-      if (!nextState) {
-        return Promise.resolve();
-      }
-      // New context inherits params and data from parent
-      var nextContext = {
-        parent: prevCtx,
-        state: nextState,
-        params: Object.assign({}, prevCtx.params, nextState._makeParams(this.params)),
-        data: Object.assign({}, prevCtx.data)
-      };
-      return Promise.resolve().then(function () {
-        return nextState.enter(nextContext);
-      }).catch(function (err) {
-        return nextState.handleError(err, nextContext);
-      }).then(function (obj) {
-        obj = obj || {};
-        debug(' -> entered %s', nextState.name);
-        // hooks can return { redirect: 'new.state.name' }
-        if (typeof obj.redirect == 'string') {
-          _this3.resolveDstState(obj.redirect, true);
-          return _this3.run();
-        }
-        _this3.manager.context = nextContext;
-        // hooks can also return { component: <VueComponent> }
-        _this3.render(nextContext, obj.component);
-        _this3.manager.emit('state_changed', _this3.manager.context);
-        if (nextState != _this3.dstState) {
-          return _this3.goDownstream();
-        }
-      });
-    }
-  }, {
-    key: 'render',
-    value: function render(ctx, comp) {
-      var state = ctx.state;
-      comp = comp || state.component;
-      if (!comp) {
-        return;
-      }
-      var Comp = (0, _utils.toVueComponent)(comp);
-      var mp = this.manager._getMountPoint();
-      ctx.mountPoint = mp;
-      ctx.vm = new Comp({
-        data: ctx.data,
-        el: mp.viewEl,
-        parent: mp.hostVm,
-        params: ctx.params,
-        ctx: ctx,
-        state: state,
-        manager: this.manager
-      });
-    }
-  }]);
-
-  return Transition;
-})();
-
-exports.default = Transition;
-
-},{"./error":70,"./utils":75,"debug":32}],75:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.toVueComponent = toVueComponent;
-
-var _vue = require('vue');
-
-var _vue2 = _interopRequireDefault(_vue);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function toVueComponent(obj) {
-  if (obj.name == 'VueComponent') {
-    return obj;
-  }
-  return _vue2.default.extend(obj);
-}
-
-},{"vue":68}]},{},[8]);
+},{"_process":1}]},{},[8]);
