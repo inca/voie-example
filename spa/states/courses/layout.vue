@@ -4,6 +4,7 @@
       <li>
         <input type="search"
                v-model="q"
+               debounce="50"
                placeholder="Filter courses"/>
       </li>
       <li v-for="course in filteredCourses">
@@ -41,7 +42,7 @@ export default {
 
   watch: {
     q() {
-      app.update({ q: this.q });
+      app.update({ q: this.q }, true);
     }
   }
 

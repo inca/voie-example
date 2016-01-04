@@ -10181,13 +10181,13 @@ exports.default = {
 
   watch: {
     q: function q() {
-      _app2.default.update({ q: this.q });
+      _app2.default.update({ q: this.q }, true);
     }
   }
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"courses-layout\">\n    <ul class=\"courses-list side-list\">\n      <li>\n        <input type=\"search\" v-model=\"q\" placeholder=\"Filter courses\">\n      </li>\n      <li v-for=\"course in filteredCourses\">\n        <a v-link=\"{ name: 'course', params: { courseId: course.id }}\">\n          {{ course.title }}\n        </a>\n      </li>\n    </ul>\n    <v-view class=\"courses-view\">\n      <div class=\"loading\">\n        Please wait...\n      </div>\n    </v-view>\n  </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n  <div class=\"courses-layout\">\n    <ul class=\"courses-list side-list\">\n      <li>\n        <input type=\"search\" v-model=\"q\" debounce=\"50\" placeholder=\"Filter courses\">\n      </li>\n      <li v-for=\"course in filteredCourses\">\n        <a v-link=\"{ name: 'course', params: { courseId: course.id }}\">\n          {{ course.title }}\n        </a>\n      </li>\n    </ul>\n    <v-view class=\"courses-view\">\n      <div class=\"loading\">\n        Please wait...\n      </div>\n    </v-view>\n  </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -10639,27 +10639,27 @@ _vue2.default.directive('link', {
   bind: function bind() {
     this.manager = resolveManager(this.vm);
     if (!this.manager) {
-      throw new Error('Can\'t find state manager.');
+      throw new Error('Can\'t locate state manager.');
     }
-    this.manager.on('state_changed', this.updateElement, this);
+    this.manager.on('context_updated', this.updateElement, this);
   },
   unbind: function unbind() {
-    this.manager.off('state_changed', this.updateElement, this);
+    this.manager.off('context_updated', this.updateElement, this);
   },
   update: function update(value) {
     var _this = this;
 
-    var manager = this.manager;
-    var name = null;
-    this.params = (0, _assign2.default)({}, manager.context.params);
     if (!value) {
       throw new Error('v-link: expression "' + this.expression + '" should resolve to { name: ..., params... }}');
     }
+    var manager = this.manager;
+    var name = null;
     if (typeof value == 'string') {
       name = value;
+      this.params = {};
     } else {
-      (0, _assign2.default)(this.params, value.params || {});
       name = value.name;
+      this.params = value.params || {};
     }
     this.state = manager.get(name);
     if (!this.state) {
@@ -10678,24 +10678,25 @@ _vue2.default.directive('link', {
     this.updateElement();
   },
   updateElement: function updateElement() {
-    var _this2 = this;
-
+    var manager = this.manager;
+    var ctx = manager.context;
     var state = this.state;
     if (!state) {
       return;
     }
-    this.el.setAttribute('href', state.createHref(this.params));
-    // Add active class
-    var manager = this.manager;
-    var ctx = manager.context;
+    var params = (0, _assign2.default)({}, ctx.params, this.params);
+    this.el.setAttribute('href', state.createHref(params));
+    // Add/remove active class
     this.el.classList.remove(manager.activeClass);
     if (ctx.state) {
-      var paramsMatch = (0, _keys2.default)(this.params).every(function (key) {
-        return ctx.params[key] == _this2.params[key];
+      var paramsMatch = (0, _keys2.default)(params).every(function (key) {
+        return ctx.params[key] == params[key];
       });
       var active = ctx.state.includes(state) && paramsMatch;
       if (active) {
         this.el.classList.add(manager.activeClass);
+      } else {
+        this.el.classList.remove(manager.activeClass);
       }
     }
   }
@@ -10880,6 +10881,7 @@ var debug = (0, _debug2.default)('voie:manager');
  * State manager emits following events:
  *
  *   * `history_updated`
+ *   * `context_updated`
  *   * `transition_finished`
  *
  */
@@ -11112,6 +11114,7 @@ var StateManager = (function (_EventEmitter) {
       var _this3 = this;
 
       (0, _assign2.default)(this.context.params, params);
+      this.emit('context_updated', this.context);
       return _promise2.default.resolve().then(function () {
         return _this3._updateHistory(replace);
       });
@@ -11615,10 +11618,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _assign = require('babel-runtime/core-js/object/assign');
-
-var _assign2 = _interopRequireDefault(_assign);
-
 var _keys = require('babel-runtime/core-js/object/keys');
 
 var _keys2 = _interopRequireDefault(_keys);
@@ -11626,6 +11625,10 @@ var _keys2 = _interopRequireDefault(_keys);
 var _promise = require('babel-runtime/core-js/promise');
 
 var _promise2 = _interopRequireDefault(_promise);
+
+var _assign = require('babel-runtime/core-js/object/assign');
+
+var _assign2 = _interopRequireDefault(_assign);
 
 var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
 
@@ -11667,7 +11670,7 @@ var Transition = (function () {
     }
     debug('go to %s', dstStateName);
     this.resolveDstState(dstStateName);
-    this.params = spec.params || {};
+    this.params = (0, _assign2.default)({}, manager.context.params, spec.params);
   }
 
   (0, _createClass3.default)(Transition, [{
@@ -11748,7 +11751,7 @@ var Transition = (function () {
         }
       }
       this.manager.context = ctx.parent;
-      this.manager.emit('state_changed', this.manager.context);
+      this.manager.emit('context_updated', this.manager.context);
     }
   }, {
     key: 'goDownstream',
@@ -11781,9 +11784,9 @@ var Transition = (function () {
           return _this3.run();
         }
         _this3.manager.context = nextContext;
+        _this3.manager.emit('context_updated', _this3.manager.context);
         // hooks can also return { component: <VueComponent> }
         _this3.render(nextContext, obj.component);
-        _this3.manager.emit('state_changed', _this3.manager.context);
         if (nextState != _this3.dstState) {
           return _this3.goDownstream();
         }
