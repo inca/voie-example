@@ -28,7 +28,7 @@
   "private": true,
   "dependencies": {
     "express": "^4.13.3",
-    "voie": "^0.5.1",
+    "voie": "^0.6.0",
     "vue": "^1.0.12"
   },
   "devDependencies": {
